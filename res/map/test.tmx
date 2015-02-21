@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Test" tilewidth="32" tileheight="32">
+  <image source="part2_tileset.png" width="384" height="288"/>
+  <terraintypes>
+   <terrain name="New Terrain" tile="-1"/>
+  </terraintypes>
+ </tileset>
+ <tileset firstgid="109" name="Water" tilewidth="32" tileheight="32">
+  <image source="water.png" width="256" height="32"/>
+ </tileset>
+ <layer name="Water" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3QwQnAMAwEQang/NI/iSGGYFABBzNwf62qZv3uOtbfkkwdSfbf9/1V2R3/lrvyOpYelua8PbEBAAAAAAAAAACWBwYdvqsQJwAA
+  </data>
+ </layer>
+ <layer name="Terrain" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3PQQrCMBBA0eQAWoXaeo7qQrD3P5cjHcGNXSf4Ag8yMIv5tZRSf7iFSziEqWzvvrPfqnfHkP9ztvTaMYcx51OnHc/wyJZjuHba8WlZvqwN3AQAAAAAAAAAAP/qBVAYUUkQJwAA
+  </data>
+ </layer>
+ <layer name="Objects" width="50" height="50">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3SMQ4AEBAEQK1v4v9vEIlKQ4OQmWS7K3aTC2EuLdxwVr5dYINyuwAMYs/rftjQ/LDDTwEAAAAAAADAXhV4bhPUECcAAA==
+  </data>
+ </layer>
+</map>
