@@ -44,7 +44,8 @@ public class Util {
 
 	public static FileHandle getFile(File path, String name, boolean internal) {
 		if (internal) {
-			return Gdx.files.internal(name);
+			return Gdx.files.internal(path.isDirectory() ? path.getAbsolutePath() : path.getParentFile().getAbsolutePath() + File.separator
+					+ name);
 		}
 		File p = path.getParentFile();
 		if (path.isDirectory()) {

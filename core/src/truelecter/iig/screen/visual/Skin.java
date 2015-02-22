@@ -36,12 +36,13 @@ public class Skin {
 	}
 
 	private Skin(File skin, boolean useInternal) throws InvalidFileFormatException, IOException {
+		System.out.println("Using" + (useInternal ? " internal " : " ") + "skin: " + skin.getAbsolutePath());
 		Ini ini = new Ini(skin);
 		Ini.Section buttonIni = ini.get("Button");
-		play = new Texture(Util.getFile(skin, buttonIni.get("playPath"), false));
-		pause = new Texture(Util.getFile(skin, buttonIni.get("pausePath"), false));
+		play = new Texture(Util.getFile(skin, buttonIni.get("playPath"), useInternal));
+		pause = new Texture(Util.getFile(skin, buttonIni.get("pausePath"), useInternal));
 		Ini.Section backgroundIni = ini.get("Background");
-		background = new Texture(Util.getFile(skin, backgroundIni.get("path"), false));
+		background = new Texture(Util.getFile(skin, backgroundIni.get("path"), useInternal));
 		Ini.Section timePanelIni = ini.get("TimePanel");
 		timePassed = new Vector2(parse(timePanelIni.get("timePassedX")), parse(timePanelIni.get("timePassedY")));
 		timeLeft = new Vector2(parse(timePanelIni.get("timeLeftX")), parse(timePanelIni.get("timeLeftY")));
@@ -49,7 +50,7 @@ public class Skin {
 		soundPos = new Vector2(parse(timePanelIni.get("soundX")), parse(timePanelIni.get("soundY")));
 		timeBar = new Vector3(parse(timePanelIni.get("timeBarX")), parse(timePanelIni.get("timeBarY")),
 				parse(timePanelIni.get("timeBarLength")));
-		bars = new Texture(Util.getFile(skin, timePanelIni.get("bars"), false));
+		bars = new Texture(Util.getFile(skin, timePanelIni.get("bars"), useInternal));
 	}
 
 	public static float parse(String exp) {
