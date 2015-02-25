@@ -28,6 +28,7 @@ public class Skin {
 	public final Vector2 songNamePos;
 	public final Vector3 timeBar;
 	public final Texture bars;
+	public final boolean useOldBars;
 
 	private static Skin defaultSkin;
 
@@ -51,6 +52,7 @@ public class Skin {
 		timeBar = new Vector3(parse(timePanelIni.get("timeBarX")), parse(timePanelIni.get("timeBarY")),
 				parse(timePanelIni.get("timeBarLength")));
 		bars = new Texture(Util.getFile(skin, timePanelIni.get("bars"), useInternal));
+		useOldBars = timePanelIni.get("oldBars", boolean.class, false);
 	}
 
 	public static float parse(String exp) {

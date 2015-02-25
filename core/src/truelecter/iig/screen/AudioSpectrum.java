@@ -287,7 +287,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			b.draw(batch);
 
 			// drawing top values(in red)
-			tmp = scale(topValues[histoX]) / 256 + tScale * radius;
+			tmp = scale(currentSkin.useOldBars ? topValues[histoX] : avg) / 256 + tScale * radius;
 			r.setSize(barWidth * k, 4);
 			r.setPosition(centerX - barWidth * k / 2, centerY + tmp);
 			r.setOrigin(barWidth * k / 2, -tmp);
@@ -489,8 +489,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
 	private void loadBarsTexture(Texture t) {
 		b = new Sprite(t, 0, 0, 16, 5);
-		r = new Sprite(t, 0, 5, 16, 5);
-		line = new Sprite(t, 0, 15, 16, 5);
+		r = new Sprite(t, 0, 15, 16, currentSkin.useOldBars ? 5 : 8);
+		line = new Sprite(t, 0, 5, 16, 5);
 	}
 
 	private void loadSkin(Skin skin) {
