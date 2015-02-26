@@ -252,7 +252,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		camera.update();
 		batch.begin();
 		background.draw(batch);
-
+		currentSkin.rendererCustomParts(batch, true);
 		batch.setProjectionMatrix(camera.combined);
 		playPause.setScale(tScale);
 
@@ -356,6 +356,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		// effect.setPosition(31 + (Main.width - 62) * timeLeftScale, 45
 		// +barWidth * k / 2); effect.draw(batch, Gdx.graphics.getDeltaTime());
 		playPause.drawCentered(batch, centerX, centerY);
+		currentSkin.rendererCustomParts(batch, false);
 		batch.end();
 	}
 
