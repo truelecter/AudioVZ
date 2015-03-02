@@ -16,4 +16,3 @@ timeBarY = 47
 timeBarLength = width - 62
 soundX = width - 90
 soundY = height - 50
-oldBars = false

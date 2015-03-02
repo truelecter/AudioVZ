@@ -76,16 +76,17 @@ public class Skin {
 		}
 	}
 
-	public Texture play;
-	public Texture pause;
-	public Texture background;
-	public Vector2 timeLeft;
-	public Vector2 timePassed;
-	public Vector2 soundPos;
-	public Vector2 songNamePos;
-	public Vector3 timeBar;
-	public Texture bars;
-	public boolean useOldBars;
+	public Texture play = new Texture(Util.getFile(null, "icon/play.png", true));
+	public Texture pause = new Texture(Util.getFile(null, "icon/pause.png", true));
+	public Texture background = new Texture(Util.getFile(null, "background.png", true));;
+	public Vector2 timeLeft = new Vector2(Main.width - 120, 100);
+	public Vector2 timePassed = new Vector2(40, 100);
+	public Vector2 soundPos = new Vector2(Main.width - 90, Main.height - 50);
+	public Vector2 songNamePos = new Vector2(50, Main.height - 50);
+	public Vector3 timeBar = new Vector3(Main.width - 62, 33, 47);
+	public long barWidth = 8;
+	public Texture bars = new Texture(Util.getFile(null, "colors-borders.png", true));;
+	public boolean useOldBars = false;
 	public ArrayList<SkinPart> customPartsBackground;
 	public ArrayList<SkinPart> customPartsForeground;
 
@@ -134,6 +135,7 @@ public class Skin {
 				y = section.get("timeBarY", "47");
 				timeBar = new Vector3(parse(x), parse(y), parse(w));
 				bars = new Texture(Util.getFile(skin, section.get("bars", "colors-borders.png"), useInternal));
+				barWidth = (long) parse(section.get("barWidth", "8"));
 				useOldBars = section.get("oldBars", boolean.class, false);
 				break;
 			default:
