@@ -26,14 +26,14 @@ public class FontManager {
 	}
 
 	public static BitmapFont getFileLabelFont() {
-		return getFont("comic-20");
+		return getFont("fileLabel");
 	}
 
 	public static BitmapFont getSongNameFont() {
-		return getFont("comic-32");
+		return getFont("songName");
 	}
 
 	public static BitmapFont getTimeFont(){
-		return getFont("comic-20");
+		return getFont("timeFont");
 	}
 }
