@@ -6,4 +6,5 @@ public class ConfigHandler {
 	public static float volume;
 	public static String skinPath;
 	public static String lastFileManagerPath;
+	public static String skinOrigPath;
 }

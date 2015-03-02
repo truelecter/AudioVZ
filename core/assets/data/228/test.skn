@@ -2,17 +2,17 @@
 playPath = icon/play.png
 pausePath = icon/pause.png
 [Background]
-path = backgroundV.jpg
+path = background.jpg
 [TimePanel]
 bars = colors-borders.png
 timePassedX = 40
-timePassedY = 100
+timePassedY = height - 15
 timeLeftX = width - 120
-timeLeftY = 100
+timeLeftY = height - 15
 songNameX = 50
-songNameY = height - 50
+songNameY = 100
 timeBarX = 33
-timeBarY = 47
+timeBarY = height - 50
 timeBarLength = width - 62
 timeBarWidth = 3
 soundX = width - 90

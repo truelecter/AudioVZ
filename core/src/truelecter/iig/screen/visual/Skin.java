@@ -103,6 +103,7 @@ public class Skin {
 	public ArrayList<SkinPart> customPartsBackground;
 	public ArrayList<SkinPart> customPartsForeground;
 	public File skinFile;
+	public Vector2 button = new Vector2(ConfigHandler.width, ConfigHandler.height);
 
 	private static Skin defaultSkin;
 
@@ -128,6 +129,9 @@ public class Skin {
 				play = new Texture(Util.getFile(skin, x, useInternal));
 				x = section.get("pausePath", "icon/pause.png");
 				pause = new Texture(Util.getFile(skin, x, useInternal));
+				x = section.get("posX", "width / 2");
+				y = section.get("posY", "height / 2");
+				button = new Vector2(parse(x), parse(y));
 				break;
 			case BACKGROUND:
 				x = section.get("path", "backgroundV.png");

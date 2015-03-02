@@ -308,7 +308,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		String s = "-" + Util.computeTime((long) (songLength - playbackTime / 1000));
 		FontManager.getTimeFont().draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
 		float timeLeftScale = playbackTime / 1000f / songLength;
-		line.setSize(6 * k, (currentSkin.timeBar.z) * timeLeftScale);
+		line.setSize(currentSkin.timeBar.t * k, (currentSkin.timeBar.z) * timeLeftScale);
 		line.setPosition(currentSkin.timeBar.x, currentSkin.timeBar.y);
 		line.setOrigin(0, 6 * k / 2);
 		line.setRotation(-90);
@@ -454,6 +454,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		loadBarsTexture(currentSkin.bars);
 		background = new Sprite(currentSkin.background);
 		background.setSize(ConfigHandler.width, ConfigHandler.height);
+		centerX = currentSkin.button.x;
+		centerY = currentSkin.button.y;
 	}
 
 	@Override

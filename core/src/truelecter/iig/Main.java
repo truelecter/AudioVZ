@@ -37,7 +37,13 @@ public class Main extends Game {
 			ConfigHandler.height = s.get("height", int.class, 600);
 			ConfigHandler.volume = s.get("volume", float.class, 0.1f);
 			ConfigHandler.lastFileManagerPath = s.get("lastFMPath", String.class, null);
-			ConfigHandler.skinPath = s.get("skin", String.class, null);
+			ConfigHandler.skinOrigPath = s.get("skin", String.class, null);
+			if (ConfigHandler.skinOrigPath != null) {
+				ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!", Gdx.files.getLocalStoragePath()).replace(
+						"!EXTERNAL!", Gdx.files.getExternalStoragePath());
+			} else {
+				ConfigHandler.skinPath = null;
+			}
 		} catch (Exception e) {
 			ConfigHandler.width = 900;
 			ConfigHandler.height = 600;
@@ -45,7 +51,8 @@ public class Main extends Game {
 			ConfigHandler.lastFileManagerPath = null;
 			ConfigHandler.skinPath = null;
 			System.out.println("Config not found. Using default values");
-			System.out.println("Watched in "+Gdx.files.local("data/config.ini").file().getAbsolutePath());
+			System.out.println("Watched in " + Gdx.files.local("data/config.ini").file().getAbsolutePath());
+			e.printStackTrace();
 		}
 		Gdx.input.setInputProcessor(new GlobalInputProcessor());
 		try {
@@ -53,6 +60,7 @@ public class Main extends Game {
 		} catch (Exception e) {
 			setScreen(new FileManager());
 		}
+		this.resize(ConfigHandler.width, ConfigHandler.height);
 	}
 
 	public void saveConfig() {
@@ -63,6 +71,7 @@ public class Main extends Game {
 			s.add("height", ConfigHandler.height);
 			s.add("volume", ConfigHandler.volume);
 			s.add("lastFMPath", ConfigHandler.lastFileManagerPath);
+			s.add("skin", ConfigHandler.skinOrigPath);
 			File f = Gdx.files.local("data/config.ini").file();
 			config.store(f);
 			System.out.println("Config stored to " + f.getAbsolutePath());
