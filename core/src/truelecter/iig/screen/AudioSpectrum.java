@@ -7,6 +7,7 @@ import truelecter.iig.Main;
 import truelecter.iig.screen.visual.Button;
 import truelecter.iig.screen.visual.FadingText;
 import truelecter.iig.screen.visual.Skin;
+import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.Util;
@@ -23,7 +24,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -42,7 +42,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private short[] samples = new short[2048];
 	private KissFFT fft;
 	private float[] spectrum = new float[2048];
-	// private float[] maxValues = new float[2048];
 	private float[] topValues = new float[2048];
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -52,18 +51,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private Texture playImage;
 
 	private Sprite b;
-	// private Sprite y;
 	private Sprite line;
 	private Sprite r;
 
 	private Button playPause;
 
 	// TESTAREA_BEGIN
-	private ParticleEffect effect;
+	// TESTAREA_END
+
 	private FadingText ft = new FadingText(0.05f, 5000);
 	private FadingText volumeft = new FadingText(0.05f, 6000);
 	private Skin currentSkin;
-	// TESTAREA_END
 
 	private Random gen = new Random(1337);
 	private float angle;
@@ -72,13 +70,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private String filename;
 	private long playbackTime = 0;
 	private long songLength = 0;
-	private float centerX = Main.width / 2;
-	private float centerY = Main.height / 2;
+	private float centerX = ConfigHandler.width / 2;
+	private float centerY = ConfigHandler.height / 2;
 
 	private boolean changingVolume = false;
 	private int factor = 1;
-
-	private boolean changingSkin = false;
 
 	public AudioSpectrum() {
 		this("!INTERNAL!/data/default.mp3", true, null);
@@ -125,7 +121,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		camera = new OrthographicCamera();
 
 		try {
-			currentSkin = Skin.getDefaultSkin();
+			currentSkin = Skin.skinByPath(ConfigHandler.skinPath);
 		} catch (Exception e) {
 			System.out.println("Invalid skin properties!");
 			e.printStackTrace();
@@ -133,14 +129,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
 		loadSkin(currentSkin);
 
-		camera.setToOrtho(false, Main.width, Main.height);
+		camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
 
 		batch = new SpriteBatch();
 
 		fft = new KissFFT(2048);
 
 		for (int i = 0; i < spectrum.length; i++) {
-			// maxValues[i] = 0;
 			topValues[i] = 0;
 		}
 
@@ -176,9 +171,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		});
 		playbackThread.setDaemon(true);
 		playbackThread.start();
-		device.setVolume(Main.volume);
-		// y = new Sprite(t, 0, 10, 16, 5);
-		playPause = new Button(pausedImage, Main.width / 2, Main.height / 2, radius * 2, radius * 2, new Function() {
+		device.setVolume(ConfigHandler.volume);
+		playPause = new Button(pausedImage, ConfigHandler.width / 2, ConfigHandler.height / 2, radius * 2, radius * 2, new Function() {
 			@Override
 			public void toRun() {
 				playing = !playing;
@@ -189,10 +183,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 				}
 			}
 		});
-		effect = new ParticleEffect();
-		effect.load(Gdx.files.internal("data/3.p"), Gdx.files.internal("data"));
-		effect.scaleEffect(0.5f);
-		effect.start();
 		angle = 10;
 		this.name = name == null ? this.filename.substring(this.filename.lastIndexOf('\\') + 1, this.filename.length() - 4) : name;
 		GlobalInputProcessor.getInstance().register(this);
@@ -220,12 +210,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		Util.ignoreErrors(new Function() {
 			@Override
 			public void toRun() {
-				effect.dispose();
-			}
-		});
-		Util.ignoreErrors(new Function() {
-			@Override
-			public void toRun() {
 				playbackThread.interrupt();
 				playbackThread = null;
 			}
@@ -247,7 +231,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		float scale = calculateScale() / 125 / 4096 + 0.2f;
 		float angle = 180f / NB_BARS;
 		float offsetAngle = -this.angle;
-		float k = Main.width / 910f;
+		float k = ConfigHandler.width / 910f;
 		float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
 		camera.update();
 		batch.begin();
@@ -266,9 +250,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
 			int nb = (samples.length / NB_BARS) / 2;
 			float avg = avg(histoX, nb) / (NB_BARS / 40) / LINE_SCALE;
-			// if (avg > maxValues[histoX]) {
-			// maxValues[histoX] = avg;
-			// }
 
 			if (avg > topValues[histoX]) {
 				topValues[histoX] = avg;
@@ -296,24 +277,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			r.setRotation(angle * i + 180 + offsetAngle);
 			r.draw(batch);
 
-			// drawing max values (in yellow)
-			// tmp = scale(maxValues[histoX]) / 256 + tScale * radius;
-			// y.setSize(barWidth * k, 2);
-			// y.setPosition((Main.width - barWidth * k) / 2, Main.height / 2 +
-			// tmp);
-			// y.setOrigin(barWidth * k / 2, -tmp);
-			// y.setRotation(angle * i + offsetAngle);
-			// y.draw(batch);
-			// y.setRotation(angle * i + 180 + offsetAngle);
-			// y.draw(batch);
-
 			topValues[histoX] -= FALLING_SPEED;
 		}
 		if (scale > 0.33 && playing) {
 			this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
 		}
-		if (effect.isComplete())
-			effect.reset();
 		if (!ft.finished()) {
 			FontManager.getSongNameFont().setColor(1, 1, 1, ft.getFadeX());
 			FontManager.getSongNameFont().draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
@@ -321,17 +289,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		}
 		if (changingVolume) {
 			volumeft.show();
-			Main.volume += Math.signum(factor) * 0.01;
-			if (Main.volume < 0) {
-				Main.volume = 0;
+			ConfigHandler.volume += Math.signum(factor) * 0.01;
+			if (ConfigHandler.volume < 0) {
+				ConfigHandler.volume = 0;
 			}
-			if (Main.volume > 1) {
-				Main.volume = 1;
+			if (ConfigHandler.volume > 1) {
+				ConfigHandler.volume = 1;
 			}
-			device.setVolume(Main.volume);
+			device.setVolume(ConfigHandler.volume);
 		}
 		if (!volumeft.finished()) {
-			String volumeString = Math.round((Main.volume * 100)) + "%";
+			String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
 			FontManager.getTimeFont().setColor(1, 1, 1, volumeft.getFadeX());
 			FontManager.getTimeFont().draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
 			FontManager.getTimeFont().setColor(1, 1, 1, 1);
@@ -340,21 +308,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		String s = "-" + Util.computeTime((long) (songLength - playbackTime / 1000));
 		FontManager.getTimeFont().draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
 		float timeLeftScale = playbackTime / 1000f / songLength;
-		// line.setSize(10 * k, (Main.width - 62) * timeLeftScale);
-		// line.setColor(1, 1, 1, 0.1f + 1.5f * (scale > 0.13 ? (0.1f + scale -
-		// 0.12f) : 0.1f));
-		// line.setPosition(33, 47);
-		// line.setOrigin(0, 10 * k / 2);
-		// line.setRotation(-90);
-		// line.draw(batch);
-		// line.setColor(1, 1, 1, 1);
 		line.setSize(6 * k, (currentSkin.timeBar.z) * timeLeftScale);
 		line.setPosition(currentSkin.timeBar.x, currentSkin.timeBar.y);
 		line.setOrigin(0, 6 * k / 2);
 		line.setRotation(-90);
 		line.draw(batch);
-		// effect.setPosition(31 + (Main.width - 62) * timeLeftScale, 45
-		// +barWidth * k / 2); effect.draw(batch, Gdx.graphics.getDeltaTime());
 		playPause.drawCentered(batch, centerX, centerY);
 		currentSkin.rendererCustomParts(batch, false);
 		batch.end();
@@ -377,7 +335,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	}
 
 	private float scale(float x) {
-		return x * Main.height;
+		return x * ConfigHandler.height;
 	}
 
 	private float avg(int pos, int nb) {
@@ -395,10 +353,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
-		Main.width = width;
-		Main.height = height;
+		ConfigHandler.width = width;
+		ConfigHandler.height = height;
 		playPause.setLocation(width / 2, height / 2);
-		camera.setToOrtho(false, Main.width, Main.height);
+		camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
 		background.setSize(width, height);
 	}
 
@@ -466,14 +424,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		case Input.Keys.UP:
 			changingVolume = false;
 			break;
-		case Input.Keys.F2:
-			changingSkin = !changingSkin;
+		case Input.Keys.R:
 			try {
-				if (changingSkin) {
-					loadSkin(new Skin(Gdx.files.internal("data/test/test.skn").file()));
-				} else {
-					loadSkin(Skin.getDefaultSkin());
-				}
+				loadSkin(new Skin(currentSkin.skinFile));
 				if (playing) {
 					playPause.changeSkin(pausedImage, 512, 512);
 				} else {
@@ -500,6 +453,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		playImage = currentSkin.play;
 		loadBarsTexture(currentSkin.bars);
 		background = new Sprite(currentSkin.background);
+		background.setSize(ConfigHandler.width, ConfigHandler.height);
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import truelecter.iig.Main;
+import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
 
 public class VisualFile {
@@ -67,7 +67,8 @@ public class VisualFile {
 	}
 
 	public void update(float delta) {
-		Vector2 target = new Vector2(LEFT_PADDING, (Main.height - getHeight()) / 2 + (selectedId - id) * (LINE_SPLIT_HEIGHT + getHeight()));
+		Vector2 target = new Vector2(LEFT_PADDING, (ConfigHandler.height - getHeight()) / 2 + (selectedId - id)
+				* (LINE_SPLIT_HEIGHT + getHeight()));
 		setPos(getPos().lerp(target, 0.3f));
 	}
 

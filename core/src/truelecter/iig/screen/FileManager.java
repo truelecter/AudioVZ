@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileFilter;
 
 import truelecter.iig.Main;
 import truelecter.iig.screen.visual.VisualFile;
+import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
@@ -31,7 +32,7 @@ public class FileManager implements Screen, SubInputProcessor {
 	private ArrayList<File> structureDirs;
 	private int rootCount = 0;
 	private OrthographicCamera camera;
-	private SpriteBatch batch;	
+	private SpriteBatch batch;
 	private Sprite background;
 	private int lastScreenX = 0;
 	private int lastScreenY = 0;
@@ -58,15 +59,17 @@ public class FileManager implements Screen, SubInputProcessor {
 		}
 		changeDir(currentDir);
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Main.width, Main.height);
+		camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
 		batch = new SpriteBatch();
-		background = new Sprite(new Texture("data/background.png"));
+		background = new Sprite(new Texture("data/FileManager/background.png"));
 		GlobalInputProcessor.getInstance().register(this);
 	}
 
 	private void changeDir(File dir) {
 		try {
 			lastFmDir = currentDir;
+			if (lastFmDir != null)
+				ConfigHandler.lastFileManagerPath = lastFmDir.getAbsolutePath();
 			if (dir != null) {
 				if (dir.exists() && !dir.isDirectory()) {
 					Main.getInstance().setScreen(new AudioSpectrum(dir, true, Util.getMP3InfoForFile(dir)));
@@ -158,7 +161,7 @@ public class FileManager implements Screen, SubInputProcessor {
 	}
 
 	@Override
-	public void render(float delta) {	
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();

@@ -7,8 +7,6 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import truelecter.iig.Main;
-
 public class CloudManager {
 
 	private static final String CLOUD_TEXTURE_PATH = "res/gui/menu/";
@@ -40,8 +38,8 @@ public class CloudManager {
 
 	private Cloud randomCloud() {
 		Cloud cloud = new Cloud();
-		cloud.x = -500 + gen.nextInt(Main.width + 500);
-		cloud.y = gen.nextInt(Main.height);
+		cloud.x = -500 + gen.nextInt(ConfigHandler.width + 500);
+		cloud.y = gen.nextInt(ConfigHandler.height);
 		cloud.speedDif = gen.nextFloat() / 200;
 		if (gen.nextBoolean()) {
 			cloud.speedDif = -cloud.speedDif;
@@ -61,7 +59,7 @@ public class CloudManager {
 		double cloudStep = 0.01;
 		for (Cloud cloud : clouds) {
 			cloud.x += (cloudStep + cloud.speedDif) * delta * 1000;
-			if (cloud.x > Main.width) {
+			if (cloud.x > ConfigHandler.width) {
 				cloud.x = -200 - gen.nextInt(500);
 				cloud.img = getRandomCloudTexture();
 			}
