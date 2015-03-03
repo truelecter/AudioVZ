@@ -8,7 +8,6 @@ import truelecter.iig.screen.visual.Button;
 import truelecter.iig.screen.visual.FadingText;
 import truelecter.iig.screen.visual.Skin;
 import truelecter.iig.util.ConfigHandler;
-import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
@@ -283,9 +282,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
 		}
 		if (!ft.finished()) {
-			FontManager.getSongNameFont().setColor(1, 1, 1, ft.getFadeX());
-			FontManager.getSongNameFont().draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
-			FontManager.getSongNameFont().setColor(1, 1, 1, 1);
+			currentSkin.songName.setColor(1, 1, 1, ft.getFadeX());
+			currentSkin.songName.draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
+			currentSkin.songName.setColor(1, 1, 1, 1);
 		}
 		if (changingVolume) {
 			volumeft.show();
@@ -300,17 +299,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		}
 		if (!volumeft.finished()) {
 			String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
-			FontManager.getTimeFont().setColor(1, 1, 1, volumeft.getFadeX());
-			FontManager.getTimeFont().draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
-			FontManager.getTimeFont().setColor(1, 1, 1, 1);
+			currentSkin.volumeFont.setColor(1, 1, 1, volumeft.getFadeX());
+			currentSkin.volumeFont.draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
+			currentSkin.volumeFont.setColor(1, 1, 1, 1);
 		}
-		FontManager.getTimeFont().draw(batch, Util.computeTime(playbackTime / 1000), currentSkin.timePassed.x, currentSkin.timePassed.y);
+		currentSkin.timeFont.draw(batch, Util.computeTime(playbackTime / 1000), currentSkin.timePassed.x, currentSkin.timePassed.y);
 		String s = "-" + Util.computeTime((long) (songLength - playbackTime / 1000));
-		FontManager.getTimeFont().draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
+		currentSkin.timeFont.draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
 		float timeLeftScale = playbackTime / 1000f / songLength;
 		line.setSize(currentSkin.timeBar.t * k, (currentSkin.timeBar.z) * timeLeftScale);
 		line.setPosition(currentSkin.timeBar.x, currentSkin.timeBar.y);
-		line.setOrigin(0, 6 * k / 2);
+		line.setOrigin(0, currentSkin.timeBar.t * k / 2);
 		line.setRotation(-90);
 		line.draw(batch);
 		playPause.drawCentered(batch, centerX, centerY);

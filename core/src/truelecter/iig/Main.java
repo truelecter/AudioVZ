@@ -60,7 +60,7 @@ public class Main extends Game {
 		} catch (Exception e) {
 			setScreen(new FileManager());
 		}
-		this.resize(ConfigHandler.width, ConfigHandler.height);
+		Gdx.graphics.setDisplayMode(ConfigHandler.width, ConfigHandler.height, false);	
 	}
 
 	public void saveConfig() {

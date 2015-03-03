@@ -63,6 +63,7 @@ public class FileManager implements Screen, SubInputProcessor {
 		batch = new SpriteBatch();
 		background = new Sprite(new Texture("data/FileManager/background.png"));
 		GlobalInputProcessor.getInstance().register(this);
+		background.setSize(ConfigHandler.width, ConfigHandler.height);
 	}
 
 	private void changeDir(File dir) {

@@ -8,6 +8,7 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 
 import truelecter.iig.util.ConfigHandler;
+import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Util;
 
 import com.badlogic.gdx.Gdx;
@@ -59,7 +60,7 @@ public class Skin {
 	}
 
 	private enum SkinPartType {
-		CUSTOM, BUTTON, BACKGROUND, TIMEPANEL;
+		CUSTOM, BUTTON, BACKGROUND, TIMEPANEL, FONT;
 
 		protected static SkinPartType getTypeFor(String name) {
 			String c = name.toLowerCase();
@@ -71,6 +72,9 @@ public class Skin {
 			}
 			if (c.equals("timepanel")) {
 				return TIMEPANEL;
+			}
+			if (c.equals("font")) {
+				return FONT;
 			}
 			return CUSTOM;
 		}
@@ -105,6 +109,10 @@ public class Skin {
 	public ArrayList<SkinPart> customPartsForeground;
 	public File skinFile;
 	public Vector2 button = new Vector2(ConfigHandler.width, ConfigHandler.height);
+	public BitmapFont fileLabel = FontManager.getFileLabelFont();
+	public BitmapFont songName = FontManager.getSongNameFont();
+	public BitmapFont timeFont = FontManager.getTimeFont();
+	public BitmapFont volumeFont = FontManager.getTimeFont();
 
 	private static Skin defaultSkin;
 
@@ -137,6 +145,8 @@ public class Skin {
 			case BACKGROUND:
 				x = section.get("path", "backgroundV.png");
 				background = new Texture(Util.getFile(skin, x, useInternal));
+				break;
+			case FONT:
 				break;
 			case TIMEPANEL:
 				x = section.get("timePassedX", "40");

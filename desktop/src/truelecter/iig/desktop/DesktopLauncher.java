@@ -10,8 +10,6 @@ public class DesktopLauncher {
 		cfg.title = "AudioVZ";
 		cfg.backgroundFPS = 40;
 		cfg.foregroundFPS = 60;
-		cfg.width = 910;
-		cfg.height = 700;
 		cfg.resizable = false;
 		new LwjglApplication(new Main(), cfg);
 	}
