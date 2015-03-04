@@ -20,11 +20,12 @@ import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.analysis.KissFFT;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.GL20;
+//import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class AudioSpectrum implements Screen, SubInputProcessor {
 
@@ -54,6 +55,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private Sprite r;
 
 	private Button playPause;
+	private Vector2 fadeTime;
 
 	// TESTAREA_BEGIN
 	// TESTAREA_END
@@ -71,6 +73,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private long songLength = 0;
 	private float centerX = ConfigHandler.width / 2;
 	private float centerY = ConfigHandler.height / 2;
+	private Sprite pixel = new Sprite(
+			new Texture(Gdx.files.internal("pix.bmp")));
 
 	private boolean changingVolume = false;
 	private int factor = 1;
@@ -108,7 +112,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	}
 
 	public AudioSpectrum(String filename, boolean p, String name) {
-		this.filename = filename.replace("!INTERNAL!", Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!",
+		this.filename = filename.replace("!INTERNAL!",
+				Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!",
 				Gdx.files.getExternalStoragePath());
 		while (this.filename.contains("/")) {
 			this.filename = this.filename.replace("/", "\\");
@@ -151,11 +156,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 				do {
 					if (playing) {
 						try {
-							readSamples = decoder.readSamples(samples, 0, samples.length);
+							readSamples = decoder.readSamples(samples, 0,
+									samples.length);
 							totalSamples += readSamples;
 							fft.spectrum(samples, spectrum);
 							device.writeSamples(samples, 0, readSamples);
-							playbackTime = totalSamples * 500 / decoder.getRate();
+							playbackTime = totalSamples * 500
+									/ decoder.getRate();
 						} catch (Exception e) {
 						}
 					}
@@ -171,21 +178,27 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		playbackThread.setDaemon(true);
 		playbackThread.start();
 		device.setVolume(ConfigHandler.volume);
-		playPause = new Button(pausedImage, ConfigHandler.width / 2, ConfigHandler.height / 2, radius * 2, radius * 2, new Function() {
-			@Override
-			public void toRun() {
-				playing = !playing;
-				if (playing) {
-					playPause.changeSkin(pausedImage, 512, 512);
-				} else {
-					playPause.changeSkin(playImage, 512, 512);
-				}
-			}
-		});
+		playPause = new Button(pausedImage, ConfigHandler.width / 2,
+				ConfigHandler.height / 2, radius * 2, radius * 2,
+				new Function() {
+					@Override
+					public void toRun() {
+						playing = !playing;
+						if (playing) {
+							playPause.changeSkin(pausedImage, 512, 512);
+						} else {
+							playPause.changeSkin(playImage, 512, 512);
+						}
+					}
+				});
 		angle = 10;
-		this.name = name == null ? this.filename.substring(this.filename.lastIndexOf('\\') + 1, this.filename.length() - 4) : name;
+		this.name = name == null ? this.filename
+				.substring(this.filename.lastIndexOf('\\') + 1,
+						this.filename.length() - 4) : name;
 		GlobalInputProcessor.getInstance().register(this);
 		songLength = (long) decoder.getLength();
+		fadeTime = new Vector2(0, 0);
+		pixel.setSize(ConfigHandler.width, ConfigHandler.height);
 	}
 
 	@Override
@@ -224,9 +237,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 		if (needToChange) {
 			Main.getInstance().setScreen(new FileManager());
 		}
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		// Gdx.gl.glClearColor(0, 0, 0, 1);
+		// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		fadeTime = fadeTime.lerp(new Vector2(1, 0), 0.01f);
 		float scale = calculateScale() / 125 / 4096 + 0.2f;
 		float angle = 180f / NB_BARS;
 		float offsetAngle = -this.angle;
@@ -267,7 +281,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			b.draw(batch);
 
 			// drawing top values(in red)
-			tmp = scale(currentSkin.useOldBars ? topValues[histoX] : avg) / 256 + tScale * radius;
+			tmp = scale(currentSkin.useOldBars ? topValues[histoX] : avg) / 256
+					+ tScale * radius;
 			r.setSize(barWidth * k, 4);
 			r.setPosition(centerX - barWidth * k / 2, centerY + tmp);
 			r.setOrigin(barWidth * k / 2, -tmp);
@@ -279,11 +294,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			topValues[histoX] -= FALLING_SPEED;
 		}
 		if (scale > 0.33 && playing) {
-			this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
+			this.angle += gen.nextBoolean() ? (scale - 0.2) * 20
+					: -(scale - 0.2) * 20;
 		}
 		if (!ft.finished()) {
 			currentSkin.songName.setColor(1, 1, 1, ft.getFadeX());
-			currentSkin.songName.draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
+			currentSkin.songName.draw(batch, name, currentSkin.songNamePos.x,
+					currentSkin.songNamePos.y);
 			currentSkin.songName.setColor(1, 1, 1, 1);
 		}
 		if (changingVolume) {
@@ -298,22 +315,30 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 			device.setVolume(ConfigHandler.volume);
 		}
 		if (!volumeft.finished()) {
-			String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
+			String volumeString = Math.round((ConfigHandler.volume * 100))
+					+ "%";
 			currentSkin.volumeFont.setColor(1, 1, 1, volumeft.getFadeX());
-			currentSkin.volumeFont.draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
+			currentSkin.volumeFont.draw(batch, volumeString,
+					currentSkin.soundPos.x, currentSkin.soundPos.y);
 			currentSkin.volumeFont.setColor(1, 1, 1, 1);
 		}
-		currentSkin.timeFont.draw(batch, Util.computeTime(playbackTime / 1000), currentSkin.timePassed.x, currentSkin.timePassed.y);
-		String s = "-" + Util.computeTime((long) (songLength - playbackTime / 1000));
-		currentSkin.timeFont.draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
+		currentSkin.timeFont.draw(batch, Util.computeTime(playbackTime / 1000),
+				currentSkin.timePassed.x, currentSkin.timePassed.y);
+		String s = "-"
+				+ Util.computeTime((long) (songLength - playbackTime / 1000));
+		currentSkin.timeFont.draw(batch, s, currentSkin.timeLeft.x,
+				currentSkin.timeLeft.y);
 		float timeLeftScale = playbackTime / 1000f / songLength;
-		line.setSize(currentSkin.timeBar.t * k, (currentSkin.timeBar.z) * timeLeftScale);
+		line.setSize(currentSkin.timeBar.t * k, (currentSkin.timeBar.z)
+				* timeLeftScale);
 		line.setPosition(currentSkin.timeBar.x, currentSkin.timeBar.y);
 		line.setOrigin(0, currentSkin.timeBar.t * k / 2);
 		line.setRotation(-90);
 		line.draw(batch);
 		playPause.drawCentered(batch, centerX, centerY);
 		currentSkin.rendererCustomParts(batch, false);
+		pixel.setColor(0, 0, 0, 1 - fadeTime.x);
+		pixel.draw(batch);
 		batch.end();
 	}
 
@@ -375,7 +400,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 	private DecoderInfo initDecoder(String path) {
 		FileHandle externalFile = Gdx.files.absolute(path);
 		Mpg123Decoder decoder = new Mpg123Decoder(externalFile);
-		AudioDevice device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 ? true : false);
+		AudioDevice device = Gdx.audio.newAudioDevice(decoder.getRate(),
+				decoder.getChannels() == 1 ? true : false);
 		return new DecoderInfo(decoder, device);
 	}
 

@@ -20,8 +20,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class FileManager implements Screen, SubInputProcessor {
 
@@ -41,6 +43,11 @@ public class FileManager implements Screen, SubInputProcessor {
 	private int scrollPointerDiff = 0;
 	private String lastError = "";
 	private boolean enableHidden = false;
+	private Animation loaderAnimation;
+	private float stateTime = 0f;
+	private boolean loading = false;
+	private String name = null;
+	private File selectedFile = null;
 
 	public FileManager() {
 		this(lastFmDir);
@@ -64,32 +71,53 @@ public class FileManager implements Screen, SubInputProcessor {
 		background = new Sprite(new Texture("data/FileManager/background.png"));
 		GlobalInputProcessor.getInstance().register(this);
 		background.setSize(ConfigHandler.width, ConfigHandler.height);
+		initAnimation();
 	}
 
-	private void changeDir(File dir) {
+	private void initAnimation() {
+		Texture loadingAnimationTexture = new Texture(
+				Gdx.files.internal("loading.gif"));
+		TextureRegion[][] sprites = TextureRegion.split(
+				loadingAnimationTexture, 128, 128);
+		loaderAnimation = new Animation(0.025f, sprites[0]);
+	}
+
+	private void changeDir(final File dir) {
 		try {
 			lastFmDir = currentDir;
 			if (lastFmDir != null)
 				ConfigHandler.lastFileManagerPath = lastFmDir.getAbsolutePath();
 			if (dir != null) {
 				if (dir.exists() && !dir.isDirectory()) {
-					Main.getInstance().setScreen(new AudioSpectrum(dir, true, Util.getMP3InfoForFile(dir)));
-					dispose();
+					Thread t = new Thread(new Runnable() {
+
+						@Override
+						public void run() {
+							loading = true;
+							name = Util.getMP3InfoForFile(dir);
+						}
+					});
+					selectedFile = dir;
+					t.start();
 				}
 				if (!dir.exists() || !dir.isDirectory()) {
-					currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
+					currentDir = lastFmDir == null ? new File(
+							Gdx.files.getExternalStoragePath()) : lastFmDir;
 				} else {
 					currentDir = dir;
 				}
 				rootCount = File.listRoots().length;
 				try {
-					makeStructure(new ArrayList<File>(Arrays.asList(currentDir.listFiles())));
+					makeStructure(new ArrayList<File>(Arrays.asList(currentDir
+							.listFiles())));
 				} catch (Exception e) {
 
 				}
 			} else {
 				rootCount = File.listRoots().length;
-				makeStructure(new ArrayList<File>(Arrays.asList(File.listRoots())), true);
+				makeStructure(
+						new ArrayList<File>(Arrays.asList(File.listRoots())),
+						true);
 			}
 		} catch (Exception e) {
 			changeDir(lastFmDir);
@@ -104,8 +132,10 @@ public class FileManager implements Screen, SubInputProcessor {
 
 	public static boolean isHidden(File f) {
 		boolean s = f.isHidden() || f.getName().charAt(0) == '.';
-		boolean names = f.getName().toLowerCase().equals("RECYCLER".toLowerCase())
-				|| f.getName().toLowerCase().equals("$Recycle.Bin".toLowerCase());
+		boolean names = f.getName().toLowerCase()
+				.equals("RECYCLER".toLowerCase())
+				|| f.getName().toLowerCase()
+						.equals("$Recycle.Bin".toLowerCase());
 		return s || names;
 	}
 
@@ -163,14 +193,28 @@ public class FileManager implements Screen, SubInputProcessor {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		batch.begin();
-		batch.setProjectionMatrix(camera.combined);
-		background.draw(batch);
-		VisualFile.updateAll(delta);
-		VisualFile.drawAll(batch);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if (loading) {
+			stateTime += Gdx.graphics.getDeltaTime();
+			TextureRegion currentFrame = loaderAnimation.getKeyFrame(stateTime,
+					true);
+			batch.draw(currentFrame,
+					ConfigHandler.width - currentFrame.getRegionWidth() - 25,
+					25);
+			if (name != null) {
+				Main.getInstance().setScreen(
+						new AudioSpectrum(selectedFile, true, name));
+				dispose();
+			}
+		} else {
+			batch.setProjectionMatrix(camera.combined);
+			background.draw(batch);
+			VisualFile.updateAll(delta);
+			VisualFile.drawAll(batch);
+		}
 		batch.end();
 	}
 
@@ -233,7 +277,8 @@ public class FileManager implements Screen, SubInputProcessor {
 
 				@Override
 				public boolean accept(File f) {
-					return f.isDirectory() || f.getName().toLowerCase().endsWith(".mp3");
+					return f.isDirectory()
+							|| f.getName().toLowerCase().endsWith(".mp3");
 				}
 
 				@Override
@@ -243,11 +288,14 @@ public class FileManager implements Screen, SubInputProcessor {
 
 			});
 			if (fc.showDialog(null, "Choose your file") == JFileChooser.APPROVE_OPTION) {
-				Main.getInstance().setScreen(new AudioSpectrum(fc.getSelectedFile().getAbsolutePath()));
+				Main.getInstance().setScreen(
+						new AudioSpectrum(fc.getSelectedFile()
+								.getAbsolutePath()));
 			}
 			break;
 		case Input.Keys.F1:
-			Main.getInstance().setScreen(new AudioSpectrum(false, "Spag Heddy - Sine Time"));
+			Main.getInstance().setScreen(
+					new AudioSpectrum(false, "Spag Heddy - Sine Time"));
 			break;
 		case Input.Keys.H:
 			enableHidden = !enableHidden;
