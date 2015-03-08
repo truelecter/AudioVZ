@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="truelecter.iig.android"
+    android:versionCode="2"
+    android:versionName="1.0.1" >
+
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="18" />
+    <uses-feature android:required="true" android:glEsVersion="2" android:name="Required OpenGL ES 2 version"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/appName"
+        android:theme="@style/GdxTheme" android:killAfterRestore="true">
+        <activity
+            android:name="truelecter.iig.android.AndroidLauncher"
+            android:label="AudioVZ" 
+            android:screenOrientation="landscape"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		cfg.backgroundFPS = 40;
 		cfg.foregroundFPS = 60;
 		cfg.resizable = false;
+		cfg.audioDeviceBufferCount = 10;
 		new LwjglApplication(new Main(), cfg);
 	}
 }
