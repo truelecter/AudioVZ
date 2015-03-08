@@ -122,10 +122,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             tfilename = tfilename.replace("/", "\\");
         }
         while (tfilename.contains("\\\\")) {
-            tfilename = tfilename.replace("\\\\", "\\");
+            tfilename = tfilename.replace("\\\\", "?");
         }
-        while (tfilename.contains("\\")) {
-            tfilename = tfilename.replace("\\", File.separator);
+        while (tfilename.contains("?")) {
+            tfilename = tfilename.replace("?", File.separator);
         }
         this.filename = tfilename;
         playing = p;
@@ -137,7 +137,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             System.out.println("Invalid skin properties!");
             e.printStackTrace();
         }
-
         loadSkin(currentSkin);
 
         camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
@@ -188,7 +187,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
             }
         });
-
         playbackThread.setDaemon(true);
         playbackThread.start();
         device.setVolume(ConfigHandler.volume);

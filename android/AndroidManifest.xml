@@ -15,8 +15,7 @@
         <activity
             android:name="truelecter.iig.android.AndroidLauncher"
             android:label="AudioVZ" 
-            android:screenOrientation="landscape"
-            >
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

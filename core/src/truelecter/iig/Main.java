@@ -63,7 +63,6 @@ public class Main extends Game {
             e.printStackTrace();
         }
         Gdx.input.setInputProcessor(new GlobalInputProcessor());
-
         Gdx.graphics.setDisplayMode(ConfigHandler.width, ConfigHandler.height, false);
         try {
             setScreen(new FileManager(new File(ConfigHandler.lastFileManagerPath)));
