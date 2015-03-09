@@ -95,8 +95,8 @@ public class FileManager implements Screen, SubInputProcessor {
         Cursor musicCursor = Main.aa.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, proj, null, null, null);
         VisualFile.prepareList();
         while (musicCursor.moveToNext()) {
-            Logger.i(musicCursor.getString(2) + " : " + musicCursor.getString(1));
-            new VisualFile(new File(musicCursor.getString(1)), musicCursor.getString(2));
+            if (musicCursor.getString(1).toLowerCase().endsWith(".mp3"))
+                new VisualFile(new File(musicCursor.getString(1)), musicCursor.getString(2));
         }
         VisualFile.get(0).select();
     }
@@ -108,22 +108,18 @@ public class FileManager implements Screen, SubInputProcessor {
     }
 
     private void changeDir(final File dir) {
+        if (Gdx.app.getType() == ApplicationType.Android) {
+            Main.getInstance().setScreen(
+                    new AudioSpectrum(VisualFile.getSelected().getFile(), true, VisualFile.getSelected().getLabel()));
+            return;
+        }
         try {
             lastFmDir = currentDir;
             if (lastFmDir != null)
                 ConfigHandler.lastFileManagerPath = lastFmDir.getAbsolutePath();
             if (dir != null) {
                 if (dir.exists() && !dir.isDirectory()) {
-                    Thread t = new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            loading = true;
-                            name = Util.getMP3InfoForFile(dir);
-                        }
-                    });
-                    selectedFile = dir;
-                    t.start();
+                    startThread(dir);
                 }
                 if (!dir.exists() || !dir.isDirectory()) {
                     currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
@@ -144,6 +140,19 @@ public class FileManager implements Screen, SubInputProcessor {
             changeDir(lastFmDir);
             Logger.w("Error changing dir. Dir changed to last succesfull", e);
         }
+    }
+
+    private void startThread(File dir) {
+        Thread t = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                loading = true;
+                name = Util.getMP3InfoForFile(dir);
+            }
+        });
+        selectedFile = dir;
+        t.start();
     }
 
     private void makeStructure(ArrayList<File> list) {

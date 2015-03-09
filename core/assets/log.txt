@@ -368,3 +368,106 @@ java.lang.NullPointerException
 [INFO Mon Mar 09 17:12:19 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
 [ Mon Mar 09 17:16:33 EET 2015] **************************************************************************
 [INFO Mon Mar 09 17:16:33 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 19:48:01 EET 2015] **************************************************************************
+[INFO Mon Mar 09 19:48:01 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 19:48:29 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:262)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:227)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 19:48:39 EET 2015] **************************************************************************
+[INFO Mon Mar 09 19:48:39 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 19:48:43 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:262)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:227)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 19:53:32 EET 2015] **************************************************************************
+[INFO Mon Mar 09 19:53:32 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 19:53:37 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:266)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:231)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 19:53:37 EET 2015] Error while playing file!
+com.badlogic.gdx.utils.GdxRuntimeException: Unabe to allocate audio buffers.
+	at com.badlogic.gdx.backends.lwjgl.audio.OpenALAudioDevice.writeSamples(OpenALAudioDevice.java:92)
+	at com.badlogic.gdx.backends.lwjgl.audio.OpenALAudioDevice.writeSamples(OpenALAudioDevice.java:67)
+	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:174)
+	at java.lang.Thread.run(Thread.java:722)
+[ Mon Mar 09 19:54:35 EET 2015] **************************************************************************
+[INFO Mon Mar 09 19:54:35 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 19:54:37 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:266)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:231)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 20:00:39 EET 2015] **************************************************************************
+[INFO Mon Mar 09 20:00:39 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 20:01:06 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:267)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:232)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 20:01:42 EET 2015] **************************************************************************
+[INFO Mon Mar 09 20:01:42 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 20:01:46 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:268)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:233)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 20:01:46 EET 2015] Error while playing file!
+com.badlogic.gdx.utils.GdxRuntimeException: Unabe to allocate audio buffers.
+	at com.badlogic.gdx.backends.lwjgl.audio.OpenALAudioDevice.writeSamples(OpenALAudioDevice.java:92)
+	at com.badlogic.gdx.backends.lwjgl.audio.OpenALAudioDevice.writeSamples(OpenALAudioDevice.java:67)
+	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:174)
+	at java.lang.Thread.run(Thread.java:722)
+[ Mon Mar 09 20:01:48 EET 2015] **************************************************************************
+[INFO Mon Mar 09 20:01:48 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[WARNING Mon Mar 09 20:01:50 EET 2015] Error while disposing FileManager instance
+java.lang.IllegalArgumentException: buffer not allocated with newUnsafeByteBuffer or already disposed
+	at com.badlogic.gdx.utils.BufferUtils.disposeUnsafeByteBuffer(BufferUtils.java:507)
+	at com.badlogic.gdx.graphics.glutils.VertexArray.dispose(VertexArray.java:67)
+	at com.badlogic.gdx.graphics.Mesh.dispose(Mesh.java:581)
+	at com.badlogic.gdx.graphics.g2d.SpriteBatch.dispose(SpriteBatch.java:1007)
+	at truelecter.iig.screen.FileManager.dispose(FileManager.java:268)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:233)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
