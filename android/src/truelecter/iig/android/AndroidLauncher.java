@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -27,6 +28,7 @@ public class AndroidLauncher extends AndroidApplication {
         } catch (Exception e) {
             Log.w("AudioVZ", "Failed to get package version");
         }
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         File firstRun = new File(getFilesDir().getAbsoluteFile() + "/FIRST_RUN_" + firstRunString);
         if (!firstRun.exists()) {
             copyFileOrDir("loading.gif", true);

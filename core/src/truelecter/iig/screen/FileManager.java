@@ -142,9 +142,8 @@ public class FileManager implements Screen, SubInputProcessor {
         }
     }
 
-    private void startThread(File dir) {
+    private void startThread(final File dir) {
         Thread t = new Thread(new Runnable() {
-
             @Override
             public void run() {
                 loading = true;
