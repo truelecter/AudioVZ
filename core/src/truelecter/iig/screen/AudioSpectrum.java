@@ -12,6 +12,7 @@ import truelecter.iig.screen.visual.FadingText;
 import truelecter.iig.screen.visual.Skin;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Function;
+import truelecter.iig.util.Logger;
 import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
@@ -122,7 +123,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             tfilename = tfilename.replace("/", "\\");
         }
         while (tfilename.contains("\\\\")) {
-            tfilename = tfilename.replace("\\\\", "?");
+            tfilename = tfilename.replace("\\\\", "\\");
+        }
+        while (tfilename.contains("\\")) {
+            tfilename = tfilename.replace("\\", "?");
         }
         while (tfilename.contains("?")) {
             tfilename = tfilename.replace("?", File.separator);
@@ -134,8 +138,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         try {
             currentSkin = Skin.skinByPath(ConfigHandler.skinPath);
         } catch (Exception e) {
-            System.out.println("Invalid skin properties!");
-            e.printStackTrace();
+            Logger.e("Invalid skin properties!", e);
         }
         loadSkin(currentSkin);
 
@@ -175,8 +178,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         }
                     } while (readSamples > 0);
                 } catch (Exception e1) {
-                    System.out.println("Error while playing file! ");
-                    e1.printStackTrace();
+                    Logger.e("Error while playing file!", e1);
                 }
                 long lastTime = System.currentTimeMillis();
                 do {
@@ -246,6 +248,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     public void render(float delta) {
         if (needToChange) {
             Main.getInstance().setScreen(new FileManager());
+            return;
         }
         // Gdx.gl.glClearColor(0, 0, 0, 1);
         // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -443,6 +446,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                     playPause.changeSkin(playImage, 512, 512);
                 }
             } catch (Exception e) {
+                Logger.w("Error while refreshing skin", e);
             }
             break;
         default:
@@ -458,6 +462,14 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     }
 
     private void loadSkin(Skin skin) {
+        if (skin == null) {
+            try {
+                currentSkin = Skin.getDefaultSkin();
+            } catch (Exception e) {
+                Logger.e("Skin loading error", e);
+                Gdx.app.exit();
+            }
+        }
         currentSkin = skin;
         pausedImage = currentSkin.pause;
         playImage = currentSkin.play;

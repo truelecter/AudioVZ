@@ -10,9 +10,12 @@ import javax.swing.filechooser.FileFilter;
 import truelecter.iig.Main;
 import truelecter.iig.screen.visual.VisualFile;
 import truelecter.iig.util.ConfigHandler;
+import truelecter.iig.util.Logger;
 import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
+import android.database.Cursor;
+import android.provider.MediaStore;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -41,7 +44,6 @@ public class FileManager implements Screen, SubInputProcessor {
     private int lastScreenTouchX = 0;
     private int lastScreenTouchY = 0;
     private int scrollPointerDiff = 0;
-    private String lastError = "";
     private boolean enableHidden = false;
     private Animation loaderAnimation;
     private float stateTime = 0f;
@@ -64,7 +66,20 @@ public class FileManager implements Screen, SubInputProcessor {
         if (currentDir == null) {
             currentDir = new File(Gdx.files.getExternalStoragePath());
         }
-        changeDir(currentDir);
+        if (currentDir.getAbsolutePath().toLowerCase().endsWith(".mp3")) {
+            currentDir = currentDir.getParentFile();
+        }
+        switch (Gdx.app.getType()) {
+        case Desktop:
+            changeDir(currentDir);
+            break;
+        case Android:
+            initAndroidView();
+            break;
+        default:
+            Logger.e("Unsupported system", null);
+            Gdx.app.exit();
+        }
         camera = new OrthographicCamera();
         camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
         batch = new SpriteBatch();
@@ -72,6 +87,18 @@ public class FileManager implements Screen, SubInputProcessor {
         GlobalInputProcessor.getInstance().register(this);
         background.setSize(ConfigHandler.width, ConfigHandler.height);
         initAnimation();
+    }
+
+    private void initAndroidView() {
+        String[] proj = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Video.Media.SIZE };
+        Cursor musicCursor = Main.aa.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, proj, null, null, null);
+        VisualFile.prepareList();
+        while (musicCursor.moveToNext()) {
+            Logger.i(musicCursor.getString(2) + " : " + musicCursor.getString(1));
+            new VisualFile(new File(musicCursor.getString(1)), musicCursor.getString(2));
+        }
+        VisualFile.get(0).select();
     }
 
     private void initAnimation() {
@@ -115,8 +142,7 @@ public class FileManager implements Screen, SubInputProcessor {
             }
         } catch (Exception e) {
             changeDir(lastFmDir);
-            lastError = e.getMessage();
-            System.out.println(lastError);
+            Logger.w("Error changing dir. Dir changed to last succesfull", e);
         }
     }
 
@@ -171,7 +197,6 @@ public class FileManager implements Screen, SubInputProcessor {
         }
         if (root) {
             VisualFile.get(0).select();
-
         } else
             for (File f : structureFiles) {
                 new VisualFile(f, 0, 0);
@@ -236,6 +261,7 @@ public class FileManager implements Screen, SubInputProcessor {
             GlobalInputProcessor.getInstance().remove(this);
             batch.dispose();
         } catch (Exception e) {
+            Logger.w("Error while disposing FileManager instance", e);
         }
     }
 
@@ -253,13 +279,17 @@ public class FileManager implements Screen, SubInputProcessor {
         case Input.Keys.UP:
             VisualFile.getSelected().before();
             break;
-        case Input.Keys.BACK:
         case Input.Keys.ENTER:
             changeDir(VisualFile.getSelected().getFile());
+            break;
+        case Input.Keys.BACK:
+            Gdx.app.exit();
             break;
         case Input.Keys.BACKSPACE:
             if (!VisualFile.isOnRoot())
                 changeDir(VisualFile.get(0).getFile());
+            else
+                Gdx.app.exit();
             break;
         case Input.Keys.ESCAPE:
             Gdx.app.exit();
@@ -283,7 +313,7 @@ public class FileManager implements Screen, SubInputProcessor {
                 try {
                     Main.getInstance().setScreen(new AudioSpectrum(fc.getSelectedFile().getAbsolutePath()));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Logger.e("Unable to select file", e);
                 }
             }
             break;
@@ -291,7 +321,7 @@ public class FileManager implements Screen, SubInputProcessor {
             try {
                 Main.getInstance().setScreen(new AudioSpectrum(false, "Spag Heddy - Sine Time"));
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.e("Error while launching preview", e);
             }
             break;
         case Input.Keys.H:

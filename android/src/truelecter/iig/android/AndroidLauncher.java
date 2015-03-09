@@ -23,7 +23,7 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         String firstRunString = "";
         try {
-            firstRunString = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            firstRunString = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode + "";
         } catch (Exception e) {
             Log.w("AudioVZ", "Failed to get package version");
         }
@@ -38,7 +38,7 @@ public class AndroidLauncher extends AndroidApplication {
                 e.printStackTrace();
             }
         }
-        initialize(new Main(), config);
+        initialize(new Main(this), config);
     }
 
     public void copyFileOrDir(String path, boolean onlyFiles) {
