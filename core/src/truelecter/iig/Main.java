@@ -2,11 +2,9 @@ package truelecter.iig;
 
 import java.io.File;
 
-import org.ini4j.Ini;
-import org.ini4j.Profile.Section;
-
 import truelecter.iig.screen.*;
 import truelecter.iig.util.ConfigHandler;
+import truelecter.iig.util.Ini;
 import truelecter.iig.util.Logger;
 import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
@@ -42,6 +40,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        Logger.log("", "**************************************************************************", null);
         Logger.i("Started AudioVZ v " + VERSION);
         if (!Gdx.files.isExternalStorageAvailable()) {
             Logger.w("External storage is not available", null);
@@ -51,13 +50,12 @@ public class Main extends Game {
             if (!configFile.exists()) {
                 configFile.createNewFile();
             }
-            Ini config = new Ini(configFile);
-            Ini.Section s = config.get("Main");
-            ConfigHandler.width = s.get("width", int.class, 900);
-            ConfigHandler.height = s.get("height", int.class, 600);
-            ConfigHandler.volume = s.get("volume", float.class, 0.1f);
-            ConfigHandler.lastFileManagerPath = s.get("lastFMPath", String.class, Gdx.files.getExternalStoragePath());
-            ConfigHandler.skinOrigPath = s.get("skin", String.class, null);
+            Ini s = new Ini(configFile);
+            ConfigHandler.width = s.getInt("Main", "width", 900);
+            ConfigHandler.height = s.getInt("Main", "height", 600);
+            ConfigHandler.volume = (float) s.getDouble("Main", "volume", 0.1);
+            ConfigHandler.lastFileManagerPath = s.getString("Main", "lastFMPath", Gdx.files.getExternalStoragePath());
+            ConfigHandler.skinOrigPath = s.getString("Main", "skin", null);
             if (ConfigHandler.skinOrigPath != null) {
                 ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!",
                         Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!", Gdx.files.getExternalStoragePath());
@@ -69,7 +67,7 @@ public class Main extends Game {
             ConfigHandler.height = 600;
             ConfigHandler.volume = 0.1f;
             ConfigHandler.lastFileManagerPath = Gdx.files.getExternalStoragePath();
-            ConfigHandler.skinPath = Gdx.files.internal("data/228/test.skn").path();
+            ConfigHandler.skinPath = Gdx.files.local("data/228/test.skn").path();
             Logger.w("Config not found. Using default values\n" + "Watched in "
                     + Gdx.files.local("data/config.ini").file().getAbsolutePath(), e);
         }
@@ -91,18 +89,18 @@ public class Main extends Game {
     public void saveConfig() {
         try {
             Ini config = new Ini();
-            Section s = config.add("Main");
-            s.add("width", ConfigHandler.width);
-            s.add("height", ConfigHandler.height);
-            s.add("volume", ConfigHandler.volume);
-            s.add("lastFMPath", Util.convertPath(ConfigHandler.lastFileManagerPath));
-            s.add("skin", ConfigHandler.skinOrigPath);
+            config.put("Main","width", ConfigHandler.width);
+            config.put("Main","height", ConfigHandler.height);
+            config.put("Main","volume", ConfigHandler.volume);
+            config.put("Main","lastFMPath", Util.convertPath(ConfigHandler.lastFileManagerPath));
+            config.put("Main","skin", ConfigHandler.skinOrigPath);
             File f = Gdx.files.local("data/config.ini").file();
-            config.store(f);
+            config.write(f);
             System.out.println("Config stored to " + f.getAbsolutePath());
         } catch (Exception e) {
             System.out.println("Config wasn't saved.");
             e.printStackTrace();
         }
+
     }
 }

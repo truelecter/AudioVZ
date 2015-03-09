@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.ini4j.Ini;
-import org.ini4j.InvalidFileFormatException;
-
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
+import truelecter.iig.util.Ini;
 import truelecter.iig.util.Util;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -121,65 +119,66 @@ public class Skin {
 
     private static Skin defaultSkin;
 
-    public Skin(File skin) throws InvalidFileFormatException, IOException {
+    public Skin(File skin) throws IOException {
         this(skin, false);
     }
 
-    private Skin(File skin, boolean useInternal) throws InvalidFileFormatException, IOException {
+    private Skin(File skin, boolean useInternal) throws IOException {
         System.out.println("Using" + (useInternal ? " internal " : " ") + "skin: " + skin.getAbsolutePath());
-        Ini ini = new Ini(skin);
+        Ini section = new Ini(skin);
         customPartsBackground = new ArrayList<SkinPart>();
         customPartsForeground = new ArrayList<SkinPart>();
         skinFile = skin;
-        for (String name : ini.keySet()) {
-            Ini.Section section = ini.get(name);
+        for (String name : section._entries.keySet()) {
             String x = "";
             String y = "";
             String w = "";
             String v = "";
             switch (SkinPartType.getTypeFor(name)) {
             case BUTTON:
-                x = section.get("playPath", "icon/play.png");
+                x = section.getString("Button", "playPath", "icon/play.png");
                 play = new Texture(Util.getFile(skin, x, useInternal));
-                x = section.get("pausePath", "icon/pause.png");
+                x = section.getString("Button", "pausePath", "icon/pause.png");
                 pause = new Texture(Util.getFile(skin, x, useInternal));
-                x = section.get("posX", "width / 2");
-                y = section.get("posY", "height / 2");
+                x = section.getString("Button", "posX", "width / 2");
+                y = section.getString("Button", "posY", "height / 2");
                 button = new Vector2(parse(x), parse(y));
                 break;
             case BACKGROUND:
-                x = section.get("path", "backgroundV.png");
+                x = section.getString("Background", "path", "backgroundV.png");
                 background = new Texture(Util.getFile(skin, x, useInternal));
                 break;
             case FONT:
                 break;
             case TIMEPANEL:
-                x = section.get("timePassedX", "40");
-                y = section.get("timePassedY", "100");
+                x = section.getString("TimePanel", "timePassedX", "40");
+                y = section.getString("TimePanel", "timePassedY", "100");
                 timePassed = new Vector2(parse(x), parse(y));
-                x = section.get("timeLeftX", "width - 120");
-                y = section.get("timeLeftY", "100");
+                x = section.getString("TimePanel", "timeLeftX", "width - 120");
+                y = section.getString("TimePanel", "timeLeftY", "100");
                 timeLeft = new Vector2(parse(x), parse(y));
-                x = section.get("songNameX", "50");
-                y = section.get("songNameY", "height - 50");
+                x = section.getString("TimePanel", "songNameX", "50");
+                y = section.getString("TimePanel", "songNameY", "height - 50");
                 songNamePos = new Vector2(parse(x), parse(y));
-                x = section.get("soundX", " width - 90");
-                y = section.get("soundY", "height - 50");
+                x = section.getString("TimePanel", "soundX", " width - 90");
+                y = section.getString("TimePanel", "soundY", "height - 50");
                 soundPos = new Vector2(parse(x), parse(y));
-                w = section.get("timeBarLength", "width - 62");
-                x = section.get("timeBarX", "33");
-                y = section.get("timeBarY", "47");
-                v = section.get("timeBarWidth", "8");
+                w = section.getString("TimePanel", "timeBarLength", "width - 62");
+                x = section.getString("TimePanel", "timeBarX", "33");
+                y = section.getString("TimePanel", "timeBarY", "47");
+                v = section.getString("TimePanel", "timeBarWidth", "8");
                 timeBar = new Vector4(parse(x), parse(y), parse(w), parse(v));
-                bars = new Texture(Util.getFile(skin, section.get("bars", "colors-borders.png"), useInternal));
-                barWidth = (long) parse(section.get("barWidth", "8"));
-                useOldBars = section.get("oldBars", boolean.class, false);
+                bars = new Texture(Util.getFile(skin, section.getString("TimePanel", "bars", "colors-borders.png"),
+                        useInternal));
+                barWidth = (long) parse(section.getString("TimePanel", "barWidth", "8"));
+                useOldBars = Boolean.valueOf(section.getString("TimePanel", "oldBars", "false"));
                 break;
             default:
-                x = section.get("path", "data/particle.png");
+                x = section.getString("Main", "path", "data/particle.png");
                 Texture t = new Texture(Util.getFile(skin, x, x.equalsIgnoreCase("data/default/particle.png")));
-                SkinPart sp = new SkinPart(t, parse(section.get("x", "0")), parse(section.get("y", "0")));
-                if (section.get("isOnBackground", boolean.class, true)) {
+                SkinPart sp = new SkinPart(t, parse(section.getString(name, "x", "0")), parse(section.getString(name,
+                        "y", "0")));
+                if (Boolean.valueOf(section.getString(name, "isOnBackground", "true"))) {
                     customPartsBackground.add(sp);
                 } else {
                     customPartsForeground.add(sp);
@@ -208,14 +207,14 @@ public class Skin {
         return (float) expr.value();
     }
 
-    public static Skin skinByPath(String path) throws InvalidFileFormatException, IOException {
+    public static Skin skinByPath(String path) throws IOException {
         if (path == null || !new File(path).exists()) {
             return getDefaultSkin();
         }
         return new Skin(new File(path));
     }
 
-    public static Skin getDefaultSkin() throws InvalidFileFormatException, IOException {
+    public static Skin getDefaultSkin() throws IOException {
         if (defaultSkin == null) {
             if (Gdx.app.getType() == ApplicationType.Android)
                 defaultSkin = new Skin(Gdx.files.local("data/default/default.skn").file(), false);

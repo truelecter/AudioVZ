@@ -1,1 +1,370 @@
-[INFO Mon Mar 09 11:50:49 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Mon Mar 09 16:46:18 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:46:18 EET 2015] Invalid skin properties!
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: H:/_Projects/IIG/core/assets/data/228/icon/play.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:140)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.GLTexture.createTextureData(GLTexture.java:185)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:103)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:95)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:140)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:139)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: Error reading file: H:\_Projects\IIG\core\assets\data\228\icon\play.png (Absolute)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:144)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:137)
+	... 14 more
+Caused by: java.io.FileNotFoundException: H:\_Projects\IIG\core\assets\data\228\icon\play.png (The system cannot find the path specified)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:140)
+	... 16 more
+[ERROR Mon Mar 09 16:46:19 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:474)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:143)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:46:19 EET 2015] Invalid skin properties!
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: H:/_Projects/IIG/core/assets/data/228/icon/play.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:140)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.GLTexture.createTextureData(GLTexture.java:185)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:103)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:95)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:140)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:139)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: Error reading file: H:\_Projects\IIG\core\assets\data\228\icon\play.png (Absolute)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:144)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:137)
+	... 14 more
+Caused by: java.io.FileNotFoundException: H:\_Projects\IIG\core\assets\data\228\icon\play.png (The system cannot find the path specified)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:140)
+	... 16 more
+[ERROR Mon Mar 09 16:46:19 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:474)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:143)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:46:21 EET 2015] Invalid skin properties!
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: H:/_Projects/IIG/core/assets/data/228/icon/play.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:140)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.GLTexture.createTextureData(GLTexture.java:185)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:103)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:95)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:140)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:139)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:116)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:223)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: Error reading file: H:\_Projects\IIG\core\assets\data\228\icon\play.png (Absolute)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:144)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:137)
+	... 13 more
+Caused by: java.io.FileNotFoundException: H:\_Projects\IIG\core\assets\data\228\icon\play.png (The system cannot find the path specified)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:140)
+	... 15 more
+[INFO Mon Mar 09 16:47:19 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:47:22 EET 2015] Invalid skin properties!
+com.badlogic.gdx.utils.GdxRuntimeException: Couldn't load file: H:/_Projects/IIG/core/assets/data/228/icon/play.png
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:140)
+	at com.badlogic.gdx.graphics.TextureData$Factory.loadFromFile(TextureData.java:98)
+	at com.badlogic.gdx.graphics.GLTexture.createTextureData(GLTexture.java:185)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:103)
+	at com.badlogic.gdx.graphics.Texture.<init>(Texture.java:95)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:140)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:139)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:116)
+	at truelecter.iig.screen.FileManager.render(FileManager.java:223)
+	at com.badlogic.gdx.Game.render(Game.java:46)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:208)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+Caused by: com.badlogic.gdx.utils.GdxRuntimeException: Error reading file: H:\_Projects\IIG\core\assets\data\228\icon\play.png (Absolute)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:144)
+	at com.badlogic.gdx.files.FileHandle.readBytes(FileHandle.java:222)
+	at com.badlogic.gdx.graphics.Pixmap.<init>(Pixmap.java:137)
+	... 13 more
+Caused by: java.io.FileNotFoundException: H:\_Projects\IIG\core\assets\data\228\icon\play.png (The system cannot find the path specified)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at com.badlogic.gdx.files.FileHandle.read(FileHandle.java:140)
+	... 15 more
+[INFO Mon Mar 09 16:52:26 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:52:26 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:52:26 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:52:26 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[INFO Mon Mar 09 16:52:57 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:52:57 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:52:57 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:52:57 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 16:53:52 EET 2015] **************************************************************************
+[INFO Mon Mar 09 16:53:52 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:53:53 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:53:53 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:53:53 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 16:54:47 EET 2015] **************************************************************************
+[INFO Mon Mar 09 16:54:47 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:54:47 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:54:48 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:54:48 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 16:56:35 EET 2015] **************************************************************************
+[INFO Mon Mar 09 16:56:35 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:56:36 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:56:36 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:56:36 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 16:57:06 EET 2015] **************************************************************************
+[INFO Mon Mar 09 16:57:06 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ERROR Mon Mar 09 16:57:07 EET 2015] Invalid skin properties!
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:123)
+	at truelecter.iig.screen.visual.Skin.skinByPath(Skin.java:214)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:138)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:57:07 EET 2015] Skin loading error
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.Skin.parse(Skin.java:201)
+	at truelecter.iig.screen.visual.Skin.<init>(Skin.java:145)
+	at truelecter.iig.screen.visual.Skin.getDefaultSkin(Skin.java:222)
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:466)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ERROR Mon Mar 09 16:57:07 EET 2015] Error while launching preview
+java.lang.NullPointerException
+	at truelecter.iig.screen.AudioSpectrum.loadSkin(AudioSpectrum.java:473)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:142)
+	at truelecter.iig.screen.AudioSpectrum.<init>(AudioSpectrum.java:96)
+	at truelecter.iig.screen.FileManager.keyUp(FileManager.java:322)
+	at truelecter.iig.util.input.GlobalInputProcessor.keyUp(GlobalInputProcessor.java:50)
+	at com.badlogic.gdx.backends.lwjgl.LwjglInput.processEvents(LwjglInput.java:289)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:200)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Mon Mar 09 16:58:28 EET 2015] **************************************************************************
+[INFO Mon Mar 09 16:58:28 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:09:45 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:09:45 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:09:58 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:09:58 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:11:01 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:11:01 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:11:33 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:11:33 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:11:56 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:11:56 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:12:19 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:12:19 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[ Mon Mar 09 17:16:33 EET 2015] **************************************************************************
+[INFO Mon Mar 09 17:16:33 EET 2015] Started AudioVZ v 0.0.3 pre-alpha

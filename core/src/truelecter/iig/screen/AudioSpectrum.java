@@ -134,7 +134,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         this.filename = tfilename;
         playing = p;
         camera = new OrthographicCamera();
-
         try {
             currentSkin = Skin.skinByPath(ConfigHandler.skinPath);
         } catch (Exception e) {
