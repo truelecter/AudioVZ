@@ -1,2 +1,2 @@
-@call gradlew.bat run
+@call gradlew.bat desktop:run
 @pause

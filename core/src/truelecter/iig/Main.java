@@ -16,7 +16,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 
 public class Main extends Game {
     private static Main instance;
-    public final boolean DEBUG = true;
+    public static final boolean DEBUG = true;
     public final String VERSION = "0.0.3 pre-alpha";
     public static AndroidApplication aa = null;
 
@@ -89,11 +89,11 @@ public class Main extends Game {
     public void saveConfig() {
         try {
             Ini config = new Ini();
-            config.put("Main","width", ConfigHandler.width);
-            config.put("Main","height", ConfigHandler.height);
-            config.put("Main","volume", ConfigHandler.volume);
-            config.put("Main","lastFMPath", Util.convertPath(ConfigHandler.lastFileManagerPath));
-            config.put("Main","skin", ConfigHandler.skinOrigPath);
+            config.put("Main", "width", ConfigHandler.width);
+            config.put("Main", "height", ConfigHandler.height);
+            config.put("Main", "volume", ConfigHandler.volume);
+            config.put("Main", "lastFMPath", Util.convertPath(ConfigHandler.lastFileManagerPath));
+            config.put("Main", "skin", ConfigHandler.skinOrigPath);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);
             System.out.println("Config stored to " + f.getAbsolutePath());

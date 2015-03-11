@@ -7,13 +7,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import truelecter.iig.Main;
+
 import com.badlogic.gdx.Gdx;
 
 public class Logger {
-    
+
     private static BufferedWriter getWriter() {
         try {
-            File file = new File(Gdx.files.getLocalStoragePath() + File.separator + "log.txt");
+            File file = null;
+            if (Main.DEBUG)
+                file = new File(Gdx.files.getLocalStoragePath() + File.separator + "log.txt");
+            else
+                file = new File(Gdx.files.getExternalStoragePath() + File.separator + "AudioVZ_log.txt");
             if (!file.exists()) {
                 file.createNewFile();
             }
