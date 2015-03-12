@@ -19,23 +19,32 @@ public class Main extends Game {
     public static final boolean DEBUG = true;
     public final String VERSION = "0.0.3 pre-alpha";
     public static AndroidApplication aa = null;
+    private final File toRun;
 
     public static Main getInstance() {
         return instance;
     }
 
-    public Main(AndroidApplication aa) {
-        this();
+    public Main() {
+        this(null);
+    }
+
+    public Main(AndroidApplication aa, File f) {
+        this(f);
         Main.aa = aa;
     }
 
-    public Main() {
+    public Main(File f) {
         instance = this;
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             public void run() {
                 saveConfig();
             }
         }));
+        if (f != null && (aa != null || (f.exists() && f.isFile() && f.getAbsolutePath().endsWith(".mp3"))))
+            toRun = f;
+        else
+            toRun = null;
     }
 
     @Override
@@ -78,6 +87,13 @@ public class Main extends Game {
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(new GlobalInputProcessor());
         Gdx.graphics.setDisplayMode(ConfigHandler.width, ConfigHandler.height, false);
+        if (toRun != null) {
+            Logger.i("File param is not null! Path: " + toRun.getAbsolutePath());
+            setScreen(new Loading(2000l, toRun, null));
+            return;
+        } else {
+            Logger.i("File param is null!");
+        }
         try {
             setScreen(new FileManager(new File(ConfigHandler.lastFileManagerPath)));
         } catch (Exception e) {

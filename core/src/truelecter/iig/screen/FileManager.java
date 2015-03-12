@@ -11,7 +11,6 @@ import truelecter.iig.Main;
 import truelecter.iig.screen.visual.VisualFile;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Logger;
-import truelecter.iig.util.Util;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
 import android.database.Cursor;
@@ -24,10 +23,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class FileManager implements Screen, SubInputProcessor {
 
@@ -45,11 +42,6 @@ public class FileManager implements Screen, SubInputProcessor {
     private int lastScreenTouchY = 0;
     private int scrollPointerDiff = 0;
     private boolean enableHidden = false;
-    private Animation loaderAnimation;
-    private float stateTime = 0f;
-    private boolean loading = false;
-    private String name = null;
-    private File selectedFile = null;
 
     public FileManager() {
         this(ConfigHandler.lastFileManagerPath);
@@ -86,7 +78,6 @@ public class FileManager implements Screen, SubInputProcessor {
         background = new Sprite(new Texture("data/FileManager/background.png"));
         GlobalInputProcessor.getInstance().register(this);
         background.setSize(ConfigHandler.width, ConfigHandler.height);
-        initAnimation();
     }
 
     private void initAndroidView() {
@@ -101,12 +92,6 @@ public class FileManager implements Screen, SubInputProcessor {
         VisualFile.get(0).select();
     }
 
-    private void initAnimation() {
-        Texture loadingAnimationTexture = new Texture(Gdx.files.internal("loading.gif"));
-        TextureRegion[][] sprites = TextureRegion.split(loadingAnimationTexture, 128, 128);
-        loaderAnimation = new Animation(0.025f, sprites[0]);
-    }
-
     private void changeDir(final File dir) {
         if (Gdx.app.getType() == ApplicationType.Android) {
             Main.getInstance().setScreen(
@@ -119,7 +104,8 @@ public class FileManager implements Screen, SubInputProcessor {
                 ConfigHandler.lastFileManagerPath = lastFmDir.getAbsolutePath();
             if (dir != null) {
                 if (dir.exists() && !dir.isDirectory()) {
-                    startThread(dir);
+                    Main.getInstance().setScreen(new Loading(0l, dir, null));
+
                 }
                 if (!dir.exists() || !dir.isDirectory()) {
                     currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
@@ -140,18 +126,6 @@ public class FileManager implements Screen, SubInputProcessor {
             changeDir(lastFmDir);
             Logger.w("Error changing dir. Dir changed to last succesfull", e);
         }
-    }
-
-    private void startThread(final File dir) {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loading = true;
-                name = Util.getMP3InfoForFile(dir);
-            }
-        });
-        selectedFile = dir;
-        t.start();
     }
 
     private void makeStructure(ArrayList<File> list) {
@@ -222,24 +196,10 @@ public class FileManager implements Screen, SubInputProcessor {
         batch.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (loading) {
-            stateTime += Gdx.graphics.getDeltaTime();
-            TextureRegion currentFrame = loaderAnimation.getKeyFrame(stateTime, true);
-            batch.draw(currentFrame, ConfigHandler.width - currentFrame.getRegionWidth() - 25, 25);
-            if (name != null) {
-                try {
-                    Main.getInstance().setScreen(new AudioSpectrum(selectedFile, true, name));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                dispose();
-            }
-        } else {
-            batch.setProjectionMatrix(camera.combined);
-            background.draw(batch);
-            VisualFile.updateAll(delta);
-            VisualFile.drawAll(batch);
-        }
+        batch.setProjectionMatrix(camera.combined);
+        background.draw(batch);
+        VisualFile.updateAll(delta);
+        VisualFile.drawAll(batch);
         batch.end();
     }
 
@@ -290,15 +250,13 @@ public class FileManager implements Screen, SubInputProcessor {
         case Input.Keys.ENTER:
             changeDir(VisualFile.getSelected().getFile());
             break;
-        case Input.Keys.BACK:
-            Gdx.app.exit();
-            break;
         case Input.Keys.BACKSPACE:
             if (!VisualFile.isOnRoot())
                 changeDir(VisualFile.get(0).getFile());
             else
                 Gdx.app.exit();
             break;
+        case Input.Keys.BACK:
         case Input.Keys.ESCAPE:
             Gdx.app.exit();
             break;

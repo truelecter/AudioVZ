@@ -156,29 +156,36 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         playbackThread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Logger.i("Playback thread started!");
                 int readSamples = 1;
                 long toStay = 5000;
                 long totalSamples = 0;
+                Bitstream bitStream = null;
                 try {
-                    Bitstream bitStream = new Bitstream(new FileInputStream(filename));
-                    Decoder decode = new Decoder();
-                    do {
-                        if (playing) {
-                            SampleBuffer o = (SampleBuffer) decode.decodeFrame(bitStream.readFrame(), bitStream);
-                            samples = o.getBuffer();
-                            totalSamples += samples.length;
-                            // readSamples =
-                            // decoder.readSamples(samples,0,samples.length);
-                            fft.spectrum(samples, spectrum);
-                            // s.write(samples, 0, samples.length);
-                            device.writeSamples(samples, 0, samples.length);
-                            playbackTime = totalSamples * 500 / decoder.getRate();
-                            bitStream.closeFrame();
-                        }
-                    } while (readSamples > 0);
-                } catch (Exception e1) {
-                    Logger.e("Error while playing file!", e1);
+                    bitStream = new Bitstream(new FileInputStream(filename));
+                } catch (Exception e) {
+                    Logger.w("Bit stream init error", e);
                 }
+                Decoder decode = new Decoder();
+                do {
+                    if (playing) {
+                        try {
+                            samples = ((SampleBuffer) decode.decodeFrame(bitStream.readFrame(), bitStream)).getBuffer();
+                        } catch (Exception e) {
+                            samples = new short[0];
+                            Logger.w("Error decoding file", e);
+                        }
+                        totalSamples += samples.length;
+                        fft.spectrum(samples, spectrum);
+                        try {
+                            device.writeSamples(samples, 0, samples.length);
+                        } catch (Exception e){
+                            Logger.w("Error while writing to audio device", e);
+                        }
+                        playbackTime = totalSamples * 500 / decoder.getRate();
+                        bitStream.closeFrame();
+                    }
+                } while (readSamples > 0);
                 long lastTime = System.currentTimeMillis();
                 do {
                     toStay += lastTime - System.currentTimeMillis();
@@ -188,8 +195,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
             }
         });
-        playbackThread.setDaemon(true);
-        playbackThread.start();
         device.setVolume(ConfigHandler.volume);
         playPause = new Button(pausedImage, ConfigHandler.width / 2, ConfigHandler.height / 2, radius * 2, radius * 2,
                 new Function() {
@@ -210,6 +215,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         songLength = (long) decoder.getLength();
         fadeTime = new Vector2(0, 0);
         pixel.setSize(ConfigHandler.width, ConfigHandler.height);
+        playbackThread.setDaemon(true);
+        playbackThread.start();
     }
 
     @Override

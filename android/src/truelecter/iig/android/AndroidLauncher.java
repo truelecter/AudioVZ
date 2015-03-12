@@ -7,7 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -40,7 +43,16 @@ public class AndroidLauncher extends AndroidApplication {
                 e.printStackTrace();
             }
         }
-        initialize(new Main(this), config);
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String scheme = intent.getScheme();
+        File f = null;
+        if (action.compareTo(Intent.ACTION_VIEW) == 0 && scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+            Uri uri = intent.getData();
+            Log.v("AudioVZ", "File intent detected: " + action + " : " + uri.getPath());
+            f = new File(uri.getPath());
+        }
+        initialize(new Main(this, f), config);
     }
 
     public void copyFileOrDir(String path, boolean onlyFiles) {
@@ -71,14 +83,12 @@ public class AndroidLauncher extends AndroidApplication {
 
     private void copyFile(String filename) {
         AssetManager assetManager = this.getAssets();
-
         InputStream in = null;
         OutputStream out = null;
         try {
             in = assetManager.open(filename);
             String newFileName = getFilesDir().getAbsoluteFile() + "/" + filename;
             out = new FileOutputStream(newFileName);
-
             byte[] buffer = new byte[1024];
             int read = -1;
             while ((read = in.read(buffer)) != -1) {
@@ -93,6 +103,5 @@ public class AndroidLauncher extends AndroidApplication {
             Log.e("AudioVz", "Error copying file " + filename);
             e.printStackTrace();
         }
-
     }
 }
