@@ -19,9 +19,15 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 import truelecter.iig.Main;
+import truelecter.iig.screen.AudioSpectrum;
 
 @SuppressLint("SdCardPath")
 public class AndroidLauncher extends AndroidApplication {
+
+    protected void onPause() {
+        AudioSpectrum.onAndroidPause();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();

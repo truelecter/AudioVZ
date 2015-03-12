@@ -3,6 +3,9 @@ package truelecter.iig.screen.visual;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,11 +13,20 @@ import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
 
 public class VisualFile {
-    private static final int LINE_SPLIT_HEIGHT = 7;
+    private static final int LINE_SPLIT_HEIGHT = 10;
     private static final int LEFT_PADDING = 20;
     private static ArrayList<VisualFile> vf;
     private static int selectedId = 0;
     private static boolean onRoot = false;
+    private static float lerpSpeed = 0.15f;
+    private static Texture selectedTexture = new Texture("data/FileManager/selected.png");
+    private static Texture mainTexture = new Texture("data/FileManager/lines.png");
+    private File f;
+    private Vector2 pos;
+    private String label;
+    private boolean selected;
+    private Sprite texture;
+    private int id;
 
     public static void prepareList() {
         if (vf == null) {
@@ -36,12 +48,6 @@ public class VisualFile {
         }
     }
 
-    private File f;
-    private Vector2 pos;
-    private String label;
-    private boolean selected;
-    private int id;
-
     public VisualFile(File f, String label, float x, float y) {
         if (vf == null) {
             prepareList();
@@ -52,6 +58,7 @@ public class VisualFile {
         selected = false;
         id = vf.size();
         vf.add(this);
+        texture = new Sprite(mainTexture);
     }
 
     public VisualFile(File f) {
@@ -67,17 +74,17 @@ public class VisualFile {
     }
 
     public float getWidth() {
-        return FontManager.getFileLabelFont().getBounds(label).width;
+        return Math.max(texture.getWidth(), FontManager.getFileLabelFont().getBounds(label).width);
     }
 
     public float getHeight() {
-        return FontManager.getFileLabelFont().getBounds(label).height;
+        return texture.getHeight();
     }
 
     public void update(float delta) {
         Vector2 target = new Vector2(LEFT_PADDING, (ConfigHandler.height - getHeight()) / 2 + (selectedId - id)
-                * (LINE_SPLIT_HEIGHT + getHeight()));
-        setPos(getPos().lerp(target, 0.3f));
+                * (LINE_SPLIT_HEIGHT + getHeight()) - 0.1f);
+        setPos(getPos().lerp(target, lerpSpeed));
     }
 
     public boolean isSelected() {
@@ -85,6 +92,7 @@ public class VisualFile {
     }
 
     public void select() {
+        texture = new Sprite(selectedTexture);
         selectedId = id;
         selected = true;
     }
@@ -97,6 +105,7 @@ public class VisualFile {
             } else {
                 vf.get(id + 1).select();
             }
+            texture = new Sprite(mainTexture);
         }
     }
 
@@ -124,7 +133,12 @@ public class VisualFile {
     }
 
     public void draw(SpriteBatch batch) {
-        FontManager.getFileLabelFont().draw(batch, (selected ? ">> " : "") + label, pos.x, pos.y);
+        String str = (selected ? ">> " : "") + label;
+        TextBounds tb = FontManager.getFileLabelFont().getBounds(str);
+        texture.setSize(ConfigHandler.width - LEFT_PADDING * 2 - (selected ? 10 : 0), texture.getHeight());
+        texture.setPosition(pos.x + (selected ? 10 : 0), pos.y - texture.getHeight());
+        texture.draw(batch);
+        FontManager.getFileLabelFont().draw(batch, str, pos.x + 15, pos.y - (texture.getHeight() - tb.height) / 2);
     }
 
     public void before() {
@@ -135,6 +149,7 @@ public class VisualFile {
             } else {
                 vf.get(id - 1).select();
             }
+            texture = new Sprite(mainTexture);
         }
     }
 

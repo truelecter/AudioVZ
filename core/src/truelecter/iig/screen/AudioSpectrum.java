@@ -38,6 +38,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private final float FALLING_SPEED = (1.5f / 3.0f);
     private final float LINE_SCALE = 2f;
     private final int NB_BARS = 40;
+    private static AudioSpectrum instance = null;
 
     private Sprite background;
     private float radius = 256;
@@ -83,6 +84,12 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     private boolean changingVolume = false;
     private int factor = 1;
+
+    public static void onAndroidPause() {
+        if (instance != null) {
+            instance.playing = !instance.playing;
+        }
+    }
 
     public AudioSpectrum() {
         this("!INTERNAL!/data/default.mp3", true, null);
@@ -157,7 +164,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             @Override
             public void run() {
                 Logger.i("Playback thread started!");
-                int readSamples = 1;
                 long toStay = 5000;
                 long totalSamples = 0;
                 Bitstream bitStream = null;
@@ -179,13 +185,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         fft.spectrum(samples, spectrum);
                         try {
                             device.writeSamples(samples, 0, samples.length);
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             Logger.w("Error while writing to audio device", e);
                         }
                         playbackTime = totalSamples * 500 / decoder.getRate();
                         bitStream.closeFrame();
                     }
-                } while (readSamples > 0);
+                } while (samples.length > 0);
                 long lastTime = System.currentTimeMillis();
                 do {
                     toStay += lastTime - System.currentTimeMillis();
@@ -217,6 +223,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         pixel.setSize(ConfigHandler.width, ConfigHandler.height);
         playbackThread.setDaemon(true);
         playbackThread.start();
+        instance = this;
     }
 
     @Override
@@ -378,7 +385,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         for (int i = 0; i < nb; i++) {
             sum += spectrum[pos + i];
         }
-
+        if (nb == 0){
+            return 0;
+        }
         return (float) (sum / nb);
     }
 

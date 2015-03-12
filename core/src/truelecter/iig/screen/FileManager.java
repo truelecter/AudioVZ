@@ -21,7 +21,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,7 +33,6 @@ public class FileManager implements Screen, SubInputProcessor {
     private ArrayList<File> structureFiles;
     private ArrayList<File> structureDirs;
     private int rootCount = 0;
-    private OrthographicCamera camera;
     private SpriteBatch batch;
     private Sprite background;
     private int lastScreenY = 0;
@@ -72,8 +70,6 @@ public class FileManager implements Screen, SubInputProcessor {
             Logger.e("Unsupported system", null);
             Gdx.app.exit();
         }
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
         batch = new SpriteBatch();
         background = new Sprite(new Texture("data/FileManager/background.png"));
         GlobalInputProcessor.getInstance().register(this);
@@ -192,11 +188,9 @@ public class FileManager implements Screen, SubInputProcessor {
 
     @Override
     public void render(float delta) {
-        camera.update();
         batch.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(camera.combined);
         background.draw(batch);
         VisualFile.updateAll(delta);
         VisualFile.drawAll(batch);

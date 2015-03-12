@@ -39,4 +39,5 @@ public class FontManager {
 	public static BitmapFont getTimeFont() {
 		return getFont("timeFont.fnt", true);
 	}
+	
 }
