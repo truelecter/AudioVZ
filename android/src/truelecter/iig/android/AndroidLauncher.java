@@ -25,6 +25,7 @@ import truelecter.iig.screen.AudioSpectrum;
 public class AndroidLauncher extends AndroidApplication {
 
     protected void onPause() {
+        super.onPause();
         AudioSpectrum.onAndroidPause();
     }
 
