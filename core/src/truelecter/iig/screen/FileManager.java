@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileFilter;
 
 import truelecter.iig.Main;
 import truelecter.iig.screen.visual.VisualFile;
+import truelecter.iig.screen.visual.menu.Options;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Logger;
 import truelecter.iig.util.input.GlobalInputProcessor;
@@ -40,6 +41,7 @@ public class FileManager implements Screen, SubInputProcessor {
     private int lastScreenTouchY = 0;
     private int scrollPointerDiff = 0;
     private boolean enableHidden = false;
+    private Options o;
 
     public FileManager() {
         this(ConfigHandler.lastFileManagerPath);
@@ -72,8 +74,8 @@ public class FileManager implements Screen, SubInputProcessor {
         }
         batch = new SpriteBatch();
         background = new Sprite(new Texture("data/FileManager/background.png"));
-        GlobalInputProcessor.getInstance().register(this);
         background.setSize(ConfigHandler.width, ConfigHandler.height);
+        o = new Options();
     }
 
     private void initAndroidView() {
@@ -183,7 +185,9 @@ public class FileManager implements Screen, SubInputProcessor {
 
     @Override
     public void show() {
-
+        System.out.println("show!");
+        GlobalInputProcessor.removeAllOfClass(this.getClass());
+        GlobalInputProcessor.register(this);
     }
 
     @Override
@@ -194,6 +198,7 @@ public class FileManager implements Screen, SubInputProcessor {
         background.draw(batch);
         VisualFile.updateAll(delta);
         VisualFile.drawAll(batch);
+        o.render(batch);
         batch.end();
     }
 
@@ -220,7 +225,7 @@ public class FileManager implements Screen, SubInputProcessor {
     @Override
     public void dispose() {
         try {
-            GlobalInputProcessor.getInstance().remove(this);
+            GlobalInputProcessor.remove(this);
             batch.dispose();
         } catch (Exception e) {
             Logger.w("Error while disposing FileManager instance", e);
@@ -287,6 +292,10 @@ public class FileManager implements Screen, SubInputProcessor {
         case Input.Keys.H:
             enableHidden = !enableHidden;
             break;
+        case Input.Keys.O:
+            o.toggle();
+            ;
+            break;
         default:
             return false;
         }
@@ -303,7 +312,7 @@ public class FileManager implements Screen, SubInputProcessor {
         lastScreenTouchX = screenX;
         lastScreenTouchY = screenY;
         lastScreenY = screenY;
-        return false;
+        return true;
     }
 
     @Override
@@ -311,7 +320,7 @@ public class FileManager implements Screen, SubInputProcessor {
         if (Math.abs(lastScreenTouchX - screenX) < 10 && Math.abs(lastScreenTouchY - screenY) < 10) {
             changeDir(VisualFile.getSelected().getFile());
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -325,7 +334,7 @@ public class FileManager implements Screen, SubInputProcessor {
             scrollPointerDiff = 0;
         }
         lastScreenY = screenY;
-        return false;
+        return true;
     }
 
     @Override
@@ -342,7 +351,7 @@ public class FileManager implements Screen, SubInputProcessor {
             for (int i = 0; i < -amount; i++)
                 VisualFile.getSelected().before();
         }
-        return false;
+        return true;
     }
 
 }

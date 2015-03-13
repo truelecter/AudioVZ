@@ -18,7 +18,7 @@ public class VisualFile {
     private static ArrayList<VisualFile> vf;
     private static int selectedId = 0;
     private static boolean onRoot = false;
-    private static float lerpSpeed = 0.15f;
+    private static float lerpSpeed = 0.1337f;
     private static Texture selectedTexture = new Texture("data/FileManager/selected.png");
     private static Texture mainTexture = new Texture("data/FileManager/lines.png");
     private File f;

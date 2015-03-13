@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -21,7 +20,6 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import truelecter.iig.Main;
 import truelecter.iig.screen.AudioSpectrum;
 
-@SuppressLint("SdCardPath")
 public class AndroidLauncher extends AndroidApplication {
 
     protected void onPause() {

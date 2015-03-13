@@ -86,8 +86,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private int factor = 1;
 
     public static void onAndroidPause() {
-        if (instance != null) {
-            instance.playing = !instance.playing;
+        if (ConfigHandler.pauseOnHide && instance != null) {
+            instance.pause();
         }
     }
 
@@ -217,7 +217,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         angle = 10;
         this.name = name == null ? this.filename.substring(this.filename.lastIndexOf('\\') + 1,
                 this.filename.length() - 4) : name;
-        GlobalInputProcessor.getInstance().register(this);
         songLength = (long) decoder.getLength();
         fadeTime = new Vector2(0, 0);
         pixel.setSize(ConfigHandler.width, ConfigHandler.height);
@@ -254,7 +253,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     }
 
     public void remove() {
-        GlobalInputProcessor.getInstance().remove(playPause);
+        GlobalInputProcessor.remove(playPause);
     }
 
     @Override
@@ -385,7 +384,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         for (int i = 0; i < nb; i++) {
             sum += spectrum[pos + i];
         }
-        if (nb == 0){
+        if (nb == 0) {
             return 0;
         }
         return (float) (sum / nb);
@@ -393,6 +392,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     @Override
     public void show() {
+        GlobalInputProcessor.removeAllOfClass(this.getClass());
+        GlobalInputProcessor.register(this);
     }
 
     @Override
@@ -406,10 +407,16 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     @Override
     public void pause() {
+        playing = false;
+        changeButtonSkinAccordingOnPlaying();
     }
 
     @Override
     public void resume() {
+        if (!playing) {
+            playing = true;
+        }
+        changeButtonSkinAccordingOnPlaying();
     }
 
     @Override
@@ -455,11 +462,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         case Input.Keys.R:
             try {
                 loadSkin(new Skin(currentSkin.skinFile));
-                if (playing) {
-                    playPause.changeSkin(pausedImage, 512, 512);
-                } else {
-                    playPause.changeSkin(playImage, 512, 512);
-                }
+                changeButtonSkinAccordingOnPlaying();
             } catch (Exception e) {
                 Logger.w("Error while refreshing skin", e);
             }
@@ -468,6 +471,14 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             return false;
         }
         return true;
+    }
+
+    private void changeButtonSkinAccordingOnPlaying() {
+        if (playing) {
+            playPause.changeSkin(pausedImage, 512, 512);
+        } else {
+            playPause.changeSkin(playImage, 512, 512);
+        }
     }
 
     private void loadBarsTexture(Texture t) {

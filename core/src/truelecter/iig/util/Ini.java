@@ -59,6 +59,17 @@ public class Ini {
         return kv.get(key);
     }
 
+    public boolean getBoolean(String section, String key, boolean defaultvalue) {
+        Map<String, String> kv = _entries.get(section);
+        if (kv == null) {
+            return defaultvalue;
+        }
+        if (!kv.containsKey(key)) {
+            return defaultvalue;
+        }
+        return Boolean.valueOf(kv.get(key));
+    }
+
     public int getInt(String section, String key, int defaultvalue) {
         Map<String, String> kv = _entries.get(section);
         if (kv == null) {
