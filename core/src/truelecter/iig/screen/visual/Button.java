@@ -1,5 +1,6 @@
 package truelecter.iig.screen.visual;
 
+import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
@@ -135,7 +136,7 @@ public class Button implements SubInputProcessor, VisualPart {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return checkIfClicked(screenX, screenY);
+        return checkIfClicked(screenX, Math.abs(screenY - ConfigHandler.height));
     }
 
     @Override
@@ -166,5 +167,10 @@ public class Button implements SubInputProcessor, VisualPart {
     @Override
     public void render(SpriteBatch sb) {
         draw(sb);
+    }
+
+    @Override
+    public int getPriority() {
+        return 98;
     }
 }

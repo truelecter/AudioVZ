@@ -8,9 +8,11 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
 import truelecter.iig.Main;
+import truelecter.iig.screen.visual.Button;
 import truelecter.iig.screen.visual.VisualFile;
 import truelecter.iig.screen.visual.menu.Options;
 import truelecter.iig.util.ConfigHandler;
+import truelecter.iig.util.Function;
 import truelecter.iig.util.Logger;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
@@ -41,7 +43,8 @@ public class FileManager implements Screen, SubInputProcessor {
     private int lastScreenTouchY = 0;
     private int scrollPointerDiff = 0;
     private boolean enableHidden = false;
-    private Options o;
+    private Options options;
+    private Button optionsButton;
 
     public FileManager() {
         this(ConfigHandler.lastFileManagerPath);
@@ -75,7 +78,13 @@ public class FileManager implements Screen, SubInputProcessor {
         batch = new SpriteBatch();
         background = new Sprite(new Texture("data/FileManager/background.png"));
         background.setSize(ConfigHandler.width, ConfigHandler.height);
-        o = new Options();
+        options = new Options();
+        optionsButton = new Button(new Texture("data/default/icon/pause.png"), 20f, 20f, 60f, 60f, new Function() {
+            @Override
+            public void toRun() {
+                options.toggle();
+            }
+        });
     }
 
     private void initAndroidView() {
@@ -198,7 +207,8 @@ public class FileManager implements Screen, SubInputProcessor {
         background.draw(batch);
         VisualFile.updateAll(delta);
         VisualFile.drawAll(batch);
-        o.render(batch);
+        options.render(batch);
+        optionsButton.drawCentered(batch, 50, 50);
         batch.end();
     }
 
@@ -293,8 +303,7 @@ public class FileManager implements Screen, SubInputProcessor {
             enableHidden = !enableHidden;
             break;
         case Input.Keys.O:
-            o.toggle();
-            ;
+            options.toggle();
             break;
         default:
             return false;
@@ -352,6 +361,11 @@ public class FileManager implements Screen, SubInputProcessor {
                 VisualFile.getSelected().before();
         }
         return true;
+    }
+
+    @Override
+    public int getPriority() {
+        return 1;
     }
 
 }

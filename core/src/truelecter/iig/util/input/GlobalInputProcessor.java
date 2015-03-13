@@ -18,6 +18,26 @@ public class GlobalInputProcessor implements InputProcessor {
         return instance;
     }
 
+    private static void swap(ArrayList<SubInputProcessor> arr, int i, int j) {
+        SubInputProcessor t = arr.get(i);
+        arr.set(i, arr.get(j));
+        arr.set(j, t);
+    }
+
+    private static void sortByPriority() {
+        for (int i = getProcessors().size() - 1; i > -1; i--) {
+            for (int j = 0; j < i; j++) {
+                if (getProcessors().get(j + 1).getPriority() > getProcessors().get(j).getPriority()) {
+                    swap(getProcessors(), j + 1, j);
+                }
+            }
+        }
+        for (int i = 0; i < getProcessors().size(); i++) {
+            System.out.print(getProcessors().get(i).getClass().getSimpleName() + " ");
+        }
+        System.out.println();
+    }
+
     private static ArrayList<SubInputProcessor> getProcessors() {
         if (processors == null)
             processors = new ArrayList<SubInputProcessor>();
@@ -26,16 +46,18 @@ public class GlobalInputProcessor implements InputProcessor {
 
     public static void remove(SubInputProcessor s) {
         getProcessors().remove(s);
+        sortByPriority();
     }
 
     public static void register(SubInputProcessor s) {
         getProcessors().add(s);
+        sortByPriority();
     }
 
     public static void removeAllOfClass(Class<?> clazz) {
         for (SubInputProcessor p : getProcessors()) {
             if (p.getClass().getName().equals(clazz.getName())) {
-                getProcessors().remove(p);
+                remove(p);
             }
         }
     }

@@ -24,7 +24,7 @@ public class Checkbox extends Button {
     @Override
     protected boolean checkIfClicked(float ix, float iy) {
         if (ix > x - origWidth * scale / 2 && ix < x + origWidth * scale / 2) {
-            if (iy - getHeight() * 3 > y - scale * origHeight / 2 && iy - getHeight() * 3 < y + scale * origHeight / 2) {
+            if (iy> y - scale * origHeight / 2 && iy < y + scale * origHeight / 2) {
                 click();
                 return true;
             }
@@ -51,5 +51,9 @@ public class Checkbox extends Button {
 
     public boolean isChecked() {
         return isChecked;
+    }
+
+    public int getPiority() {
+        return 99;
     }
 }

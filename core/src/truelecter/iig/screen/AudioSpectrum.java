@@ -539,4 +539,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         return false;
     }
 
+    @Override
+    public int getPriority() {
+        return 2;
+    }
+
 }

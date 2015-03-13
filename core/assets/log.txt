@@ -67335,3 +67335,48 @@ java.lang.NullPointerException
 [INFO Fri Mar 13 22:57:09 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
 [INFO Fri Mar 13 22:57:09 EET 2015] File param is null!
 [INFO Fri Mar 13 22:57:17 EET 2015] Playback thread started!
+[ Fri Mar 13 23:07:07 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:07:07 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:07:07 EET 2015] File param is null!
+[ Fri Mar 13 23:13:53 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:13:53 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:13:53 EET 2015] File param is null!
+[ Fri Mar 13 23:15:15 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:15:15 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:15:15 EET 2015] File param is null!
+[ Fri Mar 13 23:15:34 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:15:34 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:15:34 EET 2015] File param is null!
+[ Fri Mar 13 23:15:43 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:15:43 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:15:43 EET 2015] File param is null!
+[ Fri Mar 13 23:17:30 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:17:30 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:17:30 EET 2015] File param is null!
+[ Fri Mar 13 23:17:33 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:17:33 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:17:33 EET 2015] File param is null!
+[ Fri Mar 13 23:18:12 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:18:12 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:18:12 EET 2015] File param is null!
+[ Fri Mar 13 23:19:14 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:19:14 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:19:14 EET 2015] File param is null!
+[ Fri Mar 13 23:21:53 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:21:53 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:21:53 EET 2015] File param is null!
+[ Fri Mar 13 23:22:40 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:22:40 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:22:41 EET 2015] File param is null!
+[ Fri Mar 13 23:23:10 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:23:10 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:23:10 EET 2015] File param is null!
+[ Fri Mar 13 23:23:16 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:23:16 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:23:16 EET 2015] File param is null!
+[ Fri Mar 13 23:24:13 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:24:13 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:24:13 EET 2015] File param is null!
+[ Fri Mar 13 23:25:52 EET 2015] **************************************************************************
+[INFO Fri Mar 13 23:25:52 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Fri Mar 13 23:25:53 EET 2015] File param is null!
