@@ -60,4 +60,9 @@ public class LabeledCheckbox implements VisualPart {
         setLocation(pos.x, y);
     }
 
+    @Override
+    public void dispose() {
+        checkbox.dispose();
+    }
+
 }

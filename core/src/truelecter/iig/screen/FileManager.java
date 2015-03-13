@@ -240,6 +240,8 @@ public class FileManager implements Screen, SubInputProcessor {
         } catch (Exception e) {
             Logger.w("Error while disposing FileManager instance", e);
         }
+        options.dispose();
+        optionsButton.dispose();
     }
 
     @Override

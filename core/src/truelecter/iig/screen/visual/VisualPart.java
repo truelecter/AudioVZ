@@ -9,4 +9,5 @@ public interface VisualPart {
     public void setX(float x);
     public void setY(float y);
     public void render(SpriteBatch sb);
+    public void dispose();
 }

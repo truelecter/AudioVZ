@@ -13,9 +13,8 @@ public class Options extends Menu {
     private LabeledCheckbox pauseOnHide;
 
     public Options() {
-        super(new Vector2(-ConfigHandler.width / 3, ConfigHandler.height), new Vector2(0,
-                ConfigHandler.height), ConfigHandler.width / 3, ConfigHandler.height, new Texture(
-                "data/FileManager/backgroundt.png"));
+        super(new Vector2(-ConfigHandler.width / 3, ConfigHandler.height), new Vector2(0, ConfigHandler.height),
+                ConfigHandler.width / 3, ConfigHandler.height, new Texture("data/FileManager/backgroundt.png"));
         pauseOnHide = new LabeledCheckbox("Pause music on hide", -1000, -1000, ConfigHandler.width / 3, new Texture(
                 "data/checked.png"), new Texture("data/unchecked.png"), false, null, new Function() {
             public void toRun() {
@@ -40,4 +39,9 @@ public class Options extends Menu {
         pauseOnHide.setLocation(pos.x, ConfigHandler.height / 2 - pauseOnHide.getHeight());
         background.setPosition(pos.x, 0);
     }
+
+    public void dispose() {
+        pauseOnHide.dispose();
+    }
+
 }

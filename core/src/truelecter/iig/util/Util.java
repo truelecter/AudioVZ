@@ -36,7 +36,7 @@ public class Util {
         long hour = length / 3600;
         long minute = (length - hour * 3600) / 60;
         long sec = length - hour * 3600 - minute * 60;
-        String res = hour != 0 ? hour + ":" : "" + minute + ":" + (sec < 10 ? "0" + sec : sec);
+        String res = (hour != 0 ? hour + ":" : "" )+ minute + ":" + (sec < 10 ? "0" + sec : sec);
         return res;
     }
 

@@ -53,7 +53,8 @@ public abstract class Menu {
     }
 
     protected abstract void updateRelativeness();
-
+    public abstract void dispose();
+        
     public void render(SpriteBatch s) {
         background.draw(s);
     }

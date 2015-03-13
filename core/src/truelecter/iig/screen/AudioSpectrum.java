@@ -10,6 +10,7 @@ import truelecter.iig.Main;
 import truelecter.iig.screen.visual.Button;
 import truelecter.iig.screen.visual.FadingText;
 import truelecter.iig.screen.visual.Skin;
+import truelecter.iig.screen.visual.menu.Options;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.Logger;
@@ -84,6 +85,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     private boolean changingVolume = false;
     private int factor = 1;
+    private Options options;
+    private Button optionsButton;
 
     public static void onAndroidPause() {
         if (ConfigHandler.pauseOnHide && instance != null) {
@@ -223,6 +226,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         playbackThread.setDaemon(true);
         playbackThread.start();
         instance = this;
+        options = new Options();
+        optionsButton = new Button(new Texture("data/default/icon/pause.png"), 20f, 20f, 60f, 60f, new Function() {
+            @Override
+            public void toRun() {
+                options.toggle();
+            }
+        });
     }
 
     @Override
@@ -254,6 +264,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     public void remove() {
         GlobalInputProcessor.remove(playPause);
+        options.dispose();
+        optionsButton.dispose();
     }
 
     @Override
@@ -354,6 +366,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         line.draw(batch);
         playPause.drawCentered(batch, centerX, centerY);
         currentSkin.rendererCustomParts(batch, false);
+        options.render(batch);
+        optionsButton.drawCentered(batch, 50, 50);
         pixel.setColor(0, 0, 0, 1 - fadeTime.x);
         pixel.draw(batch);
         batch.end();
