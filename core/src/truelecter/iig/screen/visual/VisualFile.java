@@ -28,6 +28,43 @@ public class VisualFile {
     private Sprite texture;
     private int id;
 
+    public static ArrayList<VisualFile> getOnlyMusic() {
+        if (vf == null) {
+            return null;
+        }
+        ArrayList<VisualFile> res = new ArrayList<VisualFile>();
+        for (VisualFile v : vf) {
+            if (v.getFile().getAbsolutePath().endsWith(".mp3")) {
+                res.add(v);
+            }
+        }
+        return res;
+    }
+
+    public static File nextForPath(String path) {
+        ArrayList<VisualFile> s = getOnlyMusic();
+        if (s == null) {
+            return null;
+        }
+        if (path == null) {
+            return s.get(0).f;
+        }
+        for (int i = 0; i < s.size(); i++) {
+            if (s.get(i).getFile().getAbsolutePath().equals(path)) {
+                return getNextForId(i, s).f;
+            }
+        }
+        return s.get(0).f;
+    }
+
+    private static VisualFile getNextForId(int id, ArrayList<VisualFile> vf) {
+        if (id + 1 == vf.size()) {
+            return vf.get(0);
+        } else {
+            return vf.get(id + 1);
+        }
+    }
+
     public static void prepareList() {
         if (vf == null) {
             vf = new ArrayList<VisualFile>();

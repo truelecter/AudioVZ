@@ -48,6 +48,7 @@ public class Loading implements Screen {
     public Loading(long toStay, File f, String name) {
         initAnimation();
         batch = new SpriteBatch();
+        //FileManager.lastFilePath = f.getAbsolutePath();
         this.toStay = toStay;
         if (name == null)
             startThread(f);

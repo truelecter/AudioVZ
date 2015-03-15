@@ -31,6 +31,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class FileManager implements Screen, SubInputProcessor {
 
     private static File lastFmDir = null;
+    protected static String lastFilePath = null;
 
     private File currentDir;
     private ArrayList<File> structureFiles;
@@ -79,7 +80,7 @@ public class FileManager implements Screen, SubInputProcessor {
         background = new Sprite(new Texture("data/FileManager/background.png"));
         background.setSize(ConfigHandler.width, ConfigHandler.height);
         options = new Options();
-        optionsButton = new Button(new Texture("data/default/icon/pause.png"), 20f, 20f, 60f, 60f, new Function() {
+        optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
             @Override
             public void toRun() {
                 options.toggle();
@@ -194,7 +195,6 @@ public class FileManager implements Screen, SubInputProcessor {
 
     @Override
     public void show() {
-        System.out.println("show!");
         GlobalInputProcessor.removeAllOfClass(this.getClass());
         GlobalInputProcessor.register(this);
     }
@@ -202,6 +202,12 @@ public class FileManager implements Screen, SubInputProcessor {
     @Override
     public void render(float delta) {
         batch.begin();
+        if ((ConfigHandler.autoPlayReady || ConfigHandler.nextButtonPressed) && ConfigHandler.autoPlay) {
+            File next = VisualFile.nextForPath(lastFilePath);
+            ConfigHandler.nextButtonPressed = false;
+            lastFilePath = next.getAbsolutePath();
+            Main.getInstance().setScreen(new Loading(2000, next, null));
+        }
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         background.draw(batch);

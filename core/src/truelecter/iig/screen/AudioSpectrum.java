@@ -25,6 +25,7 @@ import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.analysis.KissFFT;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.GL20;
 //import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,6 +88,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private int factor = 1;
     private Options options;
     private Button optionsButton;
+    private Button nextButton;
+    private boolean defaultSong = false;
 
     public static void onAndroidPause() {
         if (ConfigHandler.pauseOnHide && instance != null) {
@@ -96,14 +99,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     public AudioSpectrum() {
         this("!INTERNAL!/data/default.mp3", true, null);
+        defaultSong = true;
     }
 
     public AudioSpectrum(boolean playing) {
         this("!INTERNAL!/data/default.mp3", playing, null);
+        defaultSong = true;
     }
 
     public AudioSpectrum(boolean dummy, String name) {
         this("!INTERNAL!/data/default.mp3", true, name);
+        defaultSong = true;
     }
 
     public AudioSpectrum(String filename) {
@@ -141,6 +147,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         while (tfilename.contains("?")) {
             tfilename = tfilename.replace("?", File.separator);
         }
+        if (!defaultSong)
+            FileManager.lastFilePath = this.filename;
         this.filename = tfilename;
         playing = p;
         camera = new OrthographicCamera();
@@ -150,7 +158,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             Logger.e("Invalid skin properties!", e);
         }
         loadSkin(currentSkin);
-
         camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
 
         batch = new SpriteBatch();
@@ -194,12 +201,14 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         playbackTime = totalSamples * 500 / decoder.getRate();
                         bitStream.closeFrame();
                     }
-                } while (samples.length > 0);
-                long lastTime = System.currentTimeMillis();
-                do {
-                    toStay += lastTime - System.currentTimeMillis();
-                    lastTime = System.currentTimeMillis();
-                } while (toStay > 1);
+                } while (samples.length > 0 && !needToChange);
+                if (!ConfigHandler.autoPlay) {
+                    long lastTime = System.currentTimeMillis();
+                    do {
+                        toStay += lastTime - System.currentTimeMillis();
+                        lastTime = System.currentTimeMillis();
+                    } while (toStay > 1);
+                }
                 needToChange = true;
 
             }
@@ -227,12 +236,22 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         playbackThread.start();
         instance = this;
         options = new Options();
-        optionsButton = new Button(new Texture("data/default/icon/pause.png"), 20f, 20f, 60f, 60f, new Function() {
+        optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
             @Override
             public void toRun() {
                 options.toggle();
             }
         });
+        if (!defaultSong)
+            nextButton = new Button(new Texture("data/icons/fastforward.png"), ConfigHandler.width - 80, 20f, 60f, 60f,
+                    new Function() {
+                        @Override
+                        public void toRun() {
+                            needToChange = true && !defaultSong;
+                            ConfigHandler.nextButtonPressed = true;
+                        }
+                    });
+        ConfigHandler.autoPlayReady = true;
     }
 
     @Override
@@ -264,18 +283,21 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     public void remove() {
         GlobalInputProcessor.remove(playPause);
+        GlobalInputProcessor.remove(this);
         options.dispose();
         optionsButton.dispose();
+        nextButton.dispose();
     }
 
     @Override
     public void render(float delta) {
         if (needToChange) {
+            dispose();
             Main.getInstance().setScreen(new FileManager());
             return;
         }
-        // Gdx.gl.glClearColor(0, 0, 0, 1);
-        // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         fadeTime = fadeTime.lerp(new Vector2(1, 0), 0.01f);
         float scale = calculateScale() / 125 / 4096 + 0.2f;
@@ -368,6 +390,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         currentSkin.rendererCustomParts(batch, false);
         options.render(batch);
         optionsButton.drawCentered(batch, 50, 50);
+        if (!defaultSong)
+            nextButton.drawCentered(batch, ConfigHandler.width - 50, 50);
         pixel.setColor(0, 0, 0, 1 - fadeTime.x);
         pixel.draw(batch);
         batch.end();
@@ -421,16 +445,20 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
     @Override
     public void pause() {
-        playing = false;
-        changeButtonSkinAccordingOnPlaying();
+        if (ConfigHandler.pauseOnHide) {
+            playing = false;
+            changeButtonSkinAccordingOnPlaying();
+        }
     }
 
     @Override
     public void resume() {
-        if (!playing) {
-            playing = true;
+        if (ConfigHandler.pauseOnHide) {
+            if (!playing) {
+                playing = true;
+            }
+            changeButtonSkinAccordingOnPlaying();
         }
-        changeButtonSkinAccordingOnPlaying();
     }
 
     @Override
@@ -464,6 +492,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         switch (keycode) {
         case Input.Keys.ESCAPE:
         case Input.Keys.BACK:
+            ConfigHandler.autoPlayReady = false;
             Main.getInstance().setScreen(new FileManager());
             break;
         case Input.Keys.SPACE:
@@ -480,6 +509,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             } catch (Exception e) {
                 Logger.w("Error while refreshing skin", e);
             }
+            break;
+        case Input.Keys.RIGHT:
+            needToChange = true && !defaultSong;
+            ConfigHandler.nextButtonPressed = true;
             break;
         default:
             return false;

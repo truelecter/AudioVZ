@@ -66,6 +66,7 @@ public class Main extends Game {
             ConfigHandler.lastFileManagerPath = s.getString("Main", "lastFMPath", Gdx.files.getExternalStoragePath());
             ConfigHandler.skinOrigPath = s.getString("Main", "skin", null);
             ConfigHandler.pauseOnHide = s.getBoolean("Main", "pauseOnHide", false);
+            ConfigHandler.autoPlay = s.getBoolean("Main", "autoPlay", false);
             if (ConfigHandler.skinOrigPath != null) {
                 ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!",
                         Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!", Gdx.files.getExternalStoragePath());
@@ -79,6 +80,7 @@ public class Main extends Game {
             ConfigHandler.lastFileManagerPath = Gdx.files.getExternalStoragePath();
             ConfigHandler.skinPath = Gdx.files.local("data/228/test.skn").path();
             ConfigHandler.pauseOnHide = false;
+            ConfigHandler.autoPlay = false;
             Logger.w("Config not found. Using default values\n" + "Watched in "
                     + Gdx.files.local("data/config.ini").file().getAbsolutePath(), e);
         }
@@ -113,6 +115,7 @@ public class Main extends Game {
             config.put("Main", "lastFMPath", Util.convertPath(ConfigHandler.lastFileManagerPath));
             config.put("Main", "skin", ConfigHandler.skinOrigPath);
             config.put("Main", "pauseOnHide", ConfigHandler.pauseOnHide);
+            config.put("Main", "autoPlay", ConfigHandler.autoPlay);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);
             System.out.println("Config stored to " + f.getAbsolutePath());

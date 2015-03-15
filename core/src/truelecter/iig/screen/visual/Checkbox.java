@@ -24,7 +24,7 @@ public class Checkbox extends Button {
     @Override
     protected boolean checkIfClicked(float ix, float iy) {
         if (ix > x - origWidth * scale / 2 && ix < x + origWidth * scale / 2) {
-            if (iy> y - scale * origHeight / 2 && iy < y + scale * origHeight / 2) {
+            if (iy > y - scale * origHeight / 2 && iy < y + scale * origHeight / 2) {
                 click();
                 return true;
             }
@@ -36,12 +36,12 @@ public class Checkbox extends Button {
     public void click() {
         isChecked = !isChecked;
         if (isChecked) {
-            super.changeSkin(checked);
+            super.changeSkin(checked, origWidth, origHeight);
             if (onCheck != null) {
                 onCheck.toRun();
             }
         } else {
-            super.changeSkin(unchecked);
+            super.changeSkin(unchecked, origWidth, origHeight);
             if (onUncheck != null) {
                 onUncheck.toRun();
             }
