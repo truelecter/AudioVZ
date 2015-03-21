@@ -73,4 +73,11 @@ public class Util {
         res += name;
         return Gdx.files.absolute(res);
     }
+    
+    public static float[] castShortToFloat(short[] x){
+        float[] res = new float[x.length];
+        for (int i = 0; i<x.length; i++)
+            res[i] = x[i];
+        return res;
+    }
 }

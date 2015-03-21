@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
+import truelecter.iig.util.Logger;
 
 public class VisualFile {
     private static final int LINE_SPLIT_HEIGHT = 10;
@@ -28,6 +29,12 @@ public class VisualFile {
     private Sprite texture;
     private int id;
 
+    public boolean isVisible() {
+        float h = getHeight();
+        float fh = h + pos.y;
+        return fh > 1 && pos.y - h < ConfigHandler.height;
+    }
+
     public static ArrayList<VisualFile> getOnlyMusic() {
         if (vf == null) {
             return null;
@@ -43,9 +50,11 @@ public class VisualFile {
 
     public static File nextForPath(String path) {
         ArrayList<VisualFile> s = getOnlyMusic();
+        Logger.i("Playlist: " + s);
         if (s == null) {
             return null;
         }
+        Logger.i("Playlist length: " + s.size() + ", path: " + path);
         if (path == null) {
             return s.get(0).f;
         }
@@ -70,6 +79,7 @@ public class VisualFile {
             vf = new ArrayList<VisualFile>();
         } else {
             vf.clear();
+            System.gc();
         }
     }
 
@@ -111,11 +121,15 @@ public class VisualFile {
     }
 
     public float getWidth() {
-        return Math.max(texture.getWidth(), FontManager.getFileLabelFont().getBounds(label).width);
+        return Math.max(texture.getWidth(), getBounds().width);
+    }
+
+    public TextBounds getBounds() {
+        return FontManager.getFileLabelFont().getBounds(label);
     }
 
     public float getHeight() {
-        return texture.getHeight();
+        return Math.max(texture.getHeight(), getBounds().height);
     }
 
     public void update(float delta) {
@@ -163,10 +177,15 @@ public class VisualFile {
     }
 
     public static void drawAll(SpriteBatch batch) {
+        int visibles = 0;
         if (vf != null)
             for (VisualFile f : vf) {
-                f.draw(batch);
+                if (f.isVisible()) {
+                    f.draw(batch);
+                    visibles++;
+                }
             }
+        FontManager.getFileLabelFont().draw(batch, "Visibles: " + visibles, 100, ConfigHandler.height / 2 + 100);
     }
 
     public void draw(SpriteBatch batch) {
@@ -176,6 +195,7 @@ public class VisualFile {
         texture.setPosition(pos.x + (selected ? 10 : 0), pos.y - texture.getHeight());
         texture.draw(batch);
         FontManager.getFileLabelFont().draw(batch, str, pos.x + 15, pos.y - (texture.getHeight() - tb.height) / 2);
+
     }
 
     public void before() {
@@ -207,5 +227,9 @@ public class VisualFile {
 
     public String getLabel() {
         return label;
+    }
+
+    public String toString() {
+        return "Label: " + label + ", path: " + f.getAbsolutePath();
     }
 }

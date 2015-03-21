@@ -103,7 +103,7 @@ public class FileManager implements Screen, SubInputProcessor {
     private void changeDir(final File dir) {
         if (Gdx.app.getType() == ApplicationType.Android) {
             Main.getInstance().setScreen(
-                    new AudioSpectrum(VisualFile.getSelected().getFile(), true, VisualFile.getSelected().getLabel()));
+                    new Loading(0l, VisualFile.getSelected().getFile(), VisualFile.getSelected().getLabel()));
             return;
         }
         try {
@@ -113,7 +113,7 @@ public class FileManager implements Screen, SubInputProcessor {
             if (dir != null) {
                 if (dir.exists() && !dir.isDirectory()) {
                     Main.getInstance().setScreen(new Loading(0l, dir, null));
-
+                    return;
                 }
                 if (!dir.exists() || !dir.isDirectory()) {
                     currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
@@ -201,13 +201,13 @@ public class FileManager implements Screen, SubInputProcessor {
 
     @Override
     public void render(float delta) {
-        batch.begin();
-        if ((ConfigHandler.autoPlayReady || ConfigHandler.nextButtonPressed) && ConfigHandler.autoPlay) {
+        if (ConfigHandler.autoPlayReady && (ConfigHandler.nextButtonPressed || ConfigHandler.autoPlay)) {
             File next = VisualFile.nextForPath(lastFilePath);
             ConfigHandler.nextButtonPressed = false;
-            lastFilePath = next.getAbsolutePath();
             Main.getInstance().setScreen(new Loading(2000, next, null));
         }
+        batch.begin();
+        ConfigHandler.autoPlayReady = false;
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         background.draw(batch);
@@ -248,6 +248,8 @@ public class FileManager implements Screen, SubInputProcessor {
         }
         options.dispose();
         optionsButton.dispose();
+        System.gc();
+        System.out.println("FileManager disposed!");
     }
 
     @Override

@@ -26,11 +26,11 @@ import com.badlogic.gdx.audio.analysis.KissFFT;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-//import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 
 import javazoom.jl.decoder.Decoder;
@@ -67,6 +67,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private Vector2 fadeTime;
 
     // TESTAREA_BEGIN
+    private ShaderProgram test;
     // TESTAREA_END
 
     private FadingText ft = new FadingText(0.05f, 5000);
@@ -90,6 +91,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private Button optionsButton;
     private Button nextButton;
     private boolean defaultSong = false;
+    private boolean paused;
 
     public static void onAndroidPause() {
         if (ConfigHandler.pauseOnHide && instance != null) {
@@ -147,8 +149,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         while (tfilename.contains("?")) {
             tfilename = tfilename.replace("?", File.separator);
         }
-        if (!defaultSong)
-            FileManager.lastFilePath = this.filename;
         this.filename = tfilename;
         playing = p;
         camera = new OrthographicCamera();
@@ -252,6 +252,13 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         }
                     });
         ConfigHandler.autoPlayReady = true;
+        try {
+            test = new ShaderProgram(Gdx.files.local("data/shaders/vertex.shd"),
+                    Gdx.files.local("data/shaders/fragment.shd"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ShaderProgram.pedantic = false;
     }
 
     @Override
@@ -279,6 +286,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 playbackThread = null;
             }
         });
+        System.gc();
+        System.out.println("AudioSpectrum disposed!");
     }
 
     public void remove() {
@@ -296,6 +305,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             Main.getInstance().setScreen(new FileManager());
             return;
         }
+        if (paused && Main.aa != null) {
+            return;
+        }
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -308,10 +320,45 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         camera.update();
         batch.begin();
         background.draw(batch);
+        batch.end();
+        batch.begin();
+        float vX = (float) (ConfigHandler.width * (-0.445 + tScale / k));
+        float vY = (float) (ConfigHandler.height * (-0.445 + tScale / k));
+        if (ConfigHandler.scaleBackground)
+            if (tScale / k > 0.445) {
+                background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
+                background.setPosition(-vX / 2, -vY / 2);
+            } else {
+                background.setSize(ConfigHandler.width, ConfigHandler.height);
+                background.setPosition(0, 0);
+            }
+        try {
+            if (test.isCompiled() && ConfigHandler.useShaders) {
+                test.begin();
+                test.setUniformf("contrast", 1);
+                test.setUniformf("approximation", 1);
+                test.setUniform4fv("color", new float[] { 0f, 1f, 0f, 0.2f }, 0, 4);
+                batch.setShader(test);
+            } else {
+                if (!test.isCompiled())
+                    System.out.println(test.getLog());
+                batch.setShader(null);
+            }
+        } catch (Exception e) {
+            batch.setShader(null);
+            e.printStackTrace();
+        }
+        background.draw(batch);
+        if (test != null && ConfigHandler.useShaders) {
+            batch.end();
+            test.end();
+            batch.begin();
+            batch.setShader(null);
+        }
+
         currentSkin.rendererCustomParts(batch, true);
         batch.setProjectionMatrix(camera.combined);
         playPause.setScale(tScale);
-
         for (int i = 0; i < NB_BARS; i++) {
             int histoX = 0;
             if (i < NB_BARS / 2) {
@@ -351,9 +398,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
             topValues[histoX] -= FALLING_SPEED;
         }
-        if (scale > 0.33 && playing) {
-            this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
-        }
+        if (ConfigHandler.offsetAngle)
+            if (scale > 0.33 && playing) {
+                this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
+            }
         if (!ft.finished()) {
             currentSkin.songName.setColor(1, 1, 1, ft.getFadeX());
             currentSkin.songName.draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
@@ -441,6 +489,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         playPause.setLocation(width / 2, height / 2);
         camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
         background.setSize(width, height);
+        if (test != null) {
+            test.begin();
+            test.setUniformf("u_resolution", width, height);
+            test.end();
+        }
     }
 
     @Override
@@ -449,6 +502,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             playing = false;
             changeButtonSkinAccordingOnPlaying();
         }
+        paused = true;
     }
 
     @Override
@@ -459,6 +513,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             }
             changeButtonSkinAccordingOnPlaying();
         }
+        paused = false;
     }
 
     @Override
@@ -508,6 +563,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 changeButtonSkinAccordingOnPlaying();
             } catch (Exception e) {
                 Logger.w("Error while refreshing skin", e);
+            }
+            try {
+                test = new ShaderProgram(Gdx.files.local("data/shaders/vertex.shd"),
+                        Gdx.files.local("data/shaders/fragment.shd"));
+                if (test != null) {
+                    test.begin();
+                    test.setUniformf("u_resolution", ConfigHandler.width, ConfigHandler.height);
+                    test.end();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             break;
         case Input.Keys.RIGHT:

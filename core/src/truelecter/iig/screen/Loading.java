@@ -48,7 +48,9 @@ public class Loading implements Screen {
     public Loading(long toStay, File f, String name) {
         initAnimation();
         batch = new SpriteBatch();
-        //FileManager.lastFilePath = f.getAbsolutePath();
+        Logger.i("BEFORE: " + FileManager.lastFilePath);
+        FileManager.lastFilePath = f.getAbsolutePath();
+        Logger.i("AFTER: " + FileManager.lastFilePath);
         this.toStay = toStay;
         if (name == null)
             startThread(f);
@@ -100,7 +102,9 @@ public class Loading implements Screen {
 
     @Override
     public void dispose() {
-
+        System.gc();
+        batch.dispose();
+        System.out.println("Loading disposed!");
     }
 
 }

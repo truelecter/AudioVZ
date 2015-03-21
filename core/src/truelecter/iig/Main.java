@@ -67,6 +67,8 @@ public class Main extends Game {
             ConfigHandler.skinOrigPath = s.getString("Main", "skin", null);
             ConfigHandler.pauseOnHide = s.getBoolean("Main", "pauseOnHide", false);
             ConfigHandler.autoPlay = s.getBoolean("Main", "autoPlay", false);
+            ConfigHandler.scaleBackground = s.getBoolean("Main", "scaleBackground", false);
+            ConfigHandler.offsetAngle = s.getBoolean("Main", "offsetAngle", false);
             if (ConfigHandler.skinOrigPath != null) {
                 ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!",
                         Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!", Gdx.files.getExternalStoragePath());
@@ -116,6 +118,8 @@ public class Main extends Game {
             config.put("Main", "skin", ConfigHandler.skinOrigPath);
             config.put("Main", "pauseOnHide", ConfigHandler.pauseOnHide);
             config.put("Main", "autoPlay", ConfigHandler.autoPlay);
+            config.put("Main", "scaleBackgound", ConfigHandler.scaleBackground);
+            config.put("Main", "offsetAngle", ConfigHandler.offsetAngle);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);
             System.out.println("Config stored to " + f.getAbsolutePath());

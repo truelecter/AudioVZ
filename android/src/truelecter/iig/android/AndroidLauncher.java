@@ -5,21 +5,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-
 import truelecter.iig.Main;
 import truelecter.iig.screen.AudioSpectrum;
 
+@SuppressLint("NewApi")
 public class AndroidLauncher extends AndroidApplication {
 
     protected void onPause() {
@@ -37,6 +37,8 @@ public class AndroidLauncher extends AndroidApplication {
             Log.w("AudioVZ", "Failed to get package version");
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD)
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         File firstRun = new File(getFilesDir().getAbsoluteFile() + "/FIRST_RUN_" + firstRunString);
         if (!firstRun.exists()) {
             copyFileOrDir("loading.gif", true);
