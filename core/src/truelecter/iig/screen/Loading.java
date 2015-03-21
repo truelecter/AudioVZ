@@ -20,7 +20,7 @@ public class Loading implements Screen {
     private long toStay;
     private float stateTime;
     private Animation loaderAnimation;
-    private boolean loaded = false;
+    private boolean loaded;
     private SpriteBatch batch;
     private String name;
     private File f;
@@ -48,15 +48,20 @@ public class Loading implements Screen {
     public Loading(long toStay, File f, String name) {
         initAnimation();
         batch = new SpriteBatch();
+        Logger.i("Loading screen for file '" + f.getAbsolutePath() + "' started! Label '" + name + "', waiting "
+                + this.toStay);
         Logger.i("BEFORE: " + FileManager.lastFilePath);
         FileManager.lastFilePath = f.getAbsolutePath();
         Logger.i("AFTER: " + FileManager.lastFilePath);
         this.toStay = toStay;
-        if (name == null)
+        loaded = false;
+        if (name == null) {
             startThread(f);
+        } else {
+            loaded = true;
+        }
         this.name = name;
         this.f = f;
-        Logger.i("Loading screen for file '" + f.getAbsolutePath() + "' started!\nWaiting " + this.toStay);
     }
 
     @Override
@@ -66,23 +71,25 @@ public class Loading implements Screen {
 
     @Override
     public void render(float delta) {
-        batch.begin();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         toStay -= delta * 1000;
         if (!loaded || toStay > 0) {
+            batch.begin();
             stateTime += delta;
             TextureRegion currentFrame = loaderAnimation.getKeyFrame(stateTime, true);
             batch.draw(currentFrame, ConfigHandler.width - currentFrame.getRegionWidth() - 25, 25);
+            batch.end();
         } else {
+            Logger.i("Loaded! ");
             Main.getInstance().setScreen(new AudioSpectrum(f, name));
         }
-        batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        ConfigHandler.width = width;
+        ConfigHandler.height = height;
     }
 
     @Override

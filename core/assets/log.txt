@@ -1,0 +1,19 @@
+[ Sat Mar 21 17:27:40 EET 2015] **************************************************************************
+[INFO Sat Mar 21 17:27:40 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Sat Mar 21 17:27:40 EET 2015] File param is null!
+[INFO Sat Mar 21 17:27:42 EET 2015] BEFORE: null
+[INFO Sat Mar 21 17:27:42 EET 2015] AFTER: H:\_Media\music\NightCore\Nightcore This - S3RL feat Tamika.mp3
+[INFO Sat Mar 21 17:27:42 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\Nightcore This - S3RL feat Tamika.mp3' started!
+Waiting 0
+[INFO Sat Mar 21 17:27:44 EET 2015] Playback thread started!
+[WARNING Sat Mar 21 17:32:08 EET 2015] Error decoding file
+java.lang.NullPointerException
+	at javazoom.jl.decoder.Decoder.decodeFrame(Unknown Source)
+	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:189)
+	at java.lang.Thread.run(Thread.java:722)
+[INFO Sat Mar 21 17:32:08 EET 2015] Playlist: [Label: Nightcore This - S3RL feat Tamika.mp3, path: H:\_Media\music\NightCore\Nightcore This - S3RL feat Tamika.mp3, Label: R4V3 B0Y - S3RL feat Krystal.mp3, path: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3]
+[INFO Sat Mar 21 17:32:08 EET 2015] Playlist length: 2, path: H:\_Media\music\NightCore\Nightcore This - S3RL feat Tamika.mp3
+[INFO Sat Mar 21 17:32:08 EET 2015] BEFORE: H:\_Media\music\NightCore\Nightcore This - S3RL feat Tamika.mp3
+[INFO Sat Mar 21 17:32:08 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Sat Mar 21 17:32:08 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started!
+Waiting 2000
