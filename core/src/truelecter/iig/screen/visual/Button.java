@@ -173,4 +173,9 @@ public class Button implements SubInputProcessor, VisualPart {
     public int getPriority() {
         return 98;
     }
+
+    @Override
+    public void setWidth(float width) {
+        
+    }
 }

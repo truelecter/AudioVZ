@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Menu {
-    public static final int PARTS_PADDING = 20;
     public static final int DELIMITER_HEIGHT = 40;
 
     protected Vector2 pos;
@@ -39,6 +38,12 @@ public abstract class Menu {
         isOpen = true;
     }
 
+    public void setWidth(float width) {
+        this.width = width;
+        this.background.setSize(width, height);
+        this.begPos.x = -width;
+    }
+
     public void close() {
         toPos = begPos;
         isOpen = false;
@@ -53,8 +58,9 @@ public abstract class Menu {
     }
 
     protected abstract void updateRelativeness();
+
     public abstract void dispose();
-        
+
     public void render(SpriteBatch s) {
         background.draw(s);
     }

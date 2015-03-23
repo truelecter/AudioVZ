@@ -319,43 +319,54 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
         camera.update();
         batch.begin();
-        background.draw(batch);
-        batch.end();
-        batch.begin();
-        float vX = (float) (ConfigHandler.width * (-0.445 + tScale / k));
-        float vY = (float) (ConfigHandler.height * (-0.445 + tScale / k));
+        // background.draw(batch);
+        // batch.end();
+        // batch.begin();
+        float vX = (float) (ConfigHandler.width * (-0.43 + tScale / k));
+        float vY = (float) (ConfigHandler.height * (-0.43 + tScale / k));
         if (ConfigHandler.scaleBackground)
-            if (tScale / k > 0.445) {
+            if (tScale / k > 0.43) {
                 background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
                 background.setPosition(-vX / 2, -vY / 2);
             } else {
                 background.setSize(ConfigHandler.width, ConfigHandler.height);
                 background.setPosition(0, 0);
             }
-        try {
-            if (test.isCompiled() && ConfigHandler.useShaders) {
-                test.begin();
-                test.setUniformf("contrast", 1);
-                test.setUniformf("approximation", 1);
-                test.setUniform4fv("color", new float[] { 0f, 1f, 0f, 0.2f }, 0, 4);
-                batch.setShader(test);
-            } else {
-                if (!test.isCompiled())
-                    System.out.println(test.getLog());
-                batch.setShader(null);
-            }
-        } catch (Exception e) {
+        batch.enableBlending();
+        // RED SHADER _ BREGIN
+        if (test.isCompiled() && ConfigHandler.useShaders) {
+            test.begin();
+            test.setUniformf("u_Contrast", 1);
+            test.setUniformf("u_Approximation", 1);
+            test.setUniformf("u_tScale", tScale / k);
+            test.setUniformf("u_Mode", 0);
+            batch.setShader(test);
+        } else {
+            if (!test.isCompiled())
+                System.out.println(test.getLog());
             batch.setShader(null);
-            e.printStackTrace();
         }
         background.draw(batch);
         if (test != null && ConfigHandler.useShaders) {
+            batch.flush();
             batch.end();
             test.end();
             batch.begin();
             batch.setShader(null);
+            test.begin();
+            test.setUniformf("u_Mode", 1);
+            batch.setShader(test);
+            background.draw(batch);
+            batch.end();
+            test.end();
+            batch.begin();
+            batch.setShader(null);
+        } else {
+            if (!test.isCompiled())
+                System.out.println(test.getLog());
+            batch.setShader(null);
         }
-
+        // CYAN SHADER _ END*/
         currentSkin.rendererCustomParts(batch, true);
         batch.setProjectionMatrix(camera.combined);
         playPause.setScale(tScale);
@@ -436,10 +447,12 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         line.draw(batch);
         playPause.drawCentered(batch, centerX, centerY);
         currentSkin.rendererCustomParts(batch, false);
-        options.render(batch);
-        optionsButton.drawCentered(batch, 50, 50);
-        if (!defaultSong)
-            nextButton.drawCentered(batch, ConfigHandler.width - 50, 50);
+        if (ConfigHandler.showButtons) {
+            options.render(batch);
+            optionsButton.drawCentered(batch, 50, 50);
+            if (!defaultSong)
+                nextButton.drawCentered(batch, ConfigHandler.width - 50, 50);
+        }
         pixel.setColor(0, 0, 0, 1 - fadeTime.x);
         pixel.draw(batch);
         batch.end();

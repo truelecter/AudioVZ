@@ -86,7 +86,7 @@ public class Main extends Game {
             Logger.w("Config not found. Using default values\n" + "Watched in "
                     + Gdx.files.local("data/config.ini").file().getAbsolutePath(), e);
         }
-        if (Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS) {
+        if (Gdx.app.getType() == ApplicationType.Android) {
             ConfigHandler.width = Gdx.graphics.getWidth();
             ConfigHandler.height = Gdx.graphics.getHeight();
         }
@@ -118,7 +118,7 @@ public class Main extends Game {
             config.put("Main", "skin", ConfigHandler.skinOrigPath);
             config.put("Main", "pauseOnHide", ConfigHandler.pauseOnHide);
             config.put("Main", "autoPlay", ConfigHandler.autoPlay);
-            config.put("Main", "scaleBackgound", ConfigHandler.scaleBackground);
+            config.put("Main", "scaleBackground", ConfigHandler.scaleBackground);
             config.put("Main", "offsetAngle", ConfigHandler.offsetAngle);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);

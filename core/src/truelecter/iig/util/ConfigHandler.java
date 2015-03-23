@@ -14,4 +14,5 @@ public class ConfigHandler {
     public static boolean useShaders = false;
     public static boolean scaleBackground = false;
     public static boolean offsetAngle = false;
+    public static boolean showButtons = true;
 }

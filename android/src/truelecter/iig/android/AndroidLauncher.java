@@ -37,11 +37,11 @@ public class AndroidLauncher extends AndroidApplication {
             Log.w("AudioVZ", "Failed to get package version");
         }
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
         File firstRun = new File(getFilesDir().getAbsoluteFile() + "/FIRST_RUN_" + firstRunString);
         if (!firstRun.exists()) {
             copyFileOrDir("loading.gif", true);
-            copyFileOrDir("pix.bmp", true); 
+            copyFileOrDir("pix.bmp", true);
             copyFileOrDir("data", false);
             try {
                 firstRun.createNewFile();

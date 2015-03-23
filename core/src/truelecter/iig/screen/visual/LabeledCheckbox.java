@@ -1,5 +1,6 @@
 package truelecter.iig.screen.visual;
 
+import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Function;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -27,6 +28,10 @@ public class LabeledCheckbox implements VisualPart {
                 onCheck, onUncheck);
         setLocation(x, y);
         this.font = font;
+    }
+
+    public float getPreferableWidth() {
+        return font.getBounds(label).width + ConfigHandler.height / 200 + checkbox.getWidth() + SIDES_PADDING * 2;
     }
 
     @Override
@@ -70,6 +75,10 @@ public class LabeledCheckbox implements VisualPart {
     @Override
     public void dispose() {
         checkbox.dispose();
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
     }
 
 }

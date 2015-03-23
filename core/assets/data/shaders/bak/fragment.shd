@@ -1,0 +1,18 @@
+uniform sampler2D tex;
+
+const vec2 lightLocation = vec2(100, 100);
+const vec3 lightColor = vec3(255.0, 255.0, 0.0);
+const vec3 ambientLight = vec3(255.0, 255.0, 0.0);
+
+void main() { 
+  vec3 baseColor = texture2D(tex, gl_FragCoord.xy).rgb;
+  vec4 light = vec4(ambientLight, 1);
+  vec4 color = vec4(baseColor,1);
+
+  float distance = length(lightLocation - gl_FragCoord.xy);
+  float attenuation = 1 / distance;
+  vec4 lColor = vec4(attenuation, attenuation, attenuation, pow(attenuation, 3)) * vec4(lightColor, 1);
+  color += lColor;
+
+  gl_FragColor = color * light;
+}

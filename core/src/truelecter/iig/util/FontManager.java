@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+
 public class FontManager {
     private static HashMap<String, BitmapFont> fonts = new HashMap<String, BitmapFont>();
     private static final String DEFAULT_FONT_PATH = "data/font/";

@@ -1,5 +1,7 @@
 package truelecter.iig.screen.visual.menu;
 
+import java.util.ArrayList;
+
 import truelecter.iig.screen.visual.LabeledCheckbox;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
@@ -11,11 +13,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Options extends Menu {
 
+    private ArrayList<LabeledCheckbox> checkboxes = new ArrayList<LabeledCheckbox>();
+
     private LabeledCheckbox pauseOnHide;
     private LabeledCheckbox autoPlay;
     private LabeledCheckbox useShaders;
     private LabeledCheckbox scaleBackground;
     private LabeledCheckbox offsetAngle;
+    private LabeledCheckbox showButton;
 
     public Options() {
         super(new Vector2(-ConfigHandler.width / 3, ConfigHandler.height), new Vector2(0, ConfigHandler.height),
@@ -31,6 +36,7 @@ public class Options extends Menu {
                         ConfigHandler.pauseOnHide = false;
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
+        checkboxes.add(pauseOnHide);
         autoPlay = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Playlist mode", -1000, -1000,
                 ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
                 new Texture("data/icons/unchecked.png"), ConfigHandler.autoPlay, null, new Function() {
@@ -42,6 +48,7 @@ public class Options extends Menu {
                         ConfigHandler.autoPlay = false;
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
+        checkboxes.add(autoPlay);
         useShaders = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Use shaders", -1000, -1000,
                 ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
                 new Texture("data/icons/unchecked.png"), ConfigHandler.useShaders, null, new Function() {
@@ -53,9 +60,10 @@ public class Options extends Menu {
                         ConfigHandler.useShaders = false;
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
-        scaleBackground = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Scale background on offsets", -1000, -1000,
-                ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
-                new Texture("data/icons/unchecked.png"), ConfigHandler.scaleBackground, null, new Function() {
+        checkboxes.add(useShaders);
+        scaleBackground = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Scale background on offsets", -1000,
+                -1000, ConfigHandler.width / 3, new Texture("data/icons/checked.png"), new Texture(
+                        "data/icons/unchecked.png"), ConfigHandler.scaleBackground, null, new Function() {
                     public void toRun() {
                         ConfigHandler.scaleBackground = true;
                     }
@@ -64,6 +72,7 @@ public class Options extends Menu {
                         ConfigHandler.scaleBackground = false;
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
+        checkboxes.add(scaleBackground);
         offsetAngle = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Bars angle change", -1000, -1000,
                 ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
                 new Texture("data/icons/unchecked.png"), ConfigHandler.offsetAngle, null, new Function() {
@@ -75,18 +84,52 @@ public class Options extends Menu {
                         ConfigHandler.offsetAngle = false;
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
+        checkboxes.add(offsetAngle);
+        showButton = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Show buttons on visualizer", -1000, -1000,
+                ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
+                new Texture("data/icons/unchecked.png"), ConfigHandler.showButtons, null, new Function() {
+                    public void toRun() {
+                        ConfigHandler.showButtons = true;
+                    }
+                }, new Function() {
+                    public void toRun() {
+                        ConfigHandler.showButtons = false;
+                    }
+                }, ConfigHandler.height / 20, ConfigHandler.height / 20);
+        checkboxes.add(showButton);
         updateRelativeness();
         background.setAlpha(0.5f);
+        updatePreferableSize();
+        pos.x = -width;
     }
 
     public void render(SpriteBatch sb) {
-        update();
-        super.render(sb);
-        pauseOnHide.render(sb);
-        autoPlay.render(sb);
-        useShaders.render(sb);
-        scaleBackground.render(sb);
-        offsetAngle.render(sb);
+        if (checkboxes != null && checkboxes.size() > 0) {
+            super.update();
+            super.render(sb);
+            pauseOnHide.render(sb);
+            autoPlay.render(sb);
+            useShaders.render(sb);
+            scaleBackground.render(sb);
+            offsetAngle.render(sb);
+            showButton.render(sb);
+        }
+    }
+
+    protected void updatePreferableSize() {
+        float minWidth = Float.MIN_VALUE;
+        for (LabeledCheckbox c : checkboxes) {
+            if (c != null && c.getPreferableWidth() > minWidth) {
+                minWidth = c.getPreferableWidth();
+            }
+        }
+        for (LabeledCheckbox c : checkboxes) {
+            if (c != null) {
+                c.setWidth(minWidth);
+            }
+        }
+
+        this.setWidth(minWidth);
     }
 
     protected void updateRelativeness() {
@@ -100,15 +143,22 @@ public class Options extends Menu {
         scaleBackground.setLocation(pos.x, y);
         y -= offsetAngle.getHeight() + ConfigHandler.height / 200;
         offsetAngle.setLocation(pos.x, y);
+        y -= showButton.getHeight() + ConfigHandler.height / 200;
+        showButton.setLocation(pos.x, y);
         background.setPosition(pos.x, 0);
     }
 
     public void dispose() {
-        autoPlay.dispose();
-        pauseOnHide.dispose();
-        useShaders.dispose();
-        scaleBackground.dispose();
-        offsetAngle.dispose();
+        if (checkboxes != null) {
+            for (LabeledCheckbox l : checkboxes) {
+                if (l != null) {
+                    l.dispose();
+                    l = null;
+                }
+            }
+            checkboxes.clear();
+            checkboxes = null;
+        }
     }
 
 }

@@ -204,7 +204,7 @@ public class FileManager implements Screen, SubInputProcessor {
         if (ConfigHandler.autoPlayReady && (ConfigHandler.nextButtonPressed || ConfigHandler.autoPlay)) {
             File next = VisualFile.nextForPath(lastFilePath);
             ConfigHandler.nextButtonPressed = false;
-            Main.getInstance().setScreen(new Loading(2000, next, null));
+            Main.getInstance().setScreen(new Loading(0, next, null));
         }
         batch.begin();
         ConfigHandler.autoPlayReady = false;
