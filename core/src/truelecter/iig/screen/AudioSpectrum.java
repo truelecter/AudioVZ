@@ -242,6 +242,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 options.toggle();
             }
         });
+        optionsButton.setPriority(99);
         if (!defaultSong)
             nextButton = new Button(new Texture("data/icons/fastforward.png"), ConfigHandler.width - 80, 20f, 60f, 60f,
                     new Function() {
@@ -332,7 +333,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 background.setSize(ConfigHandler.width, ConfigHandler.height);
                 background.setPosition(0, 0);
             }
-        batch.enableBlending();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE);
         // RED SHADER _ BREGIN
         if (test.isCompiled() && ConfigHandler.useShaders) {
             test.begin();
@@ -345,7 +347,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             if (!test.isCompiled())
                 System.out.println(test.getLog());
             batch.setShader(null);
-        }
+        } //*/
         background.draw(batch);
         if (test != null && ConfigHandler.useShaders) {
             batch.flush();

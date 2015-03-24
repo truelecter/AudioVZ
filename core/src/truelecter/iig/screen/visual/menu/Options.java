@@ -6,12 +6,14 @@ import truelecter.iig.screen.visual.LabeledCheckbox;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Function;
+import truelecter.iig.util.input.GlobalInputProcessor;
+import truelecter.iig.util.input.SubInputProcessor;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class Options extends Menu {
+public class Options extends Menu implements SubInputProcessor {
 
     private ArrayList<LabeledCheckbox> checkboxes = new ArrayList<LabeledCheckbox>();
 
@@ -101,6 +103,7 @@ public class Options extends Menu {
         background.setAlpha(0.5f);
         updatePreferableSize();
         pos.x = -width;
+        GlobalInputProcessor.register(this);
     }
 
     public void render(SpriteBatch sb) {
@@ -128,8 +131,8 @@ public class Options extends Menu {
                 c.setWidth(minWidth);
             }
         }
-
         this.setWidth(minWidth);
+        pos.x = -width;
     }
 
     protected void updateRelativeness() {
@@ -159,6 +162,54 @@ public class Options extends Menu {
             checkboxes.clear();
             checkboxes = null;
         }
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (screenX <= pos.x + width) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    @Override
+    public int getPriority() {
+        return 90;
     }
 
 }

@@ -12,6 +12,7 @@ import truelecter.iig.screen.visual.Button;
 import truelecter.iig.screen.visual.VisualFile;
 import truelecter.iig.screen.visual.menu.Options;
 import truelecter.iig.util.ConfigHandler;
+import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.Logger;
 import truelecter.iig.util.input.GlobalInputProcessor;
@@ -86,6 +87,7 @@ public class FileManager implements Screen, SubInputProcessor {
                 options.toggle();
             }
         });
+        optionsButton.setPriority(99);
     }
 
     private void initAndroidView() {
@@ -230,7 +232,8 @@ public class FileManager implements Screen, SubInputProcessor {
 
     @Override
     public void resume() {
-
+        FontManager.reloadFonts();
+        VisualFile.reloadTexture();
     }
 
     @Override

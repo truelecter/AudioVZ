@@ -19,6 +19,7 @@ public class Checkbox extends Button {
         this.unchecked = unchecked;
         this.onCheck = onCheck;
         this.onUncheck = onUncheck;
+        priority = 99;
     }
 
     @Override
@@ -53,7 +54,4 @@ public class Checkbox extends Button {
         return isChecked;
     }
 
-    public int getPiority() {
-        return 99;
-    }
 }

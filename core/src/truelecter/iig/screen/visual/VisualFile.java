@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,7 +29,13 @@ public class VisualFile {
     private boolean selected;
     private Sprite texture;
     private int id;
+    private BitmapFont font = FontManager.getFileLabelFont();
 
+    public static void reloadTexture(){
+        selectedTexture = new Texture("data/FileManager/selected.png");
+        mainTexture = new Texture("data/FileManager/lines.png");
+    }
+    
     public boolean isVisible() {
         float h = getHeight();
         float fh = h + pos.y;
@@ -125,7 +132,7 @@ public class VisualFile {
     }
 
     public TextBounds getBounds() {
-        return FontManager.getFileLabelFont().getBounds(label);
+        return font.getBounds(label);
     }
 
     public float getHeight() {
@@ -177,24 +184,21 @@ public class VisualFile {
     }
 
     public static void drawAll(SpriteBatch batch) {
-        int visibles = 0;
         if (vf != null)
             for (VisualFile f : vf) {
                 if (f.isVisible()) {
                     f.draw(batch);
-                    visibles++;
                 }
             }
-        FontManager.getFileLabelFont().draw(batch, "Visibles: " + visibles, 100, ConfigHandler.height / 2 + 100);
     }
 
     public void draw(SpriteBatch batch) {
         String str = (selected ? ">> " : "") + label;
-        TextBounds tb = FontManager.getFileLabelFont().getBounds(str);
+        TextBounds tb = font.getBounds(str);
         texture.setSize(ConfigHandler.width - LEFT_PADDING * 2 - (selected ? 10 : 0), texture.getHeight());
         texture.setPosition(pos.x + (selected ? 10 : 0), pos.y - texture.getHeight());
         texture.draw(batch);
-        FontManager.getFileLabelFont().draw(batch, str, pos.x + 15, pos.y - (texture.getHeight() - tb.height) / 2);
+        font.draw(batch, str, pos.x + 15, pos.y - (texture.getHeight() - tb.height) / 2);
 
     }
 

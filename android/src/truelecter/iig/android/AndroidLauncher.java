@@ -27,6 +27,10 @@ public class AndroidLauncher extends AndroidApplication {
         AudioSpectrum.onAndroidPause();
     }
 
+    protected void onDestroy() {
+        Main.getInstance().saveConfig();
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();

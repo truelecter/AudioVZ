@@ -1,23 +1,23 @@
 package truelecter.iig.util;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 
 public class FontManager {
     private static HashMap<String, BitmapFont> fonts = new HashMap<String, BitmapFont>();
     private static final String DEFAULT_FONT_PATH = "data/font/";
 
     public static BitmapFont getFont(String fontN, boolean defaultPath) {
-        if (fonts.containsKey(fontN.toLowerCase())) {
-            return fonts.get(fontN.toLowerCase());
+        String s = defaultPath ? DEFAULT_FONT_PATH + fontN : fontN;
+        if (fonts.containsKey(s)) {
+            return fonts.get(s);
         } else {
             try {
-                String s = defaultPath ? DEFAULT_FONT_PATH + fontN : fontN;
                 BitmapFont f = new BitmapFont(Gdx.files.local(s));
-                fonts.put(fontN.toLowerCase(), f);
+                fonts.put(s, f);
                 return f;
             } catch (Exception e) {
                 System.out.println("Unable to load font: " + fontN.toLowerCase());
@@ -26,6 +26,14 @@ public class FontManager {
                 fonts.put(fontN.toLowerCase(), f);
                 return f;
             }
+        }
+    }
+
+    public static void reloadFonts() {
+        Set<String> s = fonts.keySet();
+        fonts.clear();
+        for (String f : s) {
+            fonts.put(f, new BitmapFont(Gdx.files.internal(DEFAULT_FONT_PATH + "default.fnt")));
         }
     }
 

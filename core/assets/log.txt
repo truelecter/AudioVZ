@@ -713,3 +713,104 @@ java.lang.NullPointerException
 [INFO Mon Mar 23 21:27:32 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
 [INFO Mon Mar 23 21:27:32 EET 2015] Loaded! 
 [INFO Mon Mar 23 21:27:32 EET 2015] Playback thread started!
+[ Tue Mar 24 16:33:26 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:33:26 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:33:26 EET 2015] File param is null!
+[ Tue Mar 24 16:33:49 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:33:49 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:33:49 EET 2015] File param is null!
+[INFO Tue Mar 24 16:33:52 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:33:52 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:33:52 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:33:53 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:33:55 EET 2015] Playback thread started!
+[ Tue Mar 24 16:38:00 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:38:00 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:38:00 EET 2015] File param is null!
+[INFO Tue Mar 24 16:38:02 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:38:02 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:38:02 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:38:02 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:38:02 EET 2015] Playback thread started!
+[ Tue Mar 24 16:42:51 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:42:51 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:42:51 EET 2015] File param is null!
+[INFO Tue Mar 24 16:43:03 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:43:03 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:43:03 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:43:03 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:43:03 EET 2015] Playback thread started!
+[ Tue Mar 24 16:43:25 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:43:25 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:43:25 EET 2015] File param is null!
+[INFO Tue Mar 24 16:43:27 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:43:27 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:43:27 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:43:27 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:43:28 EET 2015] Playback thread started!
+[ Tue Mar 24 16:43:42 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:43:42 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:43:42 EET 2015] File param is null!
+[INFO Tue Mar 24 16:43:48 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:43:48 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:43:48 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:43:48 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:43:48 EET 2015] Playback thread started!
+[ Tue Mar 24 16:44:36 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:44:36 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:44:36 EET 2015] File param is null!
+[INFO Tue Mar 24 16:44:37 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:44:37 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:44:37 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:44:38 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:44:38 EET 2015] Playback thread started!
+[ Tue Mar 24 16:46:16 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:46:16 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:46:16 EET 2015] File param is null!
+[ Tue Mar 24 16:52:42 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:52:42 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:52:42 EET 2015] File param is null!
+[WARNING Tue Mar 24 16:52:43 EET 2015] Cannot create FileManager instance with last path
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.LabeledCheckbox.getHeight(LabeledCheckbox.java:39)
+	at truelecter.iig.screen.visual.menu.Options.updateRelativeness(Options.java:138)
+	at truelecter.iig.screen.visual.menu.Options.<init>(Options.java:100)
+	at truelecter.iig.screen.FileManager.<init>(FileManager.java:82)
+	at truelecter.iig.Main.create(Main.java:104)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:137)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Tue Mar 24 16:53:16 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:53:16 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:53:16 EET 2015] File param is null!
+[WARNING Tue Mar 24 16:53:17 EET 2015] Cannot create FileManager instance with last path
+java.lang.NullPointerException
+	at truelecter.iig.screen.visual.LabeledCheckbox.getHeight(LabeledCheckbox.java:39)
+	at truelecter.iig.screen.visual.menu.Options.updateRelativeness(Options.java:138)
+	at truelecter.iig.screen.visual.menu.Options.<init>(Options.java:100)
+	at truelecter.iig.screen.FileManager.<init>(FileManager.java:82)
+	at truelecter.iig.Main.create(Main.java:104)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:137)
+	at com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:114)
+[ Tue Mar 24 16:56:09 EET 2015] **************************************************************************
+[INFO Tue Mar 24 16:56:09 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 16:56:09 EET 2015] File param is null!
+[INFO Tue Mar 24 16:56:11 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Mar 24 16:56:11 EET 2015] BEFORE: null
+[INFO Tue Mar 24 16:56:11 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Mar 24 16:56:12 EET 2015] Loaded! 
+[INFO Tue Mar 24 16:56:13 EET 2015] Playback thread started!
+[ Tue Mar 24 17:31:53 EET 2015] **************************************************************************
+[INFO Tue Mar 24 17:31:53 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 17:31:53 EET 2015] File param is null!
+[ Tue Mar 24 17:32:10 EET 2015] **************************************************************************
+[INFO Tue Mar 24 17:32:10 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 17:32:10 EET 2015] File param is null!
+[ Tue Mar 24 17:51:21 EET 2015] **************************************************************************
+[INFO Tue Mar 24 17:51:21 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 17:51:21 EET 2015] File param is null!
+[ Tue Mar 24 17:52:28 EET 2015] **************************************************************************
+[INFO Tue Mar 24 17:52:28 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 17:52:28 EET 2015] File param is null!
+[ Tue Mar 24 17:53:11 EET 2015] **************************************************************************
+[INFO Tue Mar 24 17:53:11 EET 2015] Started AudioVZ v 0.0.3 pre-alpha
+[INFO Tue Mar 24 17:53:11 EET 2015] File param is null!

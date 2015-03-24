@@ -18,7 +18,8 @@ public class Button implements SubInputProcessor, VisualPart {
     protected float origHeight;
     protected float x;
     protected float y;
-
+    protected int priority = 89;
+    
     public Button(Texture texture, float width, float height, Function onClick) {
         this(texture, 0, 0, width, height, onClick);
     }
@@ -171,11 +172,15 @@ public class Button implements SubInputProcessor, VisualPart {
 
     @Override
     public int getPriority() {
-        return 98;
+        return priority;
     }
 
     @Override
     public void setWidth(float width) {
         
+    }
+
+    public void setPriority(int i) {
+        priority = i;
     }
 }
