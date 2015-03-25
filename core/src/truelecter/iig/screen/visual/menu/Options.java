@@ -51,7 +51,7 @@ public class Options extends Menu implements SubInputProcessor {
                     }
                 }, ConfigHandler.height / 20, ConfigHandler.height / 20);
         checkboxes.add(autoPlay);
-        useShaders = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Use shaders", -1000, -1000,
+        useShaders = new LabeledCheckbox(FontManager.getOptionLabelFont(), "Anaglyph", -1000, -1000,
                 ConfigHandler.width / 3, new Texture("data/icons/checked.png"),
                 new Texture("data/icons/unchecked.png"), ConfigHandler.useShaders, null, new Function() {
                     public void toRun() {
@@ -162,6 +162,7 @@ public class Options extends Menu implements SubInputProcessor {
             checkboxes.clear();
             checkboxes = null;
         }
+        GlobalInputProcessor.remove(this);
     }
 
     @Override

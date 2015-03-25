@@ -30,7 +30,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 
 import javazoom.jl.decoder.Decoder;
@@ -67,7 +66,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private Vector2 fadeTime;
 
     // TESTAREA_BEGIN
-    private ShaderProgram test;
     // TESTAREA_END
 
     private FadingText ft = new FadingText(0.05f, 5000);
@@ -209,6 +207,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         lastTime = System.currentTimeMillis();
                     } while (toStay > 1);
                 }
+                device.dispose();
+                decoder.dispose();
                 needToChange = true;
 
             }
@@ -253,13 +253,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         }
                     });
         ConfigHandler.autoPlayReady = true;
-        try {
-            test = new ShaderProgram(Gdx.files.local("data/shaders/vertex.shd"),
-                    Gdx.files.local("data/shaders/fragment.shd"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ShaderProgram.pedantic = false;
     }
 
     @Override
@@ -319,12 +312,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         float k = ConfigHandler.width / 910f;
         float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
         camera.update();
-        batch.begin();
-        // background.draw(batch);
-        // batch.end();
-        // batch.begin();
-        float vX = (float) (ConfigHandler.width * (-0.43 + tScale / k));
-        float vY = (float) (ConfigHandler.height * (-0.43 + tScale / k));
+        float vX = (float) (ConfigHandler.width * (-0.43 + tScale / k)) / 2.5f;
+        float vY = (float) (ConfigHandler.height * (-0.43 + tScale / k)) / 2.5f;
         if (ConfigHandler.scaleBackground)
             if (tScale / k > 0.43) {
                 background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
@@ -333,42 +322,33 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 background.setSize(ConfigHandler.width, ConfigHandler.height);
                 background.setPosition(0, 0);
             }
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE);
-        // RED SHADER _ BREGIN
-        if (test.isCompiled() && ConfigHandler.useShaders) {
-            test.begin();
-            test.setUniformf("u_Contrast", 1);
-            test.setUniformf("u_Approximation", 1);
-            test.setUniformf("u_tScale", tScale / k);
-            test.setUniformf("u_Mode", 0);
-            batch.setShader(test);
+        // Anaglyph_BEGIN
+        if (ConfigHandler.useShaders) {
+            if (tScale / k > 0.43) {
+                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+                batch.begin();
+                float x = background.getX();
+                float y = background.getY();
+                background.setColor(0, 1, 1, 1);
+                background.draw(batch);
+                background.setPosition(x - vX / 2, y);
+                background.setColor(1, 0, 0, 1);
+                background.draw(batch);
+                background.setPosition(x, y);
+                batch.end();
+                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                batch.begin();
+            } else {
+                batch.begin();
+                background.setColor(1, 1, 1, 1);
+                background.draw(batch);
+            }
         } else {
-            if (!test.isCompiled())
-                System.out.println(test.getLog());
-            batch.setShader(null);
-        } //*/
-        background.draw(batch);
-        if (test != null && ConfigHandler.useShaders) {
-            batch.flush();
-            batch.end();
-            test.end();
             batch.begin();
-            batch.setShader(null);
-            test.begin();
-            test.setUniformf("u_Mode", 1);
-            batch.setShader(test);
+            background.setColor(1, 1, 1, 1);
             background.draw(batch);
-            batch.end();
-            test.end();
-            batch.begin();
-            batch.setShader(null);
-        } else {
-            if (!test.isCompiled())
-                System.out.println(test.getLog());
-            batch.setShader(null);
         }
-        // CYAN SHADER _ END*/
+        // Anaglyph_BEGIN
         currentSkin.rendererCustomParts(batch, true);
         batch.setProjectionMatrix(camera.combined);
         playPause.setScale(tScale);
@@ -504,11 +484,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         playPause.setLocation(width / 2, height / 2);
         camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
         background.setSize(width, height);
-        if (test != null) {
-            test.begin();
-            test.setUniformf("u_resolution", width, height);
-            test.end();
-        }
     }
 
     @Override
@@ -578,17 +553,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 changeButtonSkinAccordingOnPlaying();
             } catch (Exception e) {
                 Logger.w("Error while refreshing skin", e);
-            }
-            try {
-                test = new ShaderProgram(Gdx.files.local("data/shaders/vertex.shd"),
-                        Gdx.files.local("data/shaders/fragment.shd"));
-                if (test != null) {
-                    test.begin();
-                    test.setUniformf("u_resolution", ConfigHandler.width, ConfigHandler.height);
-                    test.end();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
             break;
         case Input.Keys.RIGHT:

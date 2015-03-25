@@ -28,7 +28,10 @@ public class AndroidLauncher extends AndroidApplication {
     }
 
     protected void onDestroy() {
+        super.onDestroy();
         Main.getInstance().saveConfig();
+        int pid = android.os.Process.myPid();
+        android.os.Process.killProcess(pid);
     }
 
     protected void onCreate(Bundle savedInstanceState) {

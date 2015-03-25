@@ -17,7 +17,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 public class Main extends Game {
     private static Main instance;
     public static final boolean DEBUG = true;
-    public final String VERSION = "0.0.3 pre-alpha";
+    public final String VERSION = "0.0.4 alpha";
     public static AndroidApplication aa = null;
     private final File toRun;
 
@@ -69,6 +69,7 @@ public class Main extends Game {
             ConfigHandler.autoPlay = s.getBoolean("Main", "autoPlay", false);
             ConfigHandler.scaleBackground = s.getBoolean("Main", "scaleBackground", false);
             ConfigHandler.offsetAngle = s.getBoolean("Main", "offsetAngle", false);
+            ConfigHandler.useShaders = s.getBoolean("Main", "anaglyph", false);
             if (ConfigHandler.skinOrigPath != null) {
                 ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!",
                         Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!", Gdx.files.getExternalStoragePath());
@@ -120,6 +121,7 @@ public class Main extends Game {
             config.put("Main", "autoPlay", ConfigHandler.autoPlay);
             config.put("Main", "scaleBackground", ConfigHandler.scaleBackground);
             config.put("Main", "offsetAngle", ConfigHandler.offsetAngle);
+            config.put("Main", "anaglyph", ConfigHandler.useShaders);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);
             System.out.println("Config stored to " + f.getAbsolutePath());
