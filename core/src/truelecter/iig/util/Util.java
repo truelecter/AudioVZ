@@ -36,7 +36,8 @@ public class Util {
         long hour = length / 3600;
         long minute = (length - hour * 3600) / 60;
         long sec = length - hour * 3600 - minute * 60;
-        String res = (hour != 0 ? hour + ":" : "") + minute + ":" + (sec < 10 ? "0" + sec : sec);
+        String res = (hour != 0 ? hour + ":" + ((minute < 10 ? "0" : "")) : "") + minute + ":"
+                + (sec < 10 ? "0" + sec : sec);
         return res;
     }
 
@@ -73,10 +74,10 @@ public class Util {
         res += name;
         return Gdx.files.absolute(res);
     }
-    
-    public static float[] castShortToFloat(short[] x){
+
+    public static float[] castShortToFloat(short[] x) {
         float[] res = new float[x.length];
-        for (int i = 0; i<x.length; i++)
+        for (int i = 0; i < x.length; i++)
             res[i] = x[i];
         return res;
     }

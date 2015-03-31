@@ -90,6 +90,7 @@ public class Main extends Game {
         if (Gdx.app.getType() == ApplicationType.Android) {
             ConfigHandler.width = Gdx.graphics.getWidth();
             ConfigHandler.height = Gdx.graphics.getHeight();
+            ConfigHandler.volume = 1;
         }
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setInputProcessor(new GlobalInputProcessor());

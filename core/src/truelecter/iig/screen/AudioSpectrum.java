@@ -15,6 +15,9 @@ import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Function;
 import truelecter.iig.util.Logger;
 import truelecter.iig.util.Util;
+import truelecter.iig.util.audio.FFT;
+import truelecter.iig.util.audio.fft.FFTType;
+import truelecter.iig.util.audio.fft.FFTWrapper;
 import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
 
@@ -22,7 +25,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.AudioDevice;
-import com.badlogic.gdx.audio.analysis.KissFFT;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
@@ -48,7 +50,6 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private boolean playing = false;
     private Thread playbackThread;
     private short[] samples = new short[2048];
-    private KissFFT fft;
     private float[] spectrum = new float[2048];
     private float[] topValues = new float[2048];
     private OrthographicCamera camera;
@@ -160,7 +161,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
         batch = new SpriteBatch();
 
-        fft = new KissFFT(2048);
+        final FFT fft = FFTWrapper.getFFT(FFTType.KISSFFT, 2500);
 
         for (int i = 0; i < spectrum.length; i++) {
             topValues[i] = 0;
@@ -210,7 +211,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 device.dispose();
                 decoder.dispose();
                 needToChange = true;
-
+                fft.dispose();
             }
         });
         device.setVolume(ConfigHandler.volume);
@@ -299,9 +300,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             Main.getInstance().setScreen(new FileManager());
             return;
         }
+
         if (paused && Main.aa != null) {
             return;
         }
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -312,10 +315,10 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         float k = ConfigHandler.width / 910f;
         float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
         camera.update();
-        float vX = (float) (ConfigHandler.width * (-0.43 + tScale / k)) / 2.5f;
-        float vY = (float) (ConfigHandler.height * (-0.43 + tScale / k)) / 2.5f;
+        float vX = (float) (ConfigHandler.width * (-0.4377 + tScale / k)) / 2.5f;
+        float vY = (float) (ConfigHandler.height * (-0.4377 + tScale / k)) / 2.5f;
         if (ConfigHandler.scaleBackground)
-            if (tScale / k > 0.43) {
+            if (tScale / k > 0.4377) {
                 background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
                 background.setPosition(-vX / 2, -vY / 2);
             } else {
@@ -324,14 +327,15 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             }
         // Anaglyph_BEGIN
         if (ConfigHandler.useShaders) {
-            if (tScale / k > 0.43) {
+            if (tScale / k > 0.4377) {
                 batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
                 batch.begin();
                 float x = background.getX();
                 float y = background.getY();
+                background.setPosition(x + vX / 4, y);
                 background.setColor(0, 1, 1, 1);
                 background.draw(batch);
-                background.setPosition(x - vX / 2, y);
+                background.setPosition(x - vX / 4, y);
                 background.setColor(1, 0, 0, 1);
                 background.draw(batch);
                 background.setPosition(x, y);
@@ -411,7 +415,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             }
             device.setVolume(ConfigHandler.volume);
         }
-        if (!volumeft.finished()) {
+        if (!volumeft.finished() && Main.aa == null) {
             String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
             currentSkin.volumeFont.setColor(1, 1, 1, volumeft.getFadeX());
             currentSkin.volumeFont.draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
@@ -450,7 +454,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 histoX = i - NB_BARS / 2;
             }
 
-            int nb = (samples.length / NB_BARS) / 2;
+            int nb = (spectrum.length / NB_BARS) / 2;
             res = Math.max(res, scale(avg(histoX, nb)));
         }
         return res;

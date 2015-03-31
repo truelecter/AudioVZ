@@ -1283,3 +1283,176 @@ java.util.ConcurrentModificationException
 java.lang.NullPointerException
 	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:195)
 	at java.lang.Thread.run(Thread.java:722)
+[ Wed Mar 25 21:27:06 EET 2015] **************************************************************************
+[INFO Wed Mar 25 21:27:06 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Wed Mar 25 21:27:06 EET 2015] File param is null!
+[INFO Wed Mar 25 21:27:08 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Wed Mar 25 21:27:09 EET 2015] BEFORE: null
+[INFO Wed Mar 25 21:27:09 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Wed Mar 25 21:27:09 EET 2015] Loaded! 
+[INFO Wed Mar 25 21:27:09 EET 2015] Playback thread started!
+[ Wed Mar 25 21:27:49 EET 2015] **************************************************************************
+[INFO Wed Mar 25 21:27:49 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Wed Mar 25 21:27:49 EET 2015] File param is null!
+[INFO Wed Mar 25 21:27:50 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Wed Mar 25 21:27:50 EET 2015] BEFORE: null
+[INFO Wed Mar 25 21:27:50 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Wed Mar 25 21:27:50 EET 2015] Loaded! 
+[INFO Wed Mar 25 21:27:51 EET 2015] Playback thread started!
+[ Wed Mar 25 21:32:58 EET 2015] **************************************************************************
+[INFO Wed Mar 25 21:32:58 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Wed Mar 25 21:32:59 EET 2015] File param is null!
+[INFO Wed Mar 25 21:33:03 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Wed Mar 25 21:33:03 EET 2015] BEFORE: null
+[INFO Wed Mar 25 21:33:03 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Wed Mar 25 21:33:03 EET 2015] Loaded! 
+[INFO Wed Mar 25 21:33:03 EET 2015] Playback thread started!
+[ Wed Mar 25 21:34:10 EET 2015] **************************************************************************
+[INFO Wed Mar 25 21:34:10 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Wed Mar 25 21:34:10 EET 2015] File param is null!
+[INFO Wed Mar 25 21:34:14 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Wed Mar 25 21:34:14 EET 2015] BEFORE: null
+[INFO Wed Mar 25 21:34:14 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Wed Mar 25 21:34:14 EET 2015] Loaded! 
+[INFO Wed Mar 25 21:34:15 EET 2015] Playback thread started!
+[ Wed Mar 25 21:35:17 EET 2015] **************************************************************************
+[INFO Wed Mar 25 21:35:17 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Wed Mar 25 21:35:18 EET 2015] File param is null!
+[INFO Wed Mar 25 21:35:19 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Wed Mar 25 21:35:19 EET 2015] BEFORE: null
+[INFO Wed Mar 25 21:35:19 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Wed Mar 25 21:35:19 EET 2015] Loaded! 
+[INFO Wed Mar 25 21:35:19 EET 2015] Playback thread started!
+[ Thu Mar 26 11:12:35 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:12:36 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:12:36 EET 2015] File param is null!
+[INFO Thu Mar 26 11:12:40 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:12:40 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:12:40 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:12:41 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:12:42 EET 2015] Playback thread started!
+[ Thu Mar 26 11:12:59 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:12:59 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:12:59 EET 2015] File param is null!
+[INFO Thu Mar 26 11:13:02 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:13:02 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:13:02 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:13:02 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:13:02 EET 2015] Playback thread started!
+[ Thu Mar 26 11:13:57 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:13:57 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:13:57 EET 2015] File param is null!
+[INFO Thu Mar 26 11:14:00 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:14:00 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:14:00 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:14:00 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:14:00 EET 2015] Playback thread started!
+[ Thu Mar 26 11:14:17 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:14:17 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:14:17 EET 2015] File param is null!
+[INFO Thu Mar 26 11:14:17 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:14:17 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:14:17 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:14:17 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:14:18 EET 2015] Playback thread started!
+[ Thu Mar 26 11:14:48 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:14:48 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:14:48 EET 2015] File param is null!
+[INFO Thu Mar 26 11:14:51 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:14:51 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:14:51 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:14:51 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:14:51 EET 2015] Playback thread started!
+[ Thu Mar 26 11:15:21 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:15:21 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:15:21 EET 2015] File param is null!
+[INFO Thu Mar 26 11:15:22 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:15:22 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:15:22 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:15:22 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:15:22 EET 2015] Playback thread started!
+[ Thu Mar 26 11:16:06 EET 2015] **************************************************************************
+[INFO Thu Mar 26 11:16:06 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 11:16:06 EET 2015] File param is null!
+[INFO Thu Mar 26 11:16:07 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 11:16:07 EET 2015] BEFORE: null
+[INFO Thu Mar 26 11:16:07 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 11:16:07 EET 2015] Loaded! 
+[INFO Thu Mar 26 11:16:07 EET 2015] Playback thread started!
+[WARNING Thu Mar 26 11:19:08 EET 2015] Error decoding file
+java.lang.NullPointerException
+	at javazoom.jl.decoder.Decoder.decodeFrame(Unknown Source)
+	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:188)
+	at java.lang.Thread.run(Thread.java:722)
+[ Thu Mar 26 15:16:30 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:16:30 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:16:31 EET 2015] File param is null!
+[INFO Thu Mar 26 15:17:00 EET 2015] Loading screen for file 'H:\_Media\music\MIX\BBDD.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:17:00 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:17:00 EET 2015] AFTER: H:\_Media\music\MIX\BBDD.mp3
+[INFO Thu Mar 26 15:17:11 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:17:13 EET 2015] Playback thread started!
+[ Thu Mar 26 15:25:47 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:25:47 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:25:47 EET 2015] File param is null!
+[ Thu Mar 26 15:25:48 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:25:48 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:25:48 EET 2015] File param is null!
+[INFO Thu Mar 26 15:25:54 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:25:54 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:25:54 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 15:25:55 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:25:55 EET 2015] Playback thread started!
+[ Thu Mar 26 15:27:12 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:27:12 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:27:12 EET 2015] File param is null!
+[INFO Thu Mar 26 15:27:13 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:27:13 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:27:13 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 15:27:13 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:27:14 EET 2015] Playback thread started!
+[ Thu Mar 26 15:27:25 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:27:25 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:27:25 EET 2015] File param is null!
+[INFO Thu Mar 26 15:27:26 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:27:26 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:27:26 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 15:27:26 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:27:27 EET 2015] Playback thread started!
+[ Thu Mar 26 15:27:42 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:27:42 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:27:42 EET 2015] File param is null!
+[INFO Thu Mar 26 15:27:46 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:27:46 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:27:46 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Thu Mar 26 15:27:46 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:27:46 EET 2015] Playback thread started!
+[ Thu Mar 26 15:45:27 EET 2015] **************************************************************************
+[INFO Thu Mar 26 15:45:27 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Thu Mar 26 15:45:28 EET 2015] File param is null!
+[INFO Thu Mar 26 15:45:35 EET 2015] Loading screen for file 'H:\_Media\music\MIX\1 HOUR BEST OF DUBSTEP MIX 2013.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 15:45:35 EET 2015] BEFORE: null
+[INFO Thu Mar 26 15:45:35 EET 2015] AFTER: H:\_Media\music\MIX\1 HOUR BEST OF DUBSTEP MIX 2013.mp3
+[INFO Thu Mar 26 15:45:45 EET 2015] Loaded! 
+[INFO Thu Mar 26 15:45:45 EET 2015] Playback thread started!
+[WARNING Thu Mar 26 16:47:13 EET 2015] Error decoding file
+java.lang.NullPointerException
+	at javazoom.jl.decoder.Decoder.decodeFrame(Unknown Source)
+	at truelecter.iig.screen.AudioSpectrum$1.run(AudioSpectrum.java:188)
+	at java.lang.Thread.run(Thread.java:722)
+[INFO Thu Mar 26 16:47:20 EET 2015] Loading screen for file 'H:\_Media\music\MIX\BBDD.mp3' started! Label 'null', waiting 0
+[INFO Thu Mar 26 16:47:20 EET 2015] BEFORE: H:\_Media\music\MIX\1 HOUR BEST OF DUBSTEP MIX 2013.mp3
+[INFO Thu Mar 26 16:47:20 EET 2015] AFTER: H:\_Media\music\MIX\BBDD.mp3
+[INFO Thu Mar 26 16:47:21 EET 2015] Loaded! 
+[INFO Thu Mar 26 16:47:21 EET 2015] Playback thread started!
+[ Fri Mar 27 15:20:19 EET 2015] **************************************************************************
+[INFO Fri Mar 27 15:20:19 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Fri Mar 27 15:20:19 EET 2015] File param is null!
+[INFO Fri Mar 27 15:21:38 EET 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Fri Mar 27 15:21:38 EET 2015] BEFORE: null
+[INFO Fri Mar 27 15:21:38 EET 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Fri Mar 27 15:21:39 EET 2015] Loaded! 
+[INFO Fri Mar 27 15:21:40 EET 2015] Playback thread started!
+[ Fri Mar 27 15:27:39 EET 2015] **************************************************************************
+[INFO Fri Mar 27 15:27:39 EET 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Fri Mar 27 15:27:39 EET 2015] File param is null!
