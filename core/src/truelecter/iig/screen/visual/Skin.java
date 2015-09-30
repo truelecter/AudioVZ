@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.FontManager;
 import truelecter.iig.util.Ini;
+import truelecter.iig.util.Logger;
 import truelecter.iig.util.Util;
 
 import com.badlogic.gdx.Application.ApplicationType;
@@ -201,17 +202,35 @@ public class Skin {
             expr = Parser.parse(exp.toLowerCase().replaceAll("width", ConfigHandler.width + "")
                     .replaceAll("height", ConfigHandler.height + ""));
         } catch (SyntaxException e) {
-            System.err.println(e.explain());
+            Logger.w("Expression parsing error", e);
             return Float.NEGATIVE_INFINITY;
         }
         return (float) expr.value();
     }
 
-    public static Skin skinByPath(String path) throws IOException {
+    public static Skin skinByPath(String path) {
         if (path == null || !new File(path).exists()) {
-            return getDefaultSkin();
+            try {
+                return getDefaultSkin();
+            } catch (IOException e) {
+                Logger.e("Error loading default skin!", e);
+                return null;
+            }
         }
-        return new Skin(new File(path));
+        Skin res = null;
+        try {
+            res = new Skin(new File(path));
+        } catch (IOException e) {
+            Logger.e("Invalid skin properties!", e);
+        }
+        if (res == null)
+            try {
+                return getDefaultSkin();
+            } catch (IOException e) {
+                Logger.e("Error loading default skin!", e);
+                return null;
+            }
+        return res;
     }
 
     public static Skin getDefaultSkin() throws IOException {

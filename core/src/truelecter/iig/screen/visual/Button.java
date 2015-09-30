@@ -6,6 +6,7 @@ import truelecter.iig.util.input.GlobalInputProcessor;
 import truelecter.iig.util.input.SubInputProcessor;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,109 +20,108 @@ public class Button implements SubInputProcessor, VisualPart {
     protected float x;
     protected float y;
     protected int priority = 89;
-    
+
+    public Button(Texture texture, float x, float y, float width, float height, Function onClick) {
+        this.skin = new Sprite(texture);
+        this.skin.setPosition(x, y);
+        this.origHeight = height;
+        this.origWidth = width;
+        this.skin.setSize(width, height);
+        this.onClick = onClick;
+        this.setX(x);
+        this.setY(y);
+        this.scale = 1;
+        GlobalInputProcessor.register(this);
+    }
+
     public Button(Texture texture, float width, float height, Function onClick) {
         this(texture, 0, 0, width, height, onClick);
     }
 
-    public Button(Texture texture, float x, float y, float width, float height, Function onClick) {
-        skin = new Sprite(texture);
-        skin.setPosition(x, y);
-        origHeight = height;
-        origWidth = width;
-        skin.setSize(width, height);
-        this.onClick = onClick;
-        this.setX(x);
-        this.setY(y);
-        scale = 1;
-        GlobalInputProcessor.register(this);
+    public void changeSkin(Texture toChange) {
+        this.changeSkin(toChange, toChange.getWidth(), toChange.getHeight());
     }
 
+    public void changeSkin(Texture toChange, float width, float height) {
+        this.skin = new Sprite(toChange);
+        this.origWidth = width;
+        this.origHeight = height;
+        this.skin.setSize(width * this.scale, height * this.scale);
+    }
+
+    protected boolean checkIfClicked(float ix, float iy) {
+        if ((ix > this.skin.getX()) && (ix < (this.skin.getX() + (this.origWidth * this.scale))))
+            if ((iy > this.skin.getY()) && (iy < (this.skin.getY() + (this.scale * this.origHeight))))
+                if (this.checkTransparency(this.skin.getTexture(), (int) ix, (int) iy)) {
+                    this.click();
+                    return true;
+                }
+        return false;
+    }
+
+    private boolean checkTransparency(Texture t, int x, int y) {
+        TextureData td = t.getTextureData();
+        if (!td.isPrepared())
+            td.prepare();
+        int a = td.consumePixmap().getPixel(x, y) << 8;
+        System.out.println("a=" + a);
+        return (a) > (255 * 0.95);
+    }
+
+    public void click() {
+        if (this.onClick != null)
+            this.onClick.toRun();
+    }
+
+    @Override
     public void dispose() {
         GlobalInputProcessor.remove(this);
     }
 
-    protected boolean checkIfClicked(float ix, float iy) {
-        if (ix > skin.getX() && ix < skin.getX() + origWidth * scale) {
-            if (iy > skin.getY() && iy < skin.getY() + scale * origHeight) {
-                click();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void drawCentered(SpriteBatch sb, float x, float y) {
-        setLocation(x, y);
-        drawCentered(sb);
+    public void draw(SpriteBatch sb) {
+        this.skin.draw(sb);
     }
 
     public void drawCentered(SpriteBatch sb) {
-        skin.setPosition(x - origWidth / 2 * scale, y - origHeight / 2 * scale);
-        skin.draw(sb);
+        this.skin.setPosition(this.x - ((this.origWidth / 2) * this.scale), this.y
+                - ((this.origHeight / 2) * this.scale));
+        this.skin.draw(sb);
     }
 
-    public void draw(SpriteBatch sb) {
-        skin.draw(sb);
+    public void drawCentered(SpriteBatch sb, float x, float y) {
+        this.setLocation(x, y);
+        this.drawCentered(sb);
+    }
+
+    @Override
+    public float getHeight() {
+        return this.origHeight * this.scale;
+    }
+
+    @Override
+    public int getPriority() {
+        return this.priority;
     }
 
     public Sprite getSprite() {
-        return skin;
+        return this.skin;
     }
 
-    public void changeSkin(Texture toChange) {
-        changeSkin(toChange, toChange.getWidth(), toChange.getHeight());
-    }
-
-    public void changeSkin(Texture toChange, float width, float height) {
-        skin = new Sprite(toChange);
-        origWidth = width;
-        origHeight = height;
-        skin.setSize(width * scale, height * scale);
-    }
-
-    public void setLocation(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void setScale(double scale) {
-        setScale((float) scale);
-    }
-
-    public void setScale(float scale) {
-        this.scale = scale;
-        skin.setSize(origWidth * scale, origHeight * scale);
-    }
-
-    public void click() {
-        if (onClick != null)
-            onClick.toRun();
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
+    @Override
+    public float getWidth() {
+        return this.origWidth * this.scale;
     }
 
     public float getX() {
-        return x;
+        return this.x;
     }
 
-    public void setX(float x) {
-        this.x = x;
+    public float getY() {
+        return this.y;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
         return false;
     }
 
@@ -131,17 +131,7 @@ public class Button implements SubInputProcessor, VisualPart {
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return checkIfClicked(screenX, Math.abs(screenY - ConfigHandler.height));
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean keyUp(int keycode) {
         return false;
     }
 
@@ -151,36 +141,61 @@ public class Button implements SubInputProcessor, VisualPart {
     }
 
     @Override
+    public void render(SpriteBatch sb) {
+        this.draw(sb);
+    }
+
+    @Override
     public boolean scrolled(int amount) {
         return false;
     }
 
     @Override
-    public float getHeight() {
-        return origHeight * scale;
+    public void setLocation(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
-    @Override
-    public float getWidth() {
-        return origWidth * scale;
+    public void setPriority(int i) {
+        this.priority = i;
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        draw(sb);
+    public void setScale(double scale) {
+        this.setScale((float) scale);
     }
 
-    @Override
-    public int getPriority() {
-        return priority;
+    public void setScale(float scale) {
+        this.scale = scale;
+        this.skin.setSize(this.origWidth * scale, this.origHeight * scale);
     }
 
     @Override
     public void setWidth(float width) {
-        
+
     }
 
-    public void setPriority(int i) {
-        priority = i;
+    @Override
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    @Override
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return this.checkIfClicked(screenX, Math.abs(screenY - ConfigHandler.height));
     }
 }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.util.Random;
 
 import javazoom.jl.decoder.Bitstream;
+import javazoom.jl.decoder.Decoder;
 import javazoom.jl.decoder.SampleBuffer;
 import truelecter.iig.Main;
 import truelecter.iig.screen.visual.Button;
@@ -23,6 +24,7 @@ import truelecter.iig.util.input.SubInputProcessor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.io.Mpg123Decoder;
@@ -34,47 +36,76 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import javazoom.jl.decoder.Decoder;
-
+/**
+ * Main visualization screen
+ * 
+ * @author _TrueLecter_
+ *
+ */
 public class AudioSpectrum implements Screen, SubInputProcessor {
+
+    // Last instance of this class
+    private static AudioSpectrum instance = null;
+
+    /**
+     * Handles android onPause() event
+     */
+    public static void onAndroidPause() {
+        if (ConfigHandler.pauseOnHide && (instance != null))
+            instance.pause();
+    }
 
     private final float FALLING_SPEED = (1.5f / 3.0f);
     private final float LINE_SCALE = 2f;
-    private final int NB_BARS = 40;
-    private static AudioSpectrum instance = null;
 
+    // Number of bars
+    private final int NB_BARS = 40;
+    // Background image
     private Sprite background;
+    // Button radius
     private float radius = 256;
+    // MP3 decoder
     private Mpg123Decoder decoder;
     private AudioDevice device;
+    // Is playing paused or not
     private boolean playing = false;
+    // Thread, where we are decoding our MP3
     private Thread playbackThread;
     private short[] samples = new short[2048];
     private float[] spectrum = new float[2048];
     private float[] topValues = new float[2048];
     private OrthographicCamera camera;
+    // Batch to draw on
     private SpriteBatch batch;
     private float barWidth = 8;
 
+    // DPI ratio
+    private float dpiK = (Gdx.graphics.getDensity() * 160) / 190;
+    // Textures of paused and playing button
     private Texture pausedImage;
-    private Texture playImage;
 
+    private Texture playImage;
+    // Sprites of bar skin
     private Sprite b;
     private Sprite line;
+
     private Sprite r;
 
+    // Center button
     private Button playPause;
-    private Vector2 fadeTime;
 
     // TESTAREA_BEGIN
     // TESTAREA_END
 
+    private Vector2 fadeTime;
     private FadingText ft = new FadingText(0.05f, 5000);
     private FadingText volumeft = new FadingText(0.05f, 6000);
-    private Skin currentSkin;
 
+    private Skin currentSkin;
     private Random gen = new Random(1337);
+    // Bars angle
     private float angle;
+    // Do we need to change screen?
     private boolean needToChange = false;
     private String name;
     private String filename;
@@ -82,125 +113,181 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     private long songLength = 0;
     private float centerX = ConfigHandler.width / 2;
     private float centerY = ConfigHandler.height / 2;
-    private Sprite pixel = new Sprite(new Texture(Gdx.files.internal("pix.bmp")));
 
+    private Sprite pixel = new Sprite(new Texture(Gdx.files.internal("pix.bmp")));
     private boolean changingVolume = false;
     private int factor = 1;
     private Options options;
     private Button optionsButton;
     private Button nextButton;
     private boolean defaultSong = false;
+
     private boolean paused;
 
-    public static void onAndroidPause() {
-        if (ConfigHandler.pauseOnHide && instance != null) {
-            instance.pause();
-        }
-    }
-
+    /**
+     * Load song preview
+     */
     public AudioSpectrum() {
         this("!INTERNAL!/data/default.mp3", true, null);
-        defaultSong = true;
+        this.defaultSong = true;
     }
 
+    /**
+     * Load song preview
+     * 
+     * @param playing
+     *            - play song or not
+     */
     public AudioSpectrum(boolean playing) {
         this("!INTERNAL!/data/default.mp3", playing, null);
-        defaultSong = true;
+        this.defaultSong = true;
     }
 
     public AudioSpectrum(boolean dummy, String name) {
         this("!INTERNAL!/data/default.mp3", true, name);
-        defaultSong = true;
+        this.defaultSong = true;
     }
 
-    public AudioSpectrum(String filename) {
-        this(filename, true, null);
-    }
-
+    /**
+     * Start visualization of <b>file</b>
+     * 
+     * @param file
+     *            - file to play
+     */
     public AudioSpectrum(File file) {
         this(file.getAbsolutePath(), true, null);
     }
 
-    public AudioSpectrum(File file, String name) {
-        this(file.getAbsolutePath(), true, name);
-    }
-
+    /**
+     * Init visualization of playing <b>file</b>
+     * 
+     * @param file
+     *            - file to play
+     * @param playing
+     *            - start playing or not
+     */
     public AudioSpectrum(File file, boolean playing) {
         this(file.getAbsolutePath(), playing, null);
     }
 
+    /**
+     * Init visualization of playing <b>file</b>
+     * 
+     * @param file
+     *            - file to play
+     * @param playing
+     *            - start playing or not
+     * @param name
+     *            - name to show
+     */
     public AudioSpectrum(File file, boolean playing, String name) {
         this(file.getAbsolutePath(), playing, name);
     }
 
+    /**
+     * Start visualization of <b>file</b>
+     * 
+     * @param file
+     *            - file to play
+     * @param name
+     *            - name to show
+     */
+    public AudioSpectrum(File file, String name) {
+        this(file.getAbsolutePath(), true, name);
+    }
+
+    /**
+     * Start visualization of <b>filename</b>
+     * 
+     * @param filename
+     *            - path for file to play
+     */
+    public AudioSpectrum(String filename) {
+        this(filename, true, null);
+    }
+
+    /**
+     * Main constructor
+     * 
+     * @param filenameN
+     *            - path of file to play
+     * @param p
+     *            - begin playing or not
+     * @param name
+     *            - name to show
+     */
     public AudioSpectrum(String filenameN, boolean p, String name) {
+        // Normalize file path
         String tfilename = filenameN.replace("!INTERNAL!", Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!",
                 Gdx.files.getExternalStoragePath());
-        while (tfilename.contains("/")) {
+        while (tfilename.contains("/"))
             tfilename = tfilename.replace("/", "\\");
-        }
-        while (tfilename.contains("\\\\")) {
+        while (tfilename.contains("\\\\"))
             tfilename = tfilename.replace("\\\\", "\\");
-        }
-        while (tfilename.contains("\\")) {
+        while (tfilename.contains("\\"))
             tfilename = tfilename.replace("\\", "?");
-        }
-        while (tfilename.contains("?")) {
+        while (tfilename.contains("?"))
             tfilename = tfilename.replace("?", File.separator);
-        }
         this.filename = tfilename;
-        playing = p;
-        camera = new OrthographicCamera();
-        try {
-            currentSkin = Skin.skinByPath(ConfigHandler.skinPath);
-        } catch (Exception e) {
-            Logger.e("Invalid skin properties!", e);
-        }
-        loadSkin(currentSkin);
-        camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
+        this.playing = p;
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
+        // Init and load skin
+        this.currentSkin = Skin.skinByPath(ConfigHandler.skinPath);
+        this.loadSkin(this.currentSkin);
 
-        batch = new SpriteBatch();
+        this.batch = new SpriteBatch();
 
-        final FFT fft = FFTWrapper.getFFT(FFTType.KISSFFT, 2500);
-
-        for (int i = 0; i < spectrum.length; i++) {
-            topValues[i] = 0;
-        }
-        FileHandle externalFile = Gdx.files.absolute(filename);
+        for (int i = 0; i < this.spectrum.length; i++)
+            this.topValues[i] = 0;
+        // Prepare decoder, fft and audio device
+        FileHandle externalFile = Gdx.files.absolute(this.filename);
         final Mpg123Decoder decoder = new Mpg123Decoder(externalFile);
-        device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 ? true : false);
-        playbackThread = new Thread(new Runnable() {
+        this.device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 ? true : false);
+        final FFT fft = FFTWrapper.getFFT(FFTType.KJFFT, 2500);
+        this.playbackThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Logger.i("Playback thread started!");
+                // Pause before changing screen
                 long toStay = 5000;
+                // Total samples read
                 long totalSamples = 0;
                 Bitstream bitStream = null;
                 try {
-                    bitStream = new Bitstream(new FileInputStream(filename));
+                    bitStream = new Bitstream(new FileInputStream(AudioSpectrum.this.filename));
                 } catch (Exception e) {
                     Logger.w("Bit stream init error", e);
                 }
                 Decoder decode = new Decoder();
-                do {
-                    if (playing) {
+                do
+                    if (AudioSpectrum.this.playing) {
                         try {
-                            samples = ((SampleBuffer) decode.decodeFrame(bitStream.readFrame(), bitStream)).getBuffer();
+                            AudioSpectrum.this.samples = ((SampleBuffer) decode.decodeFrame(bitStream.readFrame(),
+                                    bitStream)).getBuffer();
                         } catch (Exception e) {
-                            samples = new short[0];
+                            AudioSpectrum.this.samples = new short[0];
                             Logger.w("Error decoding file", e);
                         }
-                        totalSamples += samples.length;
-                        fft.spectrum(samples, spectrum);
+                        totalSamples += AudioSpectrum.this.samples.length;
                         try {
-                            device.writeSamples(samples, 0, samples.length);
+                            fft.spectrum(AudioSpectrum.this.samples, AudioSpectrum.this.spectrum);
+                            // Util.printArray(AudioSpectrum.this.spectrum);
+                        } catch (Exception eoob) {
+                            Logger.e("Something went wrong.", eoob);
+                            fft.changeSamplesLength(AudioSpectrum.this.samples.length);
+                            AudioSpectrum.this.spectrum = new float[2048];
+                        }
+                        try {
+                            AudioSpectrum.this.device.writeSamples(AudioSpectrum.this.samples, 0,
+                                    AudioSpectrum.this.samples.length);
                         } catch (Exception e) {
                             Logger.w("Error while writing to audio device", e);
                         }
-                        playbackTime = totalSamples * 500 / decoder.getRate();
+                        AudioSpectrum.this.playbackTime = (totalSamples * 500) / decoder.getRate();
                         bitStream.closeFrame();
                     }
-                } while (samples.length > 0 && !needToChange);
+                while ((AudioSpectrum.this.samples.length > 0) && !AudioSpectrum.this.needToChange);
                 if (!ConfigHandler.autoPlay) {
                     long lastTime = System.currentTimeMillis();
                     do {
@@ -208,332 +295,152 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         lastTime = System.currentTimeMillis();
                     } while (toStay > 1);
                 }
-                device.dispose();
+                AudioSpectrum.this.device.dispose();
                 decoder.dispose();
-                needToChange = true;
+                AudioSpectrum.this.needToChange = true;
                 fft.dispose();
             }
         });
-        device.setVolume(ConfigHandler.volume);
-        playPause = new Button(pausedImage, ConfigHandler.width / 2, ConfigHandler.height / 2, radius * 2, radius * 2,
-                new Function() {
+        this.device.setVolume(ConfigHandler.volume);
+        // Create our pause/play button
+        this.playPause = new Button(this.pausedImage, ConfigHandler.width / 2, ConfigHandler.height / 2,
+                this.radius * 2, this.radius * 2, new Function() {
                     @Override
                     public void toRun() {
-                        playing = !playing;
-                        if (playing) {
-                            playPause.changeSkin(pausedImage, 512, 512);
-                        } else {
-                            playPause.changeSkin(playImage, 512, 512);
-                        }
+                        AudioSpectrum.this.playing = !AudioSpectrum.this.playing;
+                        if (AudioSpectrum.this.playing)
+                            AudioSpectrum.this.playPause.changeSkin(AudioSpectrum.this.pausedImage, 512, 512);
+                        else
+                            AudioSpectrum.this.playPause.changeSkin(AudioSpectrum.this.playImage, 512, 512);
                     }
                 });
-        angle = 10;
+        // Default bars angle
+        this.angle = 10;
+        // If name is null - set it to file name
         this.name = name == null ? this.filename.substring(this.filename.lastIndexOf('\\') + 1,
                 this.filename.length() - 4) : name;
-        songLength = (long) decoder.getLength();
-        fadeTime = new Vector2(0, 0);
-        pixel.setSize(ConfigHandler.width, ConfigHandler.height);
-        playbackThread.setDaemon(true);
-        playbackThread.start();
+        // Retrieve length of song
+        this.songLength = (long) decoder.getLength();
+        // Fade-in preparations
+        this.fadeTime = new Vector2(0, 0);
+        this.pixel.setSize(ConfigHandler.width, ConfigHandler.height);
+        this.playbackThread.setDaemon(true);
+        this.playbackThread.start();
         instance = this;
-        options = new Options();
-        optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
+        this.options = new Options();
+        this.optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
             @Override
             public void toRun() {
-                options.toggle();
+                AudioSpectrum.this.options.toggle();
             }
         });
-        optionsButton.setPriority(99);
-        if (!defaultSong)
-            nextButton = new Button(new Texture("data/icons/fastforward.png"), ConfigHandler.width - 80, 20f, 60f, 60f,
-                    new Function() {
+        this.optionsButton.setPriority(99);
+        // If it is not our preview song - show button to play next song in list
+        if (!this.defaultSong)
+            this.nextButton = new Button(new Texture("data/icons/fastforward.png"), ConfigHandler.width - 80, 20f, 60f,
+                    60f, new Function() {
                         @Override
                         public void toRun() {
-                            needToChange = true && !defaultSong;
+                            AudioSpectrum.this.needToChange = true && !AudioSpectrum.this.defaultSong;
                             ConfigHandler.nextButtonPressed = true;
                         }
                     });
+        // Are we ready to play?
         ConfigHandler.autoPlayReady = true;
     }
 
-    @Override
-    public void dispose() {
-        remove();
-        playing = false;
-        Util.ignoreErrors(new Function() {
-            @Override
-            public void toRun() {
-                device.dispose();
-                device = null;
-            }
-        });
-        Util.ignoreErrors(new Function() {
-            @Override
-            public void toRun() {
-                decoder.dispose();
-                decoder = null;
-            }
-        });
-        Util.ignoreErrors(new Function() {
-            @Override
-            public void toRun() {
-                playbackThread.interrupt();
-                playbackThread = null;
-            }
-        });
-        System.gc();
-        System.out.println("AudioSpectrum disposed!");
-    }
-
-    public void remove() {
-        GlobalInputProcessor.remove(playPause);
-        GlobalInputProcessor.remove(this);
-        options.dispose();
-        optionsButton.dispose();
-        nextButton.dispose();
-    }
-
-    @Override
-    public void render(float delta) {
-        if (needToChange) {
-            dispose();
-            Main.getInstance().setScreen(new FileManager());
-            return;
-        }
-
-        if (paused && Main.aa != null) {
-            return;
-        }
-
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        fadeTime = fadeTime.lerp(new Vector2(1, 0), 0.01f);
-        float scale = calculateScale() / 125 / 4096 + 0.2f;
-        float angle = 180f / NB_BARS;
-        float offsetAngle = -this.angle;
-        float k = ConfigHandler.width / 910f;
-        float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
-        camera.update();
-        float vX = (float) (ConfigHandler.width * (-0.4377 + tScale / k)) / 2.5f;
-        float vY = (float) (ConfigHandler.height * (-0.4377 + tScale / k)) / 2.5f;
-        if (ConfigHandler.scaleBackground)
-            if (tScale / k > 0.4377) {
-                background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
-                background.setPosition(-vX / 2, -vY / 2);
-            } else {
-                background.setSize(ConfigHandler.width, ConfigHandler.height);
-                background.setPosition(0, 0);
-            }
-        // Anaglyph_BEGIN
-        if (ConfigHandler.useShaders) {
-            if (tScale / k > 0.4377) {
-                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-                batch.begin();
-                float x = background.getX();
-                float y = background.getY();
-                background.setPosition(x + vX / 4, y);
-                background.setColor(0, 1, 1, 1);
-                background.draw(batch);
-                background.setPosition(x - vX / 4, y);
-                background.setColor(1, 0, 0, 1);
-                background.draw(batch);
-                background.setPosition(x, y);
-                batch.end();
-                batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-                batch.begin();
-            } else {
-                batch.begin();
-                background.setColor(1, 1, 1, 1);
-                background.draw(batch);
-            }
-        } else {
-            batch.begin();
-            background.setColor(1, 1, 1, 1);
-            background.draw(batch);
-        }
-        // Anaglyph_BEGIN
-        currentSkin.rendererCustomParts(batch, true);
-        batch.setProjectionMatrix(camera.combined);
-        playPause.setScale(tScale);
-        for (int i = 0; i < NB_BARS; i++) {
-            int histoX = 0;
-            if (i < NB_BARS / 2) {
-                histoX = NB_BARS / 2 - i;
-            } else {
-                histoX = i - NB_BARS / 2;
-            }
-
-            int nb = (samples.length / NB_BARS) / 2;
-            float avg = avg(histoX, nb) / (NB_BARS / 40) / LINE_SCALE;
-
-            if (avg > topValues[histoX]) {
-                topValues[histoX] = avg;
-            }
-
-            float tmp = 0;
-
-            // drawing spectrum (in blue)
-            tmp = scale(avg) / 256 + tScale * radius;
-            b.setSize(barWidth * k, tmp);
-            b.setPosition(centerX - barWidth * k / 2, centerY);
-            b.setOrigin(barWidth * k / 2, 0);
-            b.setRotation(angle * i + offsetAngle);
-            b.draw(batch);
-            b.setRotation(angle * i + 180 + offsetAngle);
-            b.draw(batch);
-
-            // drawing top values(in red)
-            tmp = scale(currentSkin.useOldBars ? topValues[histoX] : avg) / 256 + tScale * radius;
-            r.setSize(barWidth * k, 4);
-            r.setPosition(centerX - barWidth * k / 2, centerY + tmp);
-            r.setOrigin(barWidth * k / 2, -tmp);
-            r.setRotation(angle * i + offsetAngle);
-            r.draw(batch);
-            r.setRotation(angle * i + 180 + offsetAngle);
-            r.draw(batch);
-
-            topValues[histoX] -= FALLING_SPEED;
-        }
-        if (ConfigHandler.offsetAngle)
-            if (scale > 0.33 && playing) {
-                this.angle += gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
-            }
-        if (!ft.finished()) {
-            currentSkin.songName.setColor(1, 1, 1, ft.getFadeX());
-            currentSkin.songName.draw(batch, name, currentSkin.songNamePos.x, currentSkin.songNamePos.y);
-            currentSkin.songName.setColor(1, 1, 1, 1);
-        }
-        if (changingVolume) {
-            volumeft.show();
-            ConfigHandler.volume += Math.signum(factor) * 0.01;
-            if (ConfigHandler.volume < 0) {
-                ConfigHandler.volume = 0;
-            }
-            if (ConfigHandler.volume > 1) {
-                ConfigHandler.volume = 1;
-            }
-            device.setVolume(ConfigHandler.volume);
-        }
-        if (!volumeft.finished() && Main.aa == null) {
-            String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
-            currentSkin.volumeFont.setColor(1, 1, 1, volumeft.getFadeX());
-            currentSkin.volumeFont.draw(batch, volumeString, currentSkin.soundPos.x, currentSkin.soundPos.y);
-            currentSkin.volumeFont.setColor(1, 1, 1, 1);
-        }
-        currentSkin.timeFont.draw(batch, Util.computeTime(playbackTime / 1000), currentSkin.timePassed.x,
-                currentSkin.timePassed.y);
-        String s = "-" + Util.computeTime((long) (songLength - playbackTime / 1000));
-        currentSkin.timeFont.draw(batch, s, currentSkin.timeLeft.x, currentSkin.timeLeft.y);
-        float timeLeftScale = playbackTime / 1000f / songLength;
-        line.setSize(currentSkin.timeBar.t * k, (currentSkin.timeBar.z) * timeLeftScale);
-        line.setPosition(currentSkin.timeBar.x, currentSkin.timeBar.y);
-        line.setOrigin(0, currentSkin.timeBar.t * k / 2);
-        line.setRotation(-90);
-        line.draw(batch);
-        playPause.drawCentered(batch, centerX, centerY);
-        currentSkin.rendererCustomParts(batch, false);
-        if (ConfigHandler.showButtons) {
-            options.render(batch);
-            optionsButton.drawCentered(batch, 50, 50);
-            if (!defaultSong)
-                nextButton.drawCentered(batch, ConfigHandler.width - 50, 50);
-        }
-        pixel.setColor(0, 0, 0, 1 - fadeTime.x);
-        pixel.draw(batch);
-        batch.end();
+    // Calculate spectrum average
+    private float avg(int pos, int nb) {
+        int sum = 0;
+        for (int i = 0; i < nb; i++)
+            sum += this.spectrum[pos + i];
+        if (nb == 0)
+            return 0;
+        return Math.abs(sum / nb);
     }
 
     private float calculateScale() {
         float res = 0;
-        for (int i = 0; i < NB_BARS; i++) {
+        for (int i = 0; i < this.NB_BARS; i++) {
             int histoX = 0;
-            if (i < NB_BARS / 2) {
-                histoX = NB_BARS / 2 - i;
-            } else {
-                histoX = i - NB_BARS / 2;
-            }
+            if (i < (this.NB_BARS / 2))
+                histoX = (this.NB_BARS / 2) - i;
+            else
+                histoX = i - (this.NB_BARS / 2);
 
-            int nb = (spectrum.length / NB_BARS) / 2;
-            res = Math.max(res, scale(avg(histoX, nb)));
+            int nb = (this.spectrum.length / this.NB_BARS) / 2;
+            res = Math.max(res, this.scale(this.avg(histoX, nb)));
         }
         return res;
     }
 
-    private float scale(float x) {
-        return x * ConfigHandler.height;
-    }
-
-    private float avg(int pos, int nb) {
-        int sum = 0;
-        for (int i = 0; i < nb; i++) {
-            sum += spectrum[pos + i];
-        }
-        if (nb == 0) {
-            return 0;
-        }
-        return (float) (sum / nb);
+    private void changeButtonSkinAccordingOnPlaying() {
+        if (this.playing)
+            this.playPause.changeSkin(this.pausedImage, 512, 512);
+        else
+            this.playPause.changeSkin(this.playImage, 512, 512);
     }
 
     @Override
-    public void show() {
-        GlobalInputProcessor.removeAllOfClass(this.getClass());
-        GlobalInputProcessor.register(this);
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        ConfigHandler.width = width;
-        ConfigHandler.height = height;
-        playPause.setLocation(width / 2, height / 2);
-        camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
-        background.setSize(width, height);
-    }
-
-    @Override
-    public void pause() {
-        if (ConfigHandler.pauseOnHide) {
-            playing = false;
-            changeButtonSkinAccordingOnPlaying();
-        }
-        paused = true;
-    }
-
-    @Override
-    public void resume() {
-        if (ConfigHandler.pauseOnHide) {
-            if (!playing) {
-                playing = true;
+    public void dispose() {
+        this.remove();
+        this.playing = false;
+        Util.ignoreErrors(new Function() {
+            @Override
+            public void toRun() {
+                AudioSpectrum.this.device.dispose();
+                AudioSpectrum.this.device = null;
             }
-            changeButtonSkinAccordingOnPlaying();
-        }
-        paused = false;
+        });
+        Util.ignoreErrors(new Function() {
+            @Override
+            public void toRun() {
+                AudioSpectrum.this.decoder.dispose();
+                AudioSpectrum.this.decoder = null;
+            }
+        });
+        Util.ignoreErrors(new Function() {
+            @Override
+            public void toRun() {
+                AudioSpectrum.this.playbackThread.interrupt();
+                AudioSpectrum.this.playbackThread = null;
+            }
+        });
+        // Collect some garbage
+        System.gc();
+        System.out.println("AudioSpectrum disposed!");
+    }
+
+    @Override
+    public int getPriority() {
+        return 2;
     }
 
     @Override
     public void hide() {
-        dispose();
-    }
-
-    public void setPlaying(boolean p) {
-        playing = p;
+        this.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
         case Input.Keys.UP:
-            changingVolume = true;
-            factor = 1;
+            this.changingVolume = true;
+            this.factor = 1;
             break;
         case Input.Keys.DOWN:
-            changingVolume = true;
-            factor = -1;
+            this.changingVolume = true;
+            this.factor = -1;
             break;
         default:
             return false;
         }
         return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
     }
 
     @Override
@@ -545,22 +452,22 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             Main.getInstance().setScreen(new FileManager());
             break;
         case Input.Keys.SPACE:
-            playPause.click();
+            this.playPause.click();
             break;
         case Input.Keys.DOWN:
         case Input.Keys.UP:
-            changingVolume = false;
+            this.changingVolume = false;
             break;
         case Input.Keys.R:
             try {
-                loadSkin(new Skin(currentSkin.skinFile));
-                changeButtonSkinAccordingOnPlaying();
+                this.loadSkin(new Skin(this.currentSkin.skinFile));
+                this.changeButtonSkinAccordingOnPlaying();
             } catch (Exception e) {
                 Logger.w("Error while refreshing skin", e);
             }
             break;
         case Input.Keys.RIGHT:
-            needToChange = true && !defaultSong;
+            this.needToChange = true && !this.defaultSong;
             ConfigHandler.nextButtonPressed = true;
             break;
         default:
@@ -569,54 +476,249 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         return true;
     }
 
-    private void changeButtonSkinAccordingOnPlaying() {
-        if (playing) {
-            playPause.changeSkin(pausedImage, 512, 512);
-        } else {
-            playPause.changeSkin(playImage, 512, 512);
-        }
-    }
-
     private void loadBarsTexture(Texture t) {
-        b = new Sprite(t, 0, 0, 16, 5);
-        r = new Sprite(t, 0, 15, 16, currentSkin.useOldBars ? 5 : 8);
-        line = new Sprite(t, 0, 5, 16, 5);
+        this.b = new Sprite(t, 0, 0, 16, 5);
+        this.r = new Sprite(t, 0, 15, 16, this.currentSkin.useOldBars ? 5 : 8);
+        this.line = new Sprite(t, 0, 5, 16, 5);
     }
 
     private void loadSkin(Skin skin) {
-        if (skin == null) {
+        if (skin == null)
             try {
-                currentSkin = Skin.getDefaultSkin();
+                this.currentSkin = Skin.getDefaultSkin();
             } catch (Exception e) {
                 Logger.e("Skin loading error", e);
                 Gdx.app.exit();
             }
-        }
-        currentSkin = skin;
-        pausedImage = currentSkin.pause;
-        playImage = currentSkin.play;
-        loadBarsTexture(currentSkin.bars);
-        background = new Sprite(currentSkin.background);
-        int width = currentSkin.background.getWidth();
-        int height = currentSkin.background.getHeight();
-        float scale = Math.min(width * 1.0f / ConfigHandler.width, height * 1.0f / ConfigHandler.height);
-        background.setSize(width / scale, height / scale);
-        centerX = currentSkin.button.x;
-        centerY = currentSkin.button.y;
+        this.currentSkin = skin;
+        this.pausedImage = this.currentSkin.pause;
+        this.playImage = this.currentSkin.play;
+        this.loadBarsTexture(this.currentSkin.bars);
+        this.background = new Sprite(this.currentSkin.background);
+        int width = this.currentSkin.background.getWidth();
+        int height = this.currentSkin.background.getHeight();
+        float scale = Math.min((width * 1.0f) / ConfigHandler.width, (height * 1.0f) / ConfigHandler.height);
+        this.background.setSize(width / scale, height / scale);
+        this.centerX = this.currentSkin.button.x;
+        this.centerY = this.currentSkin.button.y;
     }
 
     @Override
-    public boolean keyTyped(char character) {
+    public boolean mouseMoved(int screenX, int screenY) {
         return false;
+    }
+
+    @Override
+    public void pause() {
+        if (ConfigHandler.pauseOnHide) {
+            this.playing = false;
+            this.changeButtonSkinAccordingOnPlaying();
+        }
+        this.paused = true;
+    }
+
+    /**
+     * Remove all {@link InputProcessor}s from regisrty
+     */
+    public void remove() {
+        GlobalInputProcessor.remove(this.playPause);
+        GlobalInputProcessor.remove(this);
+        this.options.dispose();
+        this.optionsButton.dispose();
+        this.nextButton.dispose();
+    }
+
+    @Override
+    public void render(float delta) {
+        // Change screen if it is needed
+        if (this.needToChange) {
+            this.dispose();
+            Main.getInstance().setScreen(new FileManager());
+            return;
+        }
+        // If paused - don't render
+        if (this.paused && (Main.aa != null))
+            return;
+
+        // Clear screen
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Fade-out for song name, artist etc.
+        this.fadeTime = this.fadeTime.lerp(new Vector2(1, 0), 0.01f);
+        float scale = (this.calculateScale() / 125 / 4096) + 0.2f;
+        float angle = 180f / this.NB_BARS;
+        float offsetAngle = -this.angle;
+        float k = ConfigHandler.width / 910f;
+        float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
+        this.camera.update();
+        float vX = (float) (ConfigHandler.width * (-0.4377 + (tScale / k))) / 2.5f;
+        float vY = (float) (ConfigHandler.height * (-0.4377 + (tScale / k))) / 2.5f;
+        if (ConfigHandler.scaleBackground)
+            if ((tScale / k) > 0.4377) {
+                this.background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
+                this.background.setPosition(-vX / 2, -vY / 2);
+            } else {
+                this.background.setSize(ConfigHandler.width, ConfigHandler.height);
+                this.background.setPosition(0, 0);
+            }
+        // Anaglyph_BEGIN
+        if (ConfigHandler.useShaders) {
+            if ((tScale / k) > 0.4377) {
+                this.batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+                this.batch.begin();
+                float x = this.background.getX();
+                float y = this.background.getY();
+                this.background.setPosition(x + ((vX / 4) * this.dpiK), y);
+                this.background.setColor(0, 1, 1, 1);
+                this.background.draw(this.batch);
+                this.background.setPosition(x - ((vX / 4) * this.dpiK), y);
+                this.background.setColor(1, 0, 0, 1);
+                this.background.draw(this.batch);
+                this.background.setPosition(x, y);
+                this.batch.end();
+                this.batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                this.batch.begin();
+            } else {
+                this.batch.begin();
+                this.background.setColor(1, 1, 1, 1);
+                this.background.draw(this.batch);
+            }
+        } else {
+            this.batch.begin();
+            this.background.setColor(1, 1, 1, 1);
+            this.background.draw(this.batch);
+        }
+        // Anaglyph_BEGIN
+        this.currentSkin.rendererCustomParts(this.batch, true);
+        this.batch.setProjectionMatrix(this.camera.combined);
+        this.playPause.setScale(tScale);
+        for (int i = 0; i < this.NB_BARS; i++) {
+            int histoX = 0;
+            if (i < (this.NB_BARS / 2))
+                histoX = (this.NB_BARS / 2) - i;
+            else
+                histoX = i - (this.NB_BARS / 2);
+
+            int nb = (this.samples.length / this.NB_BARS) / 2;
+            float avg = this.avg(histoX, nb) / (this.NB_BARS / 40) / this.LINE_SCALE;
+
+            if (avg > this.topValues[histoX])
+                this.topValues[histoX] = avg;
+
+            float tmp = 0;
+
+            // drawing spectrum (in blue)
+            tmp = (this.scale(avg) / 256) + (tScale * this.radius);
+            this.b.setSize(this.barWidth * k, tmp);
+            this.b.setPosition(this.centerX - ((this.barWidth * k) / 2), this.centerY);
+            this.b.setOrigin((this.barWidth * k) / 2, 0);
+            this.b.setRotation((angle * i) + offsetAngle);
+            this.b.draw(this.batch);
+            this.b.setRotation((angle * i) + 180 + offsetAngle);
+            this.b.draw(this.batch);
+
+            // drawing top values(in red)
+            tmp = (this.scale(this.currentSkin.useOldBars ? this.topValues[histoX] : avg) / 256)
+                    + (tScale * this.radius);
+            this.r.setSize(this.barWidth * k, 4);
+            this.r.setPosition(this.centerX - ((this.barWidth * k) / 2), this.centerY + tmp);
+            this.r.setOrigin((this.barWidth * k) / 2, -tmp);
+            this.r.setRotation((angle * i) + offsetAngle);
+            this.r.draw(this.batch);
+            this.r.setRotation((angle * i) + 180 + offsetAngle);
+            this.r.draw(this.batch);
+
+            this.topValues[histoX] -= this.FALLING_SPEED;
+        }
+        if (ConfigHandler.offsetAngle)
+            if ((scale > 0.33) && this.playing)
+                this.angle += this.gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
+        if (!this.ft.finished()) {
+            this.currentSkin.songName.setColor(1, 1, 1, this.ft.getFadeX());
+            this.currentSkin.songName.draw(this.batch, this.name, this.currentSkin.songNamePos.x,
+                    this.currentSkin.songNamePos.y);
+            this.currentSkin.songName.setColor(1, 1, 1, 1);
+        }
+        if (this.changingVolume) {
+            this.volumeft.show();
+            ConfigHandler.volume += Math.signum(this.factor) * 0.01;
+            if (ConfigHandler.volume < 0)
+                ConfigHandler.volume = 0;
+            if (ConfigHandler.volume > 1)
+                ConfigHandler.volume = 1;
+            this.device.setVolume(ConfigHandler.volume);
+        }
+        if (!this.volumeft.finished() && (Main.aa == null)) {
+            String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
+            this.currentSkin.volumeFont.setColor(1, 1, 1, this.volumeft.getFadeX());
+            this.currentSkin.volumeFont.draw(this.batch, volumeString, this.currentSkin.soundPos.x,
+                    this.currentSkin.soundPos.y);
+            this.currentSkin.volumeFont.setColor(1, 1, 1, 1);
+        }
+        this.currentSkin.timeFont.draw(this.batch, Util.computeTime(this.playbackTime / 1000),
+                this.currentSkin.timePassed.x, this.currentSkin.timePassed.y);
+        String s = "-" + Util.computeTime(this.songLength - (this.playbackTime / 1000));
+        this.currentSkin.timeFont.draw(this.batch, s, this.currentSkin.timeLeft.x, this.currentSkin.timeLeft.y);
+        float timeLeftScale = this.playbackTime / 1000f / this.songLength;
+        this.line.setSize(this.currentSkin.timeBar.t * k, (this.currentSkin.timeBar.z) * timeLeftScale);
+        this.line.setPosition(this.currentSkin.timeBar.x, this.currentSkin.timeBar.y);
+        this.line.setOrigin(0, (this.currentSkin.timeBar.t * k) / 2);
+        this.line.setRotation(-90);
+        this.line.draw(this.batch);
+        this.playPause.drawCentered(this.batch, this.centerX, this.centerY);
+        this.currentSkin.rendererCustomParts(this.batch, false);
+        if (ConfigHandler.showButtons) {
+            this.options.render(this.batch);
+            this.optionsButton.drawCentered(this.batch, 50, 50);
+            if (!this.defaultSong)
+                this.nextButton.drawCentered(this.batch, ConfigHandler.width - 50, 50);
+        }
+        this.pixel.setColor(0, 0, 0, 1 - this.fadeTime.x);
+        this.pixel.draw(this.batch);
+        this.batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        ConfigHandler.width = width;
+        ConfigHandler.height = height;
+        this.playPause.setLocation(width / 2, height / 2);
+        this.camera.setToOrtho(false, ConfigHandler.width, ConfigHandler.height);
+        this.background.setSize(width, height);
+    }
+
+    @Override
+    public void resume() {
+        if (ConfigHandler.pauseOnHide) {
+            if (!this.playing)
+                this.playing = true;
+            this.changeButtonSkinAccordingOnPlaying();
+        }
+        this.paused = false;
+    }
+
+    private float scale(float x) {
+        return x * ConfigHandler.height;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    public void setPlaying(boolean p) {
+        this.playing = p;
+    }
+
+    @Override
+    public void show() {
+        GlobalInputProcessor.removeAllOfClass(this.getClass());
+        GlobalInputProcessor.register(this);
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
@@ -626,18 +728,8 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-
-    @Override
-    public int getPriority() {
-        return 2;
     }
 
 }

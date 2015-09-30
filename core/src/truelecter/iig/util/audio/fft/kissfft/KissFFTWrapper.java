@@ -1,24 +1,33 @@
 package truelecter.iig.util.audio.fft.kissfft;
 
-import com.badlogic.gdx.audio.analysis.KissFFT;
-
 import truelecter.iig.util.audio.FFT;
 
-public class KissFFTWrapper implements FFT{
+import com.badlogic.gdx.audio.analysis.KissFFT;
+
+public class KissFFTWrapper extends FFT {
     private KissFFT fft;
-    
-    public KissFFTWrapper(int sampleSize){
-        fft = new KissFFT(sampleSize);
+
+    public KissFFTWrapper(int sampleSize) {
+        this.fft = new KissFFT(sampleSize);
     }
-    
+
     @Override
-    public void spectrum(short[] samples, float[] spectrum) {
-        fft.spectrum(samples, spectrum);
+    public void changeSamplesLength(int newLength) {
+        try {
+            this.fft.dispose();
+        } catch (Exception e) {
+        }
+        this.fft = new KissFFT(newLength);
     }
 
     @Override
     public void dispose() {
-        fft.dispose();
+        this.fft.dispose();
+    }
+
+    @Override
+    public void spectrum(short[] samples, float[] spectrum) {
+        this.fft.spectrum(samples, spectrum);
     }
 
 }

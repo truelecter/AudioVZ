@@ -2,28 +2,26 @@ package truelecter.iig.util.audio.fft.kjfft;
 
 import truelecter.iig.util.audio.FFT;
 
-public class KJFFTWrapper implements FFT {
+public class KJFFTWrapper extends FFT {
     private KJFFT fft;
 
     public KJFFTWrapper(int SampleSize) {
-        fft = new KJFFT(SampleSize);
+        this.fft = new KJFFT(500);
     }
 
     @Override
-    public void spectrum(short[] samples, float[] spectrum) {
-        spectrum = fft.calculate(getDoubleArray(samples));
-    }
-
-    private double[] getDoubleArray(short[] samples) {
-        double[] res = new double[samples.length];
-        for (int i = 0; i < samples.length; i++) {
-            res[i] = samples[i];
-        }
-        return res;
+    public void changeSamplesLength(int newLength) {
+        this.fft = new KJFFT(newLength);
     }
 
     @Override
     public void dispose() {
     }
 
+    @Override
+    public void spectrum(short[] samples, float[] spectrum) {
+        double[] in = new double[samples.length / 2];
+        decode(toByte(samples), in);
+        spectrum = this.fft.calculate(toFloat(in));
+    }
 }

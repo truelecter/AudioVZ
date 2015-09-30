@@ -14,37 +14,73 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
+/**
+ * Main visualizer class. Reads config, and some base actions to start the
+ * application correctly
+ * 
+ * @author _TrueLecter_
+ */
 public class Main extends Game {
     private static Main instance;
     public static final boolean DEBUG = true;
-    public final String VERSION = "0.0.4 alpha";
+    public final String VERSION = "0.1.1 alpha";
+    /**
+     * Used by {@link FileManager} to build song list on Android
+     */
     public static AndroidApplication aa = null;
+    /**
+     * File to play
+     */
     private final File toRun;
 
+    /**
+     * @return Instance of the main class
+     */
     public static Main getInstance() {
         return instance;
     }
 
+    /**
+     * Default constructor. We'll start from file manager screen.
+     */
     public Main() {
         this(null);
     }
 
+    /**
+     * Constructor used by AndroidLauncher
+     * 
+     * @param aa
+     *            - android application instance. Used in {@link FileManager}
+     * @param f
+     *            - file to open
+     */
     public Main(AndroidApplication aa, File f) {
         this(f);
         Main.aa = aa;
     }
 
+    /**
+     * Main constructor. Sets <b>instance<b> variable and basically checks our
+     * file.
+     * 
+     * @param f
+     *            - file to play. If <b>null</b> open file manager
+     */
     public Main(File f) {
         instance = this;
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            public void run() {
-                saveConfig();
-            }
-        }));
         if (f != null && (aa != null || (f.exists() && f.isFile() && f.getAbsolutePath().endsWith(".mp3"))))
             toRun = f;
         else
             toRun = null;
+    }
+
+    /**
+     * Just save config
+     */
+    @Override
+    public void dispose() {
+        saveConfig();
     }
 
     @Override
@@ -77,6 +113,7 @@ public class Main extends Game {
                 ConfigHandler.skinPath = null;
             }
         } catch (Exception e) {
+            // If config reading ends with error, set default values
             ConfigHandler.width = 900;
             ConfigHandler.height = 600;
             ConfigHandler.volume = 0.1f;
@@ -87,14 +124,20 @@ public class Main extends Game {
             Logger.w("Config not found. Using default values\n" + "Watched in "
                     + Gdx.files.local("data/config.ini").file().getAbsolutePath(), e);
         }
+        // If running on Android, set app width and height to device width and
+        // height. Also, set volume ratio to 1
         if (Gdx.app.getType() == ApplicationType.Android) {
             ConfigHandler.width = Gdx.graphics.getWidth();
             ConfigHandler.height = Gdx.graphics.getHeight();
             ConfigHandler.volume = 1;
         }
+        // Add back key hook
         Gdx.input.setCatchBackKey(true);
+        // Change input processor to our new instance
         Gdx.input.setInputProcessor(new GlobalInputProcessor());
+        // Set window height and width
         Gdx.graphics.setDisplayMode(ConfigHandler.width, ConfigHandler.height, false);
+        // Run file if any is set by constructor
         if (toRun != null) {
             Logger.i("File param is not null! Path: " + toRun.getAbsolutePath());
             setScreen(new Loading(2000l, toRun, null));
@@ -102,14 +145,19 @@ public class Main extends Game {
         } else {
             Logger.i("File param is null!");
         }
+        // If file was null, then set screen to FileManager instance
         try {
             setScreen(new FileManager(new File(ConfigHandler.lastFileManagerPath)));
         } catch (Exception e) {
-            Logger.w("Cannot create FileManager instance with last path", e);
+            // If we can't open last directory
+            Logger.w("Can not create FileManager instance with last path", e);
             setScreen(new FileManager());
         }
     }
 
+    /**
+     * Used to store config before application disposes
+     */
     public void saveConfig() {
         try {
             Ini config = new Ini();
@@ -125,10 +173,9 @@ public class Main extends Game {
             config.put("Main", "anaglyph", ConfigHandler.useShaders);
             File f = Gdx.files.local("data/config.ini").file();
             config.write(f);
-            System.out.println("Config stored to " + f.getAbsolutePath());
+            Logger.i("Config stored to " + f.getAbsolutePath());
         } catch (Exception e) {
-            System.out.println("Config wasn't saved.");
-            e.printStackTrace();
+            Logger.w("Exception while saving config", e);
         }
 
     }

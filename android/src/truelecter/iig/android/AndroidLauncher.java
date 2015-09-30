@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -19,14 +18,19 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import truelecter.iig.Main;
 import truelecter.iig.screen.AudioSpectrum;
 
-@SuppressLint("NewApi")
 public class AndroidLauncher extends AndroidApplication {
 
+    /**
+     * Hook to pause playing or not
+     */
     protected void onPause() {
         super.onPause();
         AudioSpectrum.onAndroidPause();
     }
 
+    /**
+     * Clear all our activities
+     */
     protected void onDestroy() {
         super.onDestroy();
         Main.getInstance().saveConfig();
@@ -34,6 +38,10 @@ public class AndroidLauncher extends AndroidApplication {
         android.os.Process.killProcess(pid);
     }
 
+    /**
+     * Unpack our files to /data/data/truelecter.iig.android/files/ if needed.
+     * Open file if file intent is provided.
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
@@ -68,6 +76,14 @@ public class AndroidLauncher extends AndroidApplication {
         initialize(new Main(this, f), config);
     }
 
+    /**
+     * Unpacks file or dir from apk
+     * 
+     * @param path
+     *            - path to file or dir in .apk
+     * @param onlyFiles
+     *            - set to <b>true</b> if <b>path</b> is path of directory
+     */
     public void copyFileOrDir(String path, boolean onlyFiles) {
         AssetManager assetManager = this.getAssets();
         String assets[] = null;
@@ -94,6 +110,9 @@ public class AndroidLauncher extends AndroidApplication {
         }
     }
 
+    /**
+     * Copy file from assets
+     */
     private void copyFile(String filename) {
         AssetManager assetManager = this.getAssets();
         InputStream in = null;

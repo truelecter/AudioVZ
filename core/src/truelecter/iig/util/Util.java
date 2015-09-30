@@ -75,8 +75,29 @@ public class Util {
         return Gdx.files.absolute(res);
     }
 
+    public static void printArray(float[] spectrum) {
+        if (spectrum == null) {
+            System.out.println("null");
+            return;
+        }
+        System.out.print("[");
+        for (int i = 0; i < spectrum.length - 1; i++) {
+            System.out.print(spectrum[i] + ", ");
+        }
+        if (spectrum.length > 0) {
+            System.out.println(spectrum[spectrum.length-1] + "]");
+        }
+    }
+
     public static float[] castShortToFloat(short[] x) {
         float[] res = new float[x.length];
+        for (int i = 0; i < x.length; i++)
+            res[i] = x[i];
+        return res;
+    }
+    
+    public static double[] castShortToDouble(short[] x) {
+        double[] res = new double[x.length];
         for (int i = 0; i < x.length; i++)
             res[i] = x[i];
         return res;

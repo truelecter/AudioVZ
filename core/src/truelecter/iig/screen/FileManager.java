@@ -34,6 +34,13 @@ public class FileManager implements Screen, SubInputProcessor {
     private static File lastFmDir = null;
     protected static String lastFilePath = null;
 
+    public static boolean isHidden(File f) {
+        boolean s = f.isHidden() || (f.getName().charAt(0) == '.');
+        boolean names = f.getName().toLowerCase().equals("RECYCLER".toLowerCase())
+                || f.getName().toLowerCase().equals("$Recycle.Bin".toLowerCase());
+        return s || names;
+    }
+
     private File currentDir;
     private ArrayList<File> structureFiles;
     private ArrayList<File> structureDirs;
@@ -46,60 +53,47 @@ public class FileManager implements Screen, SubInputProcessor {
     private int scrollPointerDiff = 0;
     private boolean enableHidden = false;
     private Options options;
+
     private Button optionsButton;
 
     public FileManager() {
         this(ConfigHandler.lastFileManagerPath);
     }
 
-    public FileManager(String filePath) {
-        this(Gdx.app.getType() == ApplicationType.Android ? Gdx.files.absolute(filePath).file() : new File(filePath));
-    }
-
     public FileManager(File currentDir) {
-        structureDirs = new ArrayList<File>();
-        structureFiles = new ArrayList<File>();
+        this.structureDirs = new ArrayList<File>();
+        this.structureFiles = new ArrayList<File>();
         this.currentDir = null;
-        if (currentDir == null) {
+        if (currentDir == null)
             currentDir = new File(Gdx.files.getExternalStoragePath());
-        }
-        if (currentDir.getAbsolutePath().toLowerCase().endsWith(".mp3")) {
+        if (currentDir.getAbsolutePath().toLowerCase().endsWith(".mp3"))
             currentDir = currentDir.getParentFile();
-        }
         switch (Gdx.app.getType()) {
         case Desktop:
-            changeDir(currentDir);
+            this.changeDir(currentDir);
             break;
         case Android:
-            initAndroidView();
+            this.initAndroidView();
             break;
         default:
             Logger.e("Unsupported system", null);
             Gdx.app.exit();
         }
-        batch = new SpriteBatch();
-        background = new Sprite(new Texture("data/FileManager/background.png"));
-        background.setSize(ConfigHandler.width, ConfigHandler.height);
-        options = new Options();
-        optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
+        this.batch = new SpriteBatch();
+        this.background = new Sprite(new Texture("data/FileManager/background.png"));
+        this.background.setSize(ConfigHandler.width, ConfigHandler.height);
+        this.options = new Options();
+        this.optionsButton = new Button(new Texture("data/icons/settings.png"), 20f, 20f, 60f, 60f, new Function() {
             @Override
             public void toRun() {
-                options.toggle();
+                FileManager.this.options.toggle();
             }
         });
-        optionsButton.setPriority(99);
+        this.optionsButton.setPriority(99);
     }
 
-    private void initAndroidView() {
-        String[] proj = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME,
-                MediaStore.Video.Media.SIZE };
-        Cursor musicCursor = Main.aa.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, proj, null, null, null);
-        VisualFile.prepareList();
-        while (musicCursor.moveToNext()) {
-            if (musicCursor.getString(1).toLowerCase().endsWith(".mp3"))
-                new VisualFile(new File(musicCursor.getString(1)), musicCursor.getString(2));
-        }
-        VisualFile.get(0).select();
+    public FileManager(String filePath) {
+        this(Gdx.app.getType() == ApplicationType.Android ? Gdx.files.absolute(filePath).file() : new File(filePath));
     }
 
     private void changeDir(final File dir) {
@@ -109,7 +103,7 @@ public class FileManager implements Screen, SubInputProcessor {
             return;
         }
         try {
-            lastFmDir = currentDir;
+            lastFmDir = this.currentDir;
             if (lastFmDir != null)
                 ConfigHandler.lastFileManagerPath = lastFmDir.getAbsolutePath();
             if (dir != null) {
@@ -117,146 +111,69 @@ public class FileManager implements Screen, SubInputProcessor {
                     Main.getInstance().setScreen(new Loading(0l, dir, null));
                     return;
                 }
-                if (!dir.exists() || !dir.isDirectory()) {
-                    currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
-                } else {
-                    currentDir = dir;
-                }
-                rootCount = File.listRoots().length;
+                if (!dir.exists() || !dir.isDirectory())
+                    this.currentDir = lastFmDir == null ? new File(Gdx.files.getExternalStoragePath()) : lastFmDir;
+                else
+                    this.currentDir = dir;
+                this.rootCount = File.listRoots().length;
                 try {
-                    makeStructure(new ArrayList<File>(Arrays.asList(currentDir.listFiles())));
+                    this.makeStructure(new ArrayList<File>(Arrays.asList(this.currentDir.listFiles())));
                 } catch (Exception e) {
 
                 }
             } else {
-                rootCount = File.listRoots().length;
-                makeStructure(new ArrayList<File>(Arrays.asList(File.listRoots())), true);
+                this.rootCount = File.listRoots().length;
+                this.makeStructure(new ArrayList<File>(Arrays.asList(File.listRoots())), true);
             }
         } catch (Exception e) {
-            changeDir(lastFmDir);
+            this.changeDir(lastFmDir);
             Logger.w("Error changing dir. Dir changed to last succesfull", e);
         }
-    }
-
-    private void makeStructure(ArrayList<File> list) {
-        makeStructure(list, false);
-    }
-
-    public static boolean isHidden(File f) {
-        boolean s = f.isHidden() || f.getName().charAt(0) == '.';
-        boolean names = f.getName().toLowerCase().equals("RECYCLER".toLowerCase())
-                || f.getName().toLowerCase().equals("$Recycle.Bin".toLowerCase());
-        return s || names;
-    }
-
-    private void makeStructure(ArrayList<File> structure, boolean root) {
-        structureDirs.clear();
-        structureFiles.clear();
-        for (File f : File.listRoots()) {
-            structureDirs.add(f);
-        }
-        structureDirs.add(currentDir.getParentFile());
-        for (File f : structure) {
-            if (f.isDirectory()) {
-                if (!isHidden(f) || enableHidden || root)
-                    structureDirs.add(f);
-            } else {
-                if (f.getAbsolutePath().endsWith("mp3")) {
-                    if (!isHidden(f) || enableHidden)
-                        structureFiles.add(f);
-                }
-            }
-        }
-        makeVisualFilesStructure(root);
-        VisualFile.setOnRoot(root);
-    }
-
-    private void makeVisualFilesStructure(boolean root) {
-        int isRoot = 0;
-        VisualFile.prepareList();
-        for (File f : structureDirs) {
-            if (isRoot < rootCount)
-                isRoot++;
-            else if (isRoot == rootCount) {
-                isRoot++;
-                if (!root) {
-                    VisualFile vf = new VisualFile(f, "..", 0, 0);
-                    vf.select();
-                }
-            } else {
-                new VisualFile(f, 0, 0);
-            }
-        }
-        if (root) {
-            VisualFile.get(0).select();
-        } else
-            for (File f : structureFiles) {
-                new VisualFile(f, 0, 0);
-            }
-    }
-
-    @Override
-    public void show() {
-        GlobalInputProcessor.removeAllOfClass(this.getClass());
-        GlobalInputProcessor.register(this);
-    }
-
-    @Override
-    public void render(float delta) {
-        if (ConfigHandler.autoPlayReady && (ConfigHandler.nextButtonPressed || ConfigHandler.autoPlay)) {
-            File next = VisualFile.nextForPath(lastFilePath);
-            ConfigHandler.nextButtonPressed = false;
-            Main.getInstance().setScreen(new Loading(0, next, null));
-        }
-        batch.begin();
-        ConfigHandler.autoPlayReady = false;
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        background.draw(batch);
-        VisualFile.updateAll(delta);
-        VisualFile.drawAll(batch);
-        options.render(batch);
-        optionsButton.drawCentered(batch, 50, 50);
-        batch.end();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-        FontManager.reloadFonts();
-        VisualFile.reloadTexture();
-    }
-
-    @Override
-    public void hide() {
-        dispose();
     }
 
     @Override
     public void dispose() {
         try {
             GlobalInputProcessor.remove(this);
-            batch.dispose();
+            this.batch.dispose();
         } catch (Exception e) {
             Logger.w("Error while disposing FileManager instance", e);
         }
-        options.dispose();
-        optionsButton.dispose();
+        this.options.dispose();
+        this.optionsButton.dispose();
         System.gc();
         System.out.println("FileManager disposed!");
     }
 
     @Override
+    public int getPriority() {
+        return 1;
+    }
+
+    @Override
+    public void hide() {
+        this.dispose();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void initAndroidView() {
+        String[] proj = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME,
+                MediaStore.Video.Media.SIZE };
+        Cursor musicCursor = Main.aa.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, proj, null, null, null);
+        VisualFile.prepareList();
+        while (musicCursor.moveToNext())
+            if (musicCursor.getString(1).toLowerCase().endsWith(".mp3"))
+                new VisualFile(new File(musicCursor.getString(1)), musicCursor.getString(2));
+        VisualFile.get(0).select();
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
         return false;
     }
 
@@ -270,11 +187,11 @@ public class FileManager implements Screen, SubInputProcessor {
             VisualFile.getSelected().before();
             break;
         case Input.Keys.ENTER:
-            changeDir(VisualFile.getSelected().getFile());
+            this.changeDir(VisualFile.getSelected().getFile());
             break;
         case Input.Keys.BACKSPACE:
             if (!VisualFile.isOnRoot())
-                changeDir(VisualFile.get(0).getFile());
+                this.changeDir(VisualFile.get(0).getFile());
             else
                 Gdx.app.exit();
             break;
@@ -297,13 +214,12 @@ public class FileManager implements Screen, SubInputProcessor {
                 }
 
             });
-            if (fc.showDialog(null, "Choose your file") == JFileChooser.APPROVE_OPTION) {
+            if (fc.showDialog(null, "Choose your file") == JFileChooser.APPROVE_OPTION)
                 try {
                     Main.getInstance().setScreen(new AudioSpectrum(fc.getSelectedFile().getAbsolutePath()));
                 } catch (Exception e) {
                     Logger.e("Unable to select file", e);
                 }
-            }
             break;
         case Input.Keys.F1:
             try {
@@ -313,10 +229,10 @@ public class FileManager implements Screen, SubInputProcessor {
             }
             break;
         case Input.Keys.H:
-            enableHidden = !enableHidden;
+            this.enableHidden = !this.enableHidden;
             break;
         case Input.Keys.O:
-            options.toggle();
+            this.options.toggle();
             break;
         default:
             return false;
@@ -324,39 +240,46 @@ public class FileManager implements Screen, SubInputProcessor {
         return true;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
+    private void makeStructure(ArrayList<File> list) {
+        this.makeStructure(list, false);
     }
 
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        lastScreenTouchX = screenX;
-        lastScreenTouchY = screenY;
-        lastScreenY = screenY;
-        return true;
+    private void makeStructure(ArrayList<File> structure, boolean root) {
+        this.structureDirs.clear();
+        this.structureFiles.clear();
+        for (File f : File.listRoots())
+            this.structureDirs.add(f);
+        this.structureDirs.add(this.currentDir.getParentFile());
+        for (File f : structure)
+            if (f.isDirectory()) {
+                if (!isHidden(f) || this.enableHidden || root)
+                    this.structureDirs.add(f);
+            } else if (f.getAbsolutePath().endsWith("mp3"))
+                if (!isHidden(f) || this.enableHidden)
+                    this.structureFiles.add(f);
+        this.makeVisualFilesStructure(root);
+        VisualFile.setOnRoot(root);
     }
 
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (Math.abs(lastScreenTouchX - screenX) < 10 && Math.abs(lastScreenTouchY - screenY) < 10) {
-            changeDir(VisualFile.getSelected().getFile());
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        scrollPointerDiff += lastScreenY - screenY;
-        if (scrollPointerDiff > 50) {
-            VisualFile.getSelected().next();
-            scrollPointerDiff = 0;
-        } else if (lastScreenY - screenY < -50) {
-            VisualFile.getSelected().before();
-            scrollPointerDiff = 0;
-        }
-        lastScreenY = screenY;
-        return true;
+    private void makeVisualFilesStructure(boolean root) {
+        int isRoot = 0;
+        VisualFile.prepareList();
+        for (File f : this.structureDirs)
+            if (isRoot < this.rootCount)
+                isRoot++;
+            else if (isRoot == this.rootCount) {
+                isRoot++;
+                if (!root) {
+                    VisualFile vf = new VisualFile(f, "..", 0, 0);
+                    vf.select();
+                }
+            } else
+                new VisualFile(f, 0, 0);
+        if (root)
+            VisualFile.get(0).select();
+        else
+            for (File f : this.structureFiles)
+                new VisualFile(f, 0, 0);
     }
 
     @Override
@@ -365,20 +288,84 @@ public class FileManager implements Screen, SubInputProcessor {
     }
 
     @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        if (ConfigHandler.autoPlayReady && (ConfigHandler.nextButtonPressed || ConfigHandler.autoPlay)) {
+            File next = VisualFile.nextForPath(lastFilePath);
+            ConfigHandler.nextButtonPressed = false;
+            Main.getInstance().setScreen(new Loading(0, next, null));
+        }
+        this.batch.begin();
+        ConfigHandler.autoPlayReady = false;
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        this.background.draw(this.batch);
+        VisualFile.updateAll(delta);
+        VisualFile.drawAll(this.batch);
+        this.options.render(this.batch);
+        this.optionsButton.drawCentered(this.batch, 50, 50);
+        this.batch.end();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void resume() {
+        FontManager.reloadFonts();
+        VisualFile.reloadTexture();
+    }
+
+    @Override
     public boolean scrolled(int amount) {
-        if (amount > 0) {
+        if (amount > 0)
             for (int i = 0; i < amount; i++)
                 VisualFile.getSelected().next();
-        } else {
+        else
             for (int i = 0; i < -amount; i++)
                 VisualFile.getSelected().before();
-        }
         return true;
     }
 
     @Override
-    public int getPriority() {
-        return 1;
+    public void show() {
+        GlobalInputProcessor.removeAllOfClass(this.getClass());
+        GlobalInputProcessor.register(this);
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.lastScreenTouchX = screenX;
+        this.lastScreenTouchY = screenY;
+        this.lastScreenY = screenY;
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        this.scrollPointerDiff += this.lastScreenY - screenY;
+        if (this.scrollPointerDiff > 50) {
+            VisualFile.getSelected().next();
+            this.scrollPointerDiff = 0;
+        } else if ((this.lastScreenY - screenY) < -50) {
+            VisualFile.getSelected().before();
+            this.scrollPointerDiff = 0;
+        }
+        this.lastScreenY = screenY;
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if ((Math.abs(this.lastScreenTouchX - screenX) < 10) && (Math.abs(this.lastScreenTouchY - screenY) < 10))
+            this.changeDir(VisualFile.getSelected().getFile());
+        return true;
     }
 
 }

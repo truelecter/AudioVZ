@@ -1456,3 +1456,76 @@ java.lang.NullPointerException
 [ Fri Mar 27 15:27:39 EET 2015] **************************************************************************
 [INFO Fri Mar 27 15:27:39 EET 2015] Started AudioVZ v 0.0.4 alpha
 [INFO Fri Mar 27 15:27:39 EET 2015] File param is null!
+[ Tue Apr 07 21:14:19 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:14:20 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:14:20 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:14:22 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:14:22 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:14:22 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:14:23 EEST 2015] Loaded! 
+[ Tue Apr 07 21:15:21 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:15:21 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:15:21 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:15:23 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:15:23 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:15:23 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:15:23 EEST 2015] Loaded! 
+[ Tue Apr 07 21:16:46 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:16:46 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:16:46 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:16:48 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:16:48 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:16:48 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:16:48 EEST 2015] Loaded! 
+[ Tue Apr 07 21:20:05 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:20:05 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:20:06 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:20:07 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:20:07 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:20:07 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:20:07 EEST 2015] Loaded! 
+[ Tue Apr 07 21:23:37 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:23:37 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:23:37 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:23:38 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:23:38 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:23:38 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:23:38 EEST 2015] Loaded! 
+[ Tue Apr 07 21:28:51 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:28:51 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:28:51 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:28:52 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:28:52 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:28:52 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:28:52 EEST 2015] Loaded! 
+[ Tue Apr 07 21:29:02 EEST 2015] **************************************************************************
+[INFO Tue Apr 07 21:29:02 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Tue Apr 07 21:29:02 EEST 2015] File param is null!
+[INFO Tue Apr 07 21:29:03 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Tue Apr 07 21:29:03 EEST 2015] BEFORE: null
+[INFO Tue Apr 07 21:29:03 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Tue Apr 07 21:29:03 EEST 2015] Loaded! 
+[ Sun Aug 02 12:02:21 EEST 2015] **************************************************************************
+[INFO Sun Aug 02 12:02:22 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Sun Aug 02 12:02:22 EEST 2015] File param is null!
+[INFO Sun Aug 02 12:03:02 EEST 2015] Loading screen for file 'H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3' started! Label 'null', waiting 0
+[INFO Sun Aug 02 12:03:02 EEST 2015] BEFORE: null
+[INFO Sun Aug 02 12:03:02 EEST 2015] AFTER: H:\_Media\music\NightCore\R4V3 B0Y - S3RL feat Krystal.mp3
+[INFO Sun Aug 02 12:03:04 EEST 2015] Loaded! 
+[INFO Sun Aug 02 12:03:05 EEST 2015] Playback thread started!
+[ Fri Aug 07 16:07:04 EEST 2015] **************************************************************************
+[INFO Fri Aug 07 16:07:04 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Fri Aug 07 16:07:04 EEST 2015] File param is null!
+[INFO Fri Aug 07 16:07:11 EEST 2015] Loading screen for file 'C:\Users\Lyuda\TheFatRat - Windfall.mp3' started! Label 'null', waiting 0
+[INFO Fri Aug 07 16:07:11 EEST 2015] BEFORE: null
+[INFO Fri Aug 07 16:07:11 EEST 2015] AFTER: C:\Users\Lyuda\TheFatRat - Windfall.mp3
+[INFO Fri Aug 07 16:07:11 EEST 2015] Loaded! 
+[INFO Fri Aug 07 16:07:12 EEST 2015] Playback thread started!
+[ Fri Aug 07 16:07:32 EEST 2015] **************************************************************************
+[INFO Fri Aug 07 16:07:32 EEST 2015] Started AudioVZ v 0.0.4 alpha
+[INFO Fri Aug 07 16:07:32 EEST 2015] File param is null!
+[INFO Fri Aug 07 16:07:34 EEST 2015] Loading screen for file 'C:\Users\Lyuda\TheFatRat - Windfall.mp3' started! Label 'null', waiting 0
+[INFO Fri Aug 07 16:07:34 EEST 2015] BEFORE: null
+[INFO Fri Aug 07 16:07:34 EEST 2015] AFTER: C:\Users\Lyuda\TheFatRat - Windfall.mp3
+[INFO Fri Aug 07 16:07:34 EEST 2015] Loaded! 
+[INFO Fri Aug 07 16:07:34 EEST 2015] Playback thread started!

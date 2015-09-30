@@ -16,7 +16,7 @@ public class Logger {
     private static BufferedWriter getWriter() {
         try {
             File file = null;
-            if (Main.DEBUG)
+            if (!Main.DEBUG || !Gdx.files.isExternalStorageAvailable())
                 file = new File(Gdx.files.getLocalStoragePath() + File.separator + "log.txt");
             else
                 file = new File(Gdx.files.getExternalStoragePath() + File.separator + "AudioVZ_log.txt");
@@ -35,6 +35,10 @@ public class Logger {
     public static void log(String tag, String message, Exception e) {
         BufferedWriter bw = getWriter();
         PrintWriter pw = new PrintWriter(bw);
+        System.out.println("[" + tag.toUpperCase() + " " + (new Date()).toString() + "] " + message);
+        if (e != null) {
+            e.printStackTrace(System.out);
+        }
         if (bw != null) {
             try {
                 bw.write("[" + tag.toUpperCase() + " " + (new Date()).toString() + "] " + message + "\n");
