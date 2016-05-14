@@ -8,6 +8,7 @@ public class KissFFTWrapper extends FFT {
     private KissFFT fft;
 
     public KissFFTWrapper(int sampleSize) {
+        super(sampleSize);
         this.fft = new KissFFT(sampleSize);
     }
 

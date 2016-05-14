@@ -1,18 +1,11 @@
 package truelecter.iig.util.audio;
 
 public abstract class FFT {
-    public static void decode(byte[] input, double[] output) {
-        for (int i = 0; i < output.length; i++) {
-            output[i] = (short) (((0xFF & input[(2 * i) + 1]) << 8) | (0xFF & input[2 * i]));
-            output[i] /= Short.MAX_VALUE;
-        }
-    }
+    protected static final int DECAY = 3;
 
-    public static byte[] toByte(short[] input) {
-        byte[] res = new byte[input.length];
-        for (int i = 0; i < input.length; i++)
-            res[i] = (byte) input[i];
-        return res;
+    public static void decode(short[] input, double[] output) {
+        for (int i = 0; i < output.length; i++)
+            output[i] = input[i] / 32768.0;
     }
 
     public static float[] toFloat(double[] input) {
@@ -22,9 +15,44 @@ public abstract class FFT {
         return res;
     }
 
+    protected float[][] prev;
+
+    public FFT(int sampleSize) {
+        this.prev = new float[DECAY][sampleSize];
+    }
+
+    protected float avg(int i) {
+        float res = 0;
+        for (int j = 0; j < DECAY; j++)
+            res += this.prev[j][i];
+        return res / DECAY;
+    }
+
     public abstract void changeSamplesLength(int newLength);
 
     public abstract void dispose();
 
+    protected float[] getWithPrev() {
+        float[] res = new float[this.prev[0].length];
+        for (int i = 0; i < this.prev[0].length; i++)
+            res[i] = this.avg(i);
+        return res;
+    }
+
+    protected void push(float[] a) {
+        for (int i = 0; i < (DECAY - 1); i++)
+            this.prev[i] = this.prev[i + 1];
+        this.prev[DECAY - 1] = a;
+    }
+
     public abstract void spectrum(short[] samples, float[] spectrum);
+
+    public void spectrumDecay(short[] samples, float[] spectrum) {
+        float[] x = new float[samples.length];
+        this.spectrum(samples, x);
+        this.push(x);
+        x = this.getWithPrev();
+        for (int i = 0; i < Math.min(x.length, spectrum.length); i++)
+            spectrum[i] = x[i];
+    }
 }

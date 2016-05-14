@@ -1,8 +1,10 @@
 [Button]
 playPath = play.png
 pausePath = pause.png
+
 [Background]
 path = background.jpg
+
 [TimePanel]
 bars = colors-borders.png
 timePassedX = 40

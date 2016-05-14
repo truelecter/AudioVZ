@@ -7,12 +7,14 @@ public class FFTPackWrapper extends FFT {
     private RealDoubleFFT fft = null;
 
     public FFTPackWrapper(int sampleSize) {
+        super(sampleSize);
         this.fft = new RealDoubleFFT(sampleSize);
     }
 
     @Override
     public void changeSamplesLength(int sampleSize) {
         this.fft = new RealDoubleFFT(sampleSize);
+        this.prev = new float[DECAY][sampleSize];
     }
 
     @Override
@@ -22,16 +24,15 @@ public class FFTPackWrapper extends FFT {
 
     @Override
     public void spectrum(short[] samples, float[] spectrum) {
-        double[] x = new double[samples.length / 2];
-        decode(toByte(samples), x);
+        double[] x = new double[samples.length];
+        for (int i = 0; i < samples.length; i++)
+            x[i] = (54 * samples[i]) / (32768.0 * 16);
         try {
-            this.fft.bt(x);
+            this.fft.ft(x);
         } catch (Exception e) {
-            this.fft = new RealDoubleFFT(samples.length / 2);
+            this.fft = new RealDoubleFFT(samples.length);
+            this.fft.ft(x);
         }
-        int j = Math.min(x.length, spectrum.length);
-        for (int i = 0; i < j; i++)
-            spectrum[i] = (float) x[i] * 3.0f;
     }
 
 }

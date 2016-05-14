@@ -56,10 +56,11 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
     }
 
     private final float FALLING_SPEED = (1.5f / 3.0f);
+    // Spectrum lines scale
     private final float LINE_SCALE = 2f;
 
     // Number of bars
-    private final int NB_BARS = 40;
+    private final int NB_BARS = 60;
     // Background image
     private Sprite background;
     // Button radius
@@ -244,7 +245,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         FileHandle externalFile = Gdx.files.absolute(this.filename);
         final Mpg123Decoder decoder = new Mpg123Decoder(externalFile);
         this.device = Gdx.audio.newAudioDevice(decoder.getRate(), decoder.getChannels() == 1 ? true : false);
-        final FFT fft = FFTWrapper.getFFT(FFTType.KJFFT, 2500);
+        final FFT fft = FFTWrapper.getFFT(FFTType.KISSFFT, 2500);
         this.playbackThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -271,7 +272,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                         }
                         totalSamples += AudioSpectrum.this.samples.length;
                         try {
-                            fft.spectrum(AudioSpectrum.this.samples, AudioSpectrum.this.spectrum);
+                            fft.spectrumDecay(AudioSpectrum.this.samples, AudioSpectrum.this.spectrum);
                             // Util.printArray(AudioSpectrum.this.spectrum);
                         } catch (Exception eoob) {
                             Logger.e("Something went wrong.", eoob);
@@ -349,7 +350,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         ConfigHandler.autoPlayReady = true;
     }
 
-    // Calculate spectrum average
+    /**
+     * Calculate spectrum average for visualization
+     */
     private float avg(int pos, int nb) {
         int sum = 0;
         for (int i = 0; i < nb; i++)
@@ -374,6 +377,9 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         return res;
     }
 
+    /**
+     * Change image of play button
+     */
     private void changeButtonSkinAccordingOnPlaying() {
         if (this.playing)
             this.playPause.changeSkin(this.pausedImage, 512, 512);
@@ -476,12 +482,24 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         return true;
     }
 
+    /**
+     * Used to pars skin texture of bars.
+     * 
+     * @param t
+     *            - {@link Texture} to parse
+     */
     private void loadBarsTexture(Texture t) {
         this.b = new Sprite(t, 0, 0, 16, 5);
         this.r = new Sprite(t, 0, 15, 16, this.currentSkin.useOldBars ? 5 : 8);
         this.line = new Sprite(t, 0, 5, 16, 5);
     }
 
+    /**
+     * Parse and load <b>skin</b>. Exit, if failed to load skin.
+     * 
+     * @param skin
+     *            - {@link Skin} to load.
+     */
     private void loadSkin(Skin skin) {
         if (skin == null)
             try {
@@ -546,14 +564,17 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
         // Fade-out for song name, artist etc.
         this.fadeTime = this.fadeTime.lerp(new Vector2(1, 0), 0.01f);
+        // Calculating scale and angles for bars.
         float scale = (this.calculateScale() / 125 / 4096) + 0.2f;
         float angle = 180f / this.NB_BARS;
         float offsetAngle = -this.angle;
         float k = ConfigHandler.width / 910f;
         float tScale = (float) (Math.pow(Math.PI, scale + 1) / 10f) * k;
+        // Idk why I wrote this :)
         this.camera.update();
         float vX = (float) (ConfigHandler.width * (-0.4377 + (tScale / k))) / 2.5f;
         float vY = (float) (ConfigHandler.height * (-0.4377 + (tScale / k))) / 2.5f;
+        // Background scaling according to beats
         if (ConfigHandler.scaleBackground)
             if ((tScale / k) > 0.4377) {
                 this.background.setSize(vX + ConfigHandler.width, vY + ConfigHandler.height);
@@ -608,7 +629,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
             float tmp = 0;
 
-            // drawing spectrum (in blue)
+            // drawing spectrum
             tmp = (this.scale(avg) / 256) + (tScale * this.radius);
             this.b.setSize(this.barWidth * k, tmp);
             this.b.setPosition(this.centerX - ((this.barWidth * k) / 2), this.centerY);
@@ -618,7 +639,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
             this.b.setRotation((angle * i) + 180 + offsetAngle);
             this.b.draw(this.batch);
 
-            // drawing top values(in red)
+            // drawing top values
             tmp = (this.scale(this.currentSkin.useOldBars ? this.topValues[histoX] : avg) / 256)
                     + (tScale * this.radius);
             this.r.setSize(this.barWidth * k, 4);
@@ -631,15 +652,18 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
 
             this.topValues[histoX] -= this.FALLING_SPEED;
         }
+        // Changing bars rotation if enabled in config.
         if (ConfigHandler.offsetAngle)
             if ((scale > 0.33) && this.playing)
                 this.angle += this.gen.nextBoolean() ? (scale - 0.2) * 20 : -(scale - 0.2) * 20;
+        // Do we need to render song name?
         if (!this.ft.finished()) {
             this.currentSkin.songName.setColor(1, 1, 1, this.ft.getFadeX());
             this.currentSkin.songName.draw(this.batch, this.name, this.currentSkin.songNamePos.x,
                     this.currentSkin.songNamePos.y);
             this.currentSkin.songName.setColor(1, 1, 1, 1);
         }
+        // Handle if one of key changing buttons is pressed and change volume.
         if (this.changingVolume) {
             this.volumeft.show();
             ConfigHandler.volume += Math.signum(this.factor) * 0.01;
@@ -649,6 +673,7 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
                 ConfigHandler.volume = 1;
             this.device.setVolume(ConfigHandler.volume);
         }
+        // Show volume pointer, if we've changed
         if (!this.volumeft.finished() && (Main.aa == null)) {
             String volumeString = Math.round((ConfigHandler.volume * 100)) + "%";
             this.currentSkin.volumeFont.setColor(1, 1, 1, this.volumeft.getFadeX());
@@ -666,16 +691,21 @@ public class AudioSpectrum implements Screen, SubInputProcessor {
         this.line.setOrigin(0, (this.currentSkin.timeBar.t * k) / 2);
         this.line.setRotation(-90);
         this.line.draw(this.batch);
+        // Draw button
         this.playPause.drawCentered(this.batch, this.centerX, this.centerY);
+        // Render skin custom parts
         this.currentSkin.rendererCustomParts(this.batch, false);
+        // If option is checked
         if (ConfigHandler.showButtons) {
             this.options.render(this.batch);
             this.optionsButton.drawCentered(this.batch, 50, 50);
             if (!this.defaultSong)
                 this.nextButton.drawCentered(this.batch, ConfigHandler.width - 50, 50);
         }
+        // Fading in
         this.pixel.setColor(0, 0, 0, 1 - this.fadeTime.x);
         this.pixel.draw(this.batch);
+        // End drawing
         this.batch.end();
     }
 
