@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="truelecter.iig.android"
-    android:versionCode="14"
-    android:versionName="0.1.1" >
+    android:versionCode="15"
+    android:versionName="0.1.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="20" />
+        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -41,6 +42,54 @@
                     android:host="*"
                     android:mimeType="*/*"
                     android:pathPattern=".*\\.mp3"
+                    android:scheme="file" />
+            </intent-filter>
+			<intent-filter android:label="Set AudioVZ background" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.png"
+                    android:scheme="file" />
+            </intent-filter>
+			<intent-filter android:label="Set AudioVZ background" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.bmp"
+                    android:scheme="file" />
+            </intent-filter>
+			<intent-filter android:label="Set AudioVZ background" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.jpg"
+                    android:scheme="file" />
+            </intent-filter>
+			<intent-filter android:label="Set AudioVZ background" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:host="*" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.jpeg"
                     android:scheme="file" />
             </intent-filter>
         </activity>

@@ -34,7 +34,7 @@ project(":desktop") {
     dependencies {
         compile project(":core")
         compile files('../core/libs/Gdx/backend-lwjgl/gdx-backend-lwjgl-1.5.3.jar',
-        '../core/libs/Gdx/box2d/gdx-box2d-platform-1.5.3-natives-desktop.jar',
+//      '../core/libs/Gdx/box2d/gdx-box2d-platform-1.5.3-natives-desktop.jar',
         '../core/libs/Gdx/core/gdx-platform-1.5.3-natives-desktop.jar',
         '../core/libs/Gdx/tools/gdx-tools-1.5.3.jar',
         '../core/libs/jinput/natives/jinput-platform-2.0.5-natives-linux.jar',
@@ -63,10 +63,10 @@ project(":android") {
     dependencies {
         compile project(":core")
         compile files('libs/gdx-backend-android-1.5.4.jar',
-        			  'libs/gdx-box2d-1.5.4.jar',
-        			  'libs/gdx-box2d-platform-1.5.4-natives-armeabi.jar',
-        			  'libs/gdx-box2d-platform-1.5.4-natives-armeabi-v7a.jar',
-        			  'libs/gdx-box2d-platform-1.5.4-natives-x86.jar',
+//         			  'libs/gdx-box2d-1.5.4.jar',
+//         			  'libs/gdx-box2d-platform-1.5.4-natives-armeabi.jar',
+//         			  'libs/gdx-box2d-platform-1.5.4-natives-armeabi-v7a.jar',
+//         			  'libs/gdx-box2d-platform-1.5.4-natives-x86.jar',
         			  'libs/gdx-platform-1.5.4-natives-armeabi.jar',
         			  'libs/gdx-platform-1.5.4-natives-armeabi-v7a.jar',
         			  'libs/gdx-platform-1.5.4-natives-x86.jar',
@@ -81,13 +81,13 @@ project(":core") {
     	compile files('libs/audio/gdx-audio-natives.jar',
         'libs/audio/gdx-audio.jar',
         'libs/ini/ini4j-0.5.5-SNAPSHOT.jar',
-        'libs/Gdx/box2d/lights/box2dlights-1.3.jar',
+//        'libs/Gdx/box2d/lights/box2dlights-1.3.jar',
         'libs/Gdx/ai/gdx-ai-1.4.0.jar',
-        'libs/Gdx/box2d/gdx-box2d-1.5.3.jar',
+//        'libs/Gdx/box2d/gdx-box2d-1.5.3.jar',
         'libs/Gdx/core/gdx-1.5.3.jar',
         'libs/jlayer/jl1.0.1.jar',
         '../lib/android.jar',
-        'libs/gdx-backend-android-1.5.4.jar')
+        '../android/libs/gdx-backend-android-1.5.4.jar')
     }
 }
 

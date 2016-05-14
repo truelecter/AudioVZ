@@ -1,8 +1,11 @@
 package truelecter.iig;
 
 import java.io.File;
+import java.io.IOException;
 
-import truelecter.iig.screen.*;
+import truelecter.iig.screen.FileManager;
+import truelecter.iig.screen.Loading;
+import truelecter.iig.screen.visual.Skin;
 import truelecter.iig.util.ConfigHandler;
 import truelecter.iig.util.Ini;
 import truelecter.iig.util.Logger;
@@ -23,15 +26,10 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 public class Main extends Game {
     private static Main instance;
     public static final boolean DEBUG = true;
-    public final String VERSION = "0.1.1 alpha";
     /**
      * Used by {@link FileManager} to build song list on Android
      */
     public static AndroidApplication aa = null;
-    /**
-     * File to play
-     */
-    private final File toRun;
 
     /**
      * @return Instance of the main class
@@ -39,6 +37,18 @@ public class Main extends Game {
     public static Main getInstance() {
         return instance;
     }
+
+    public final String VERSION = "0.1.2 alpha";
+
+    /**
+     * File to play
+     */
+    private File toRun = null;
+
+    /**
+     * File to set as background
+     */
+    private File toSetAsBackground = null;
 
     /**
      * Default constructor. We'll start from file manager screen.
@@ -69,32 +79,25 @@ public class Main extends Game {
      */
     public Main(File f) {
         instance = this;
-        if (f != null && (aa != null || (f.exists() && f.isFile() && f.getAbsolutePath().endsWith(".mp3"))))
-            toRun = f;
-        else
-            toRun = null;
-    }
-
-    /**
-     * Just save config
-     */
-    @Override
-    public void dispose() {
-        saveConfig();
+        if ((f != null) && (f.exists() && f.isFile())) {
+            if (f.getAbsolutePath().endsWith(".mp3"))
+                this.toRun = f;
+            if (f.getAbsolutePath().endsWith(".jpg") || f.getAbsolutePath().endsWith(".jpeg")
+                    || f.getAbsolutePath().endsWith(".png") || f.getAbsolutePath().endsWith(".bmp"))
+                this.toSetAsBackground = f;
+        }
     }
 
     @Override
     public void create() {
         Logger.log("", "**************************************************************************", null);
-        Logger.i("Started AudioVZ v " + VERSION);
-        if (!Gdx.files.isExternalStorageAvailable()) {
+        Logger.i("Started AudioVZ v " + this.VERSION);
+        if (!Gdx.files.isExternalStorageAvailable())
             Logger.w("External storage is not available", null);
-        }
         try {
             File configFile = Gdx.files.local("data/config.ini").file();
-            if (!configFile.exists()) {
+            if (!configFile.exists())
                 configFile.createNewFile();
-            }
             Ini s = new Ini(configFile);
             ConfigHandler.width = s.getInt("Main", "width", 900);
             ConfigHandler.height = s.getInt("Main", "height", 600);
@@ -106,12 +109,11 @@ public class Main extends Game {
             ConfigHandler.scaleBackground = s.getBoolean("Main", "scaleBackground", false);
             ConfigHandler.offsetAngle = s.getBoolean("Main", "offsetAngle", false);
             ConfigHandler.useShaders = s.getBoolean("Main", "anaglyph", false);
-            if (ConfigHandler.skinOrigPath != null) {
+            if (ConfigHandler.skinOrigPath != null)
                 ConfigHandler.skinPath = ConfigHandler.skinOrigPath.replace("!INTERNAL!",
                         Gdx.files.getLocalStoragePath()).replace("!EXTERNAL!", Gdx.files.getExternalStoragePath());
-            } else {
+            else
                 ConfigHandler.skinPath = null;
-            }
         } catch (Exception e) {
             // If config reading ends with error, set default values
             ConfigHandler.width = 900;
@@ -137,22 +139,37 @@ public class Main extends Game {
         Gdx.input.setInputProcessor(new GlobalInputProcessor());
         // Set window height and width
         Gdx.graphics.setDisplayMode(ConfigHandler.width, ConfigHandler.height, false);
+        // Set background wallpaper if any is provided
+        if (this.toSetAsBackground != null)
+            try {
+                new Skin(new File(ConfigHandler.skinPath)).setBackground(this.toSetAsBackground.getAbsolutePath())
+                        .save();
+            } catch (IOException e) {
+                Logger.e("Unable to change skin background", e);
+            }
         // Run file if any is set by constructor
-        if (toRun != null) {
-            Logger.i("File param is not null! Path: " + toRun.getAbsolutePath());
-            setScreen(new Loading(2000l, toRun, null));
+        if ((this.toRun != null) && (aa != null)) {
+            Logger.i("File param is not null! Path: " + this.toRun.getAbsolutePath());
+            this.setScreen(new Loading(2000l, this.toRun, null));
             return;
-        } else {
+        } else
             Logger.i("File param is null!");
-        }
         // If file was null, then set screen to FileManager instance
         try {
-            setScreen(new FileManager(new File(ConfigHandler.lastFileManagerPath)));
+            this.setScreen(new FileManager(new File(ConfigHandler.lastFileManagerPath)));
         } catch (Exception e) {
             // If we can't open last directory
             Logger.w("Can not create FileManager instance with last path", e);
-            setScreen(new FileManager());
+            this.setScreen(new FileManager());
         }
+    }
+
+    /**
+     * Just save config
+     */
+    @Override
+    public void dispose() {
+        this.saveConfig();
     }
 
     /**

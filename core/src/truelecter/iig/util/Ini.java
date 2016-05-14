@@ -21,7 +21,62 @@ public class Ini {
     }
 
     public Ini(File path) throws IOException {
-        load(path);
+        this.load(path);
+    }
+
+    public boolean getBoolean(String section, String key, boolean defaultvalue) {
+        Map<String, String> kv = this._entries.get(section);
+        if (kv == null)
+            return defaultvalue;
+        if (!kv.containsKey(key)) {
+            kv.put(key, defaultvalue + "");
+            return defaultvalue;
+        }
+        return Boolean.valueOf(kv.get(key));
+    }
+
+    public double getDouble(String section, String key, double defaultvalue) {
+        Map<String, String> kv = this._entries.get(section);
+        if (kv == null)
+            return defaultvalue;
+        if (!kv.containsKey(key)) {
+            kv.put(key, defaultvalue + "");
+            return defaultvalue;
+        }
+        return Double.parseDouble(kv.get(key));
+    }
+
+    public float getFloat(String section, String key, float defaultvalue) {
+        Map<String, String> kv = this._entries.get(section);
+        if (kv == null)
+            return defaultvalue;
+        if (!kv.containsKey(key)) {
+            kv.put(key, defaultvalue + "");
+            return defaultvalue;
+        }
+        return Float.parseFloat(kv.get(key));
+    }
+
+    public int getInt(String section, String key, int defaultvalue) {
+        Map<String, String> kv = this._entries.get(section);
+        if (kv == null)
+            return defaultvalue;
+        if (!kv.containsKey(key)) {
+            kv.put(key, defaultvalue + "");
+            return defaultvalue;
+        }
+        return Integer.parseInt(kv.get(key));
+    }
+
+    public String getString(String section, String key, String defaultvalue) {
+        Map<String, String> kv = this._entries.get(section);
+        if (kv == null)
+            return defaultvalue;
+        if (!kv.containsKey(key)) {
+            kv.put(key, defaultvalue);
+            return defaultvalue;
+        }
+        return kv.get(key);
     }
 
     public void load(File path) throws IOException {
@@ -29,18 +84,17 @@ public class Ini {
         String line;
         String section = null;
         while ((line = br.readLine()) != null) {
-            Matcher m = _section.matcher(line);
-            if (m.matches()) {
+            Matcher m = this._section.matcher(line);
+            if (m.matches())
                 section = m.group(1).trim();
-            } else if (section != null) {
-                m = _keyValue.matcher(line);
+            else if (section != null) {
+                m = this._keyValue.matcher(line);
                 if (m.matches()) {
                     String key = m.group(1).trim();
                     String value = m.group(2).trim();
-                    Map<String, String> kv = _entries.get(section);
-                    if (kv == null) {
-                        _entries.put(section, kv = new HashMap<String, String>());
-                    }
+                    Map<String, String> kv = this._entries.get(section);
+                    if (kv == null)
+                        this._entries.put(section, kv = new HashMap<String, String>());
                     kv.put(key, value);
                 }
             }
@@ -48,66 +102,11 @@ public class Ini {
         br.close();
     }
 
-    public String getString(String section, String key, String defaultvalue) {
-        Map<String, String> kv = _entries.get(section);
-        if (kv == null) {
-            return defaultvalue;
-        }
-        if (!kv.containsKey(key)) {
-            return defaultvalue;
-        }
-        return kv.get(key);
-    }
-
-    public boolean getBoolean(String section, String key, boolean defaultvalue) {
-        Map<String, String> kv = _entries.get(section);
-        if (kv == null) {
-            return defaultvalue;
-        }
-        if (!kv.containsKey(key)) {
-            return defaultvalue;
-        }
-        return Boolean.valueOf(kv.get(key));
-    }
-
-    public int getInt(String section, String key, int defaultvalue) {
-        Map<String, String> kv = _entries.get(section);
-        if (kv == null) {
-            return defaultvalue;
-        }
-        if (!kv.containsKey(key)) {
-            return defaultvalue;
-        }
-        return Integer.parseInt(kv.get(key));
-    }
-
-    public float getFloat(String section, String key, float defaultvalue) {
-        Map<String, String> kv = _entries.get(section);
-        if (kv == null) {
-            return defaultvalue;
-        }
-        if (!kv.containsKey(key)) {
-            return defaultvalue;
-        }
-        return Float.parseFloat(kv.get(key));
-    }
-
-    public double getDouble(String section, String key, double defaultvalue) {
-        Map<String, String> kv = _entries.get(section);
-        if (kv == null) {
-            return defaultvalue;
-        }
-        if (!kv.containsKey(key)) {
-            return defaultvalue;
-        }
-        return Double.parseDouble(kv.get(key));
-    }
-
     public void put(String section, String key, Object value) {
-        Map<String, String> m = _entries.get(section);
+        Map<String, String> m = this._entries.get(section);
         if (m == null) {
             m = new HashMap<String, String>();
-            _entries.put(section, m);
+            this._entries.put(section, m);
         }
         if (value != null)
             m.put(key, value.toString());
@@ -115,11 +114,10 @@ public class Ini {
 
     public void write(File f) throws FileNotFoundException {
         PrintWriter pw = new PrintWriter(f);
-        for (String section : _entries.keySet()) {
+        for (String section : this._entries.keySet()) {
             pw.write("[" + section + "]\n\n");
-            for (String key : _entries.get(section).keySet()) {
-                pw.println(key + " = " + _entries.get(section).get(key));
-            }
+            for (String key : this._entries.get(section).keySet())
+                pw.println(key + " = " + this._entries.get(section).get(key));
             pw.write("\n");
         }
         pw.close();

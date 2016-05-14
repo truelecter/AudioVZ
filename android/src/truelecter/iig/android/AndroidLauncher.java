@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import truelecter.iig.Main;
+import truelecter.iig.screen.AudioSpectrum;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -13,16 +16,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import truelecter.iig.Main;
-import truelecter.iig.screen.AudioSpectrum;
 
 public class AndroidLauncher extends AndroidApplication {
 
     /**
      * Hook to pause playing or not
      */
+    @Override
     protected void onPause() {
         super.onPause();
         AudioSpectrum.onAndroidPause();
@@ -31,6 +34,7 @@ public class AndroidLauncher extends AndroidApplication {
     /**
      * Clear all our activities
      */
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         Main.getInstance().saveConfig();
@@ -42,6 +46,7 @@ public class AndroidLauncher extends AndroidApplication {
      * Unpack our files to /data/data/truelecter.iig.android/files/ if needed.
      * Open file if file intent is provided.
      */
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
@@ -68,7 +73,7 @@ public class AndroidLauncher extends AndroidApplication {
         String action = intent.getAction();
         String scheme = intent.getScheme();
         File f = null;
-        if (action.compareTo(Intent.ACTION_VIEW) == 0 && scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+        if ((Intent.ACTION_VIEW.compareTo(action) == 0) && (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0)) {
             Uri uri = intent.getData();
             Log.v("AudioVZ", "File intent detected: " + action + " : " + uri.getPath());
             f = new File(uri.getPath());
@@ -85,7 +90,7 @@ public class AndroidLauncher extends AndroidApplication {
      *            - set to <b>true</b> if <b>path</b> is path of directory
      */
     public void copyFileOrDir(String path, boolean onlyFiles) {
-        AssetManager assetManager = this.getAssets();
+        AssetManager assetManager = getAssets();
         String assets[] = null;
         try {
             assets = assetManager.list(path);
@@ -97,8 +102,9 @@ public class AndroidLauncher extends AndroidApplication {
                 if (!onlyFiles) {
                     String fullPath = getFilesDir().getAbsoluteFile() + "/" + path;
                     File dir = new File(fullPath);
-                    if (!dir.exists())
+                    if (!dir.exists()) {
                         dir.mkdir();
+                    }
                     for (int i = 0; i < assets.length; ++i) {
                         copyFileOrDir(path + "/" + assets[i], false);
                     }
@@ -114,7 +120,7 @@ public class AndroidLauncher extends AndroidApplication {
      * Copy file from assets
      */
     private void copyFile(String filename) {
-        AssetManager assetManager = this.getAssets();
+        AssetManager assetManager = getAssets();
         InputStream in = null;
         OutputStream out = null;
         try {
