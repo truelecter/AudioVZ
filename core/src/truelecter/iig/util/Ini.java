@@ -79,6 +79,10 @@ public class Ini {
         return kv.get(key);
     }
 
+    public boolean has(String section, String key) {
+        return this._entries.containsKey(section) && this._entries.get(section).containsKey(key);
+    }
+
     public void load(File path) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(path));
         String line;

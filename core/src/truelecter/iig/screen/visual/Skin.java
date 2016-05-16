@@ -233,8 +233,8 @@ public class Skin {
                 break;
             case BACKGROUND:
                 x = section.getString("Background", "path", "backgroundV.png");
-                this.background = new Texture(Util.getFile(skin, x,
-                        section.getBoolean("Background", "local", useInternal)));
+                Logger.i("Background internal - " + false);
+                this.background = new Texture(Util.getFile(skin, x, false));
                 break;
             case FONT:
                 break;
