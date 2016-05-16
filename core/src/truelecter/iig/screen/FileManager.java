@@ -155,7 +155,6 @@ public class FileManager implements Screen, SubInputProcessor {
         this.dispose();
     }
 
-    @SuppressWarnings("deprecation")
     private void initAndroidView() {
         String[] proj = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DISPLAY_NAME,
                 MediaStore.Video.Media.SIZE };
